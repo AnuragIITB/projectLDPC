@@ -1,0 +1,71 @@
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+
+The following software contains two folders:
+
+src 	:	contains the source and header files
+include :	contains the input and output files
+
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+To compile the programs : 
+
+>> execute compile.sh file.
+#./compile.sh
+An object file, "sum_product_decode" is made in src folder.
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+Running the software:
+
+NAME:	sum_product_decode
+
+Takes parity check matrix and code block as input files and performs belief propagation
+algorithm ti decode the code blocks. Decoding time analysis and accuracy of the 
+algorithm can be checked. 
+
+---------------------------------------------------------------------------------------------
+
+SYNOPSIS:
+
+sum_product_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration] [crossover probability]  
+
+----------------------------------------------------------------------------------------------
+
+DESCRIPTION:
+
+FILE1	 :	parityCheckMatrix.txt file
+
+FILE2	 :	codeBits.txt file
+
+MODE     :	Two mode of operations
+		
+		-time 	:	Decode time analysis.
+		-accuracy :	Accuracy of decoding analysis.
+
+
+------------------------------------------------------------------------------------------------
+
+EXAMPLES:
+	 
+#./sum_product_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time  85  0.01
+#./sum_product_decode  ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  0.01
+
+
+---------------------------------------------------------------------------------------------------
+
+ORGANIZATION OF THE FOLDERS:
+
+src	:
+	-> sum_product_decode (executable file)
+include :
+	-> codeBlock
+		- contains code block of length 1lac, with different number of error count per code word. 
+	-> results
+		- contains time and  accuracy outputs.
+	-> decodeBlock
+		- contains final decoded block.
+	-> encodeBlock
+		- contain encoded block file to for comparison to decoded block.
+
+-----------------------------------------------------------------------------------------------------
