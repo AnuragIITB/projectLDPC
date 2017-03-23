@@ -13,22 +13,22 @@ To compile the programs :
 
 >> execute compile.sh file.
 #./compile.sh
-An object file, "sum_product_decode" is made in src folder.
+An object file, "min_sum_decode" is made in src folder.
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 Running the software:
 
 NAME:	sum_product_decode
 
-Takes parity check matrix and code block as input files and performs belief propagation
-algorithm ti decode the code blocks. Decoding time analysis and accuracy of the 
+Takes parity check matrix and code block as input files and performs min sum decode
+algorithm to decode the code blocks. Decoding time analysis and accuracy of the 
 algorithm can be checked. 
 
 ---------------------------------------------------------------------------------------------
 
 SYNOPSIS:
 
-sum_product_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration] [crossover probability]  
+min_sum_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration] [crossover probability]  
 
 ----------------------------------------------------------------------------------------------
 
@@ -48,8 +48,8 @@ MODE     :	Two mode of operations
 
 EXAMPLES:
 	 
-#./sum_product_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time  85  0.01
-#./sum_product_decode  ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  0.01
+#./min_sum_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time  85  0.01
+#./min_sum_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  0.01
 
 
 ---------------------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ EXAMPLES:
 ORGANIZATION OF THE FOLDERS:
 
 src	:
-	-> sum_product_decode (executable file)
+	-> min_sum_decode (executable file)
 include :
 	-> codeBlock
 		- contains code block of length 1lac, with different number of error count per code word. 
