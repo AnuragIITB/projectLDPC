@@ -3,7 +3,7 @@
 
 1.gaussianChannel (Contains decoding algorithms applied to gaussian channel)
 		-> minSumDecode (Decoding code block using min sum decode algorithm)
-				-> A seperate github repo is available
+				-> Contains README to instruct usage of software.
 		-> sumProductDecode (Decoding code block using sum product decode algorithm)
 				-> Contains README to instruct usage of software.
 
