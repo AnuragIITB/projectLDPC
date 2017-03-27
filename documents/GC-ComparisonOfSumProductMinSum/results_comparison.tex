@@ -1,0 +1,335 @@
+\documentclass[xcolor=dvipsname]
+{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{fadings}
+\usetheme{Antibes}
+\usecolortheme{beaver}
+\usepackage{textpos}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{arydshln}   %%% package for dotted line
+
+
+\usepackage{hyperref}
+
+\mode<presentation>{}
+%% preamble
+\title{LDPC} 
+\author[Anurag Gupta]
+{\textbf {Anurag Gupta\\ Microelectronics (2015-17) \\
+\footnotesize  Instructor: Prof Madhav P. Desai}}
+\institute[IIT-Bombay] % (optional)
+{
+  IIT-Bombay\\
+  Department of Electrical Engineering \\ 
+  \includegraphics[height=2cm,width=2cm]{iitb_logo}
+}
+\newcommand\Fontbig{\fontsize{25}{7.2}\selectfont}
+%\logo{\includegraphics[height=1.5cm]{iitb_logo.jpg}}
+
+%\usecolortheme{dolphin}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\setbeamercolor{footline}{fg=blue}
+
+
+
+\setbeamertemplate{frametitle}[default][center]
+
+
+
+\begin{document}
+
+%% title frame
+\begin{frame}[t]
+\titlepage
+\end{frame}
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{100mm}(.85\textwidth,-1cm)
+\includegraphics[height=1.5cm,width=1.5cm]{iitb_logo}
+\end{textblock*}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ Notations }
+\begin{frame}[t]
+\frametitle{ Notations }
+\begin{itemize}
+\item n - Block size.
+\item Eb/No - Input SNR in db to maintain input BER between $10^{-2}$ to $10^{-3}$.
+\item BER - output bit error rate.
+\item CDB - Number of correctly decoded blocks.  
+\item T - Average time to decode a code block in seconds.
+\item Itr - Average number of iterations per block.
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ Sum Product Decode }
+\begin{frame}[t]
+\frametitle{Sum Product Decode(Rate=0.75)}
+\begin{table}[]
+\centering
+
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)& Itr(/150) \\  \hline
+4096  & 5.5   & 0   & 100 & 0.032 & 1   \\
+      & 6.5   & 0   & 100 & 0.023 & 1   \\
+      & 7.5   & 0   & 100 & 0.021 & 1   \\ \hline
+8192  & 5.5   & 0   & 100 & 0.066 & 2   \\
+      & 6.5   & 0   & 100 & 0.050 & 1   \\
+      & 7.5   & 0   & 100 & 0.043 & 1   \\ \hline
+12288 & 5.5   & 0   & 100 & 0.10  & 2   \\ 
+      & 6.5   & 0   & 100 & 0.08  & 1   \\
+      & 7.5   & 0   & 100 & 0.065 & 1   \\ \hline
+16384 & 5.5   & 0   & 100 & 0.133 & 2   \\ 
+      & 6.5   & 0   & 100 & 0.111 & 1   \\
+      & 7.5   & 0   & 100 & 0.083 & 1   \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{Sum Product Decode(Rate=0.80)}
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)& Itr(/150) \\ \hline
+4096  & 5.5   & 0   & 100 & 0.037 & 1   \\ 
+      & 6.5   & 0   & 100 & 0.028 & 1   \\ 
+      & 7.5   & 0   & 100 & 0.025 & 1   \\ \hline
+8192  & 5.5   & 0   & 100 & 0.080 & 2   \\ 
+      & 6.5   & 0   & 100 & 0.058 & 1   \\ 
+      & 7.5   & 0   & 100 & 0.050 & 1   \\ \hline
+12288 & 5.5   & 0   & 100 & 0.118 & 2   \\ 
+      & 6.5   & 0   & 100 & 0.090 & 1   \\ 
+      & 7.5   & 0   & 100 & 0.075 & 1   \\ \hline
+16384 & 5.5   & 0   & 100 & 0.156 & 2   \\ 
+      & 6.5   & 0   & 100 & 0.122 & 1   \\ 
+      & 7.5   & 0   & 100 & 0.103 & 1   \\ \hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Sum Product Decode(Rate=0.85)}
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec) & Itr(/150) \\ \hline
+4096  & 5     & 0   & 100 & 0.056  & 2         \\ 
+      & 6     & 0   & 100 & 0.040  & 1         \\ 
+      & 7     & 0   & 100 & 0.033  & 1         \\ \hline
+8192  & 5     & 0   & 100 & 0.116  & 2         \\ 
+      & 6     & 0   & 100 & 0.090  & 1         \\ 
+      & 7     & 0   & 100 & 0.068  & 1         \\ \hline
+12288 & 5     & 0   & 100 & 0.186  & 3         \\ 
+      & 6     & 0   & 100 & 0.140  & 2         \\ 
+      & 7     & 0   & 100 & 0.101  & 1         \\ \hline
+16384 & 5     & 0   & 100 & 0.257  & 3         \\ 
+      & 6     & 0   & 100 & 0.192  & 2         \\ 
+      & 7     & 0   & 100 & 0.135  & 1         \\ \hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{Sum Product Decode(Rate=0.9)}
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec) & Itr(/150) \\ \hline
+4096  & 5     & 0   & 100 & 0.087  & 3         \\ 
+      & 6     & 0   & 100 & 0.060  & 2         \\ 
+      & 7     & 0   & 100 & 0.049  & 1         \\ \hline
+8192  & 5     & 0   & 100 & 0.190  & 3         \\ 
+      & 6     & 0   & 100 & 0.139  & 2         \\ 
+      & 7     & 0   & 100 & 0.098  & 1         \\ \hline
+12288 & 5     & 0   & 100 & 0.332  & 3         \\ 
+      & 6     & 0   & 100 & 0.216  & 2         \\ 
+      & 7     & 0   & 100 & 0.147  & 1         \\ \hline
+16384 & 5     & 0   & 100 & 0.431  & 3         \\ 
+      & 6     & 0   & 100 & 0.285  & 2         \\ 
+      & 7     & 0   & 100 & 0.199  & 1         \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{Sum Product Decode(Rate=0.95)}
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER    & CDB & T(sec) & Itr(/150) \\ \hline
+4096  & -     & -      & -   & -      & -         \\ \hline
+8192  & -     & -      & -   & -      & -         \\ \hline
+12288 & 4.5   & 0.0037 & 20  & -      & -         \\ 
+      & 5.5   & 0      & 100 & 0.607  & 3         \\ 
+      & 6.5   & 0      & 100 & 0.367  & 2         \\ \hline
+16384 & 4.5   & 0.0037 & 24  & -      & -         \\ 
+      & 5.5   & 0      & 100 & 0.825  & 3         \\ 
+      & 6.5   & 0      & 100 & 0.692  & 2         \\ \hline
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item n = 4096 and 8192 cycle free random matrix was not able to generate. 
+\end{itemize}
+\end{frame}
+
+
+
+\section{Min Sum Decode}
+\begin{frame}[t] 
+\frametitle{Min Sum Decode (Rate=0.75)}
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)  & Itr(/150) \\ \hline
+4096  & 5.5   & 0   & 100 & 0.0081  & 2         \\ 
+      & 6.5   & 0   & 100 & 0.0057  & 1         \\
+      & 7.5   & 0   & 100 & 0.0055  & 1         \\ \hline
+8192  & 5.5   & 0   & 100 & 0.01638 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.01291 & 1         \\
+      & 7.5   & 0   & 100 & 0.01094 & 1         \\ \hline
+12288 & 5.5   & 0   & 100 & 0.02431 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.01967 & 1         \\ 
+      & 7.5   & 0   & 100 & 0.01615 & 1         \\ \hline
+16384 & 5.5   & 0   & 100 & 0.03343 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.02769 & 1         \\ 
+      & 7.5   & 0   & 100 & 0.02116 & 1         \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{Min Sum Decode (Rate=0.8)}
+\begin{table}[]
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)  & Itr(/150) \\ \hline
+4096  & 5.5   & 0   & 100 & 0.00899 & 2         \\
+      & 6.5   & 0   & 100 & 0.00679 & 1         \\ 
+      & 7.5   & 0   & 100 & 0.00648 & 1         \\ \hline
+8192  & 5.5   & 0   & 100 & 0.01947 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.01446 & 1         \\ 
+      & 7.5   & 0   & 100 & 0.01230 & 1         \\ \hline
+12288 & 5.5   & 0   & 100 & 0.02997 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.02288 & 1         \\
+      & 7.5   & 0   & 100 & 0.01894 & 1         \\ \hline
+16384 & 5.5   & 0   & 100 & 0.03830 & 2         \\ 
+      & 6.5   & 0   & 100 & 0.03041 & 1         \\ 
+      & 7.5   & 0   & 100 & 0.02502 & 1         \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Min Sum Decode (Rate=0.85)}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)  & Itr(/150) \\ \hline
+4096  & 5     & 0   & 100 & 0.01356 & 3         \\
+      & 6     & 0   & 100 & 0.00953 & 2         \\ 
+      & 7     & 0   & 100 & 0.00774 & 1         \\ \hline
+8192  & 5     & 0   & 100 & 0.02823 & 3         \\ 
+      & 6     & 0   & 100 & 0.02128 & 2         \\ 
+      & 7     & 0   & 100 & 0.01559 & 1         \\ \hline
+12288 & 5     & 0   & 100 & 0.04409 & 3         \\ 
+      & 6     & 0   & 100 & 0.03315 & 2         \\ 
+      & 7     & 0   & 100 & 0.02424 & 1         \\ \hline
+16384 & 5     & 0   & 100 & 0.06060 & 3         \\ 
+      & 6     & 0   & 100 & 0.04551 & 2         \\ 
+      & 7     & 0   & 100 & 0.03255 & 1         \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Min Sum Decode (Rate=0.9)}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER & CDB & T(sec)  & Itr(/150) \\ \hline
+4096  & 5     & 0   & 100 & 0.02021 & 3         \\ 
+      & 6     & 0   & 100 & 0.01337 & 2         \\ 
+      & 7     & 0   & 100 & 0.01051 & 1         \\ \hline
+8192  & 5     & 0   & 100 & 0.04263 & 3         \\ 
+      & 6     & 0   & 100 & 0.02911 & 2         \\ 
+      & 7     & 0   & 100 & 0.02081 & 1         \\ \hline
+12288 & 5     & 0   & 100 & 0.06799 & 4         \\ 
+      & 6     & 0   & 100 & 0.04524 & 2         \\ 
+      & 7     & 0   & 100 & 0.03292 & 1         \\ \hline
+16384 & 5     & 0   & 100 & 0.09209 & 4         \\ 
+      & 6     & 0   & 100 & 0.06073 & 2         \\ 
+      & 7     & 0   & 100 & 0.04254 & 1         \\ \hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{Min Sum Decode (Rate=0.95)}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & Eb/No & BER    & CDB & T(sec)  & Itr(/150) \\ \hline
+4096  & -     & -      & -   & -       & -         \\ \hline
+8192  & -     & -      & -   & -       & -         \\ \hline
+12288 & 4.5   & 0.0075 & 0   & -       & -         \\ 
+      & 5.5   & 0      & 100 & 0.12824 & 4         \\ 
+      & 6.5   & 0      & 100 & 0.07325 & 2         \\ \hline
+16384 & 4.5   & 0.0072 & 0   & -       & -         \\ 
+      & 5.5   & 0      & 100 & 0.16597 & 4         \\ 
+      & 6.5   & 0      & 100 & 0.09975 & 2         \\ \hline
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item n = 4096 and 8192 cycle free random matrix was not able to generate. 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{ Conclusion }
+\begin{itemize}
+\item All the specification are matched for the rates upto 0.9.
+\item The specs are not met for rate = 0.95. The reason is use of random matrix. As number of rows in matrix
+starts decreasing the cycles starts building thus decreasing girth of the the graph. 
+\end{itemize}
+
+
+\end{frame}
+%-----------------------------last slide------------------------------
+%---------------------------end of document---------------------------
+
+\end{document}
