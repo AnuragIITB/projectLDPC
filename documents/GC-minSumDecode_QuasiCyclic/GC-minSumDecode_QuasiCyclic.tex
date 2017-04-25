@@ -17,7 +17,7 @@
 
 \mode<presentation>{}
 %% preamble
-\title{Gaussian Channel - Min sum decode - QC matrix   } 
+\title{ Analysis of the performance of min sum decode algorithm in Gaussian channel for QC matrices   } 
 \author[Anurag Gupta]
 {\textbf {Anurag Gupta\\ Microelectronics (2015-17) \\
 \footnotesize  Instructor: Prof Madhav P. Desai}}
@@ -195,22 +195,45 @@ n     & BER(IN)& Eb/No(db) & BER    & CDB & Itr(/25) \\ \hline
 \end{frame}
 
 \begin{frame}[t] 
-\frametitle{First error till 50k blocks}
+\frametitle{First error till 10 million blocks}
 
 \begin{table}[]
 \centering
-\begin{tabular}{|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|r|r|}
 \hline
-n$\simeq$   & BER(In)$\simeq$    & R=0.75,0.8 & R=0.85  & R=0.9 & R=0.95 \\ \hline
-4K  & $1x10^{-2}$  & -          & -    & 32357   & 1       \\ \hline
-    & $0.5x10{-3}$ & -          & -    & - & 1802   \\ \hline
-    & $1x10{-3}$   & -          & -    & -     & 11390  \\ \hline
-8K  & $1x10{-2}$   & -          & -    &  45837   & 1      \\ \hline
-    & $0.5x10{-3}$ & -          & 38612   & -    & 1389   \\ \hline
-    & $1x10{-3}$   & -          & -       & -     & 4518   \\ \hline
-12K & $1x10{-2}$   & -          & -    & -     & 1      \\ \hline
-    & $0.5x10{-3}$ & -          & 37547   & -     & 432    \\ \hline
-    & $1x10{-3}$   & -          & -       & -     & 5757   \\ \hline
+n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.80  \\ \hline
+4K  & $1.0x10^{-2}$  & -    & -       \\ 
+    & $0.5x10^{-3}$  &-     & -       \\ 
+    & $1.0x10^{-3}$  & -   & -       \\ \hline
+8K  & $1.0x10^{-2}$   & -   & -           \\
+    & $0.5x10^{-3}$ & -     & -       \\ 
+    & $1.0x10^{-3}$   & -   & -                 \\ \hline
+12K & $1.0x10^{-2}$   & -   & -        \\ 
+    & $0.5x10^{-3}$ & -     & -     \\
+    & $1.0x10^{-3}$   & - & -		\\ \hline 
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{First error till 10 million blocks}
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|r|r|r|}
+\hline
+n$\simeq$   & BER(In)$\simeq$  & R=0.85  & R=0.9 & R=0.95 \\ \hline
+4K  & $1.0x10^{-2}$    &2.677$x10^{3}$           &1.7819$x10^{4}$       &1       \\ 
+    & $0.5x10^{-3}$    &2.4944$x10^{4}$          &1.65511$x10^{5}$     &1.79$x10^{2}$   \\ 
+    & $1.0x10^{-3}$    &        				 &                		&3.328$x10^{3}$ \\ \hline
+8K  & $1.0x10^{-2}$    &2.3817$x10^{4}$          &1.16847$x10^{5}$        &1   \\ 
+    & $0.5x10^{-3}$    &6.9491$x10^{4}$          &1.72263$x10^{5}$        &1.001$x10^{3}$  \\ 
+    & $1.0x10^{-3}$    &                		 &                		&9.338$x10^{3}$           \\ \hline
+12K & $1.0x10^{-2}$    &9.7055$x10^{4}$          &       		 		&1       \\
+    & $0.5x10^{-3}$    &5.6400$x10^{4}$          &     			 		&1.318$x10^{3}$             \\ 
+    & $1.0x10^{-3}$    & 			             &    					 &1.6920$x10^{4}$   \\ \hline 
 \end{tabular}
 \end{table}
 

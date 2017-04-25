@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.11)  7 MAR 2017 17:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.11)  22 APR 2017 00:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**results_comparison.tex
-(./results_comparison.tex
+**algoComparisonUsingRandomMatrix.tex
+(./algoComparisonUsingRandomMatrix.tex
 LaTeX2e <2016/02/01>
 Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/beamer/beamer.cls
@@ -1272,8 +1272,8 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\\' on input line 23.
 
-(./results_comparison.aux)
-\openout1 = `results_comparison.aux'.
+(./algoComparisonUsingRandomMatrix.aux)
+\openout1 = `algoComparisonUsingRandomMatrix.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
 LaTeX Font Info:    ... okay on input line 49.
@@ -1368,9 +1368,9 @@ LaTeX Info: Redefining \ref on input line 49.
 LaTeX Info: Redefining \pageref on input line 49.
 LaTeX Info: Redefining \nameref on input line 49.
 
-(./results_comparison.out) (./results_comparison.out)
+(./algoComparisonUsingRandomMatrix.out) (./algoComparisonUsingRandomMatrix.out)
 \@outlinefile=\write5
-\openout5 = `results_comparison.out'.
+\openout5 = `algoComparisonUsingRandomMatrix.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 49.
@@ -1451,10 +1451,10 @@ Dictionary: translator-theorem-dictionary, Language: English
 )
 LaTeX Info: Redefining \includegraphics on input line 49.
 
-(./results_comparison.nav) <iitb_logo.jpg, id=50, 449.68pt x 458.71375pt>
+(./algoComparisonUsingRandomMatrix.nav)
+<iitb_logo.jpg, id=50, 449.68pt x 458.71375pt>
 File: iitb_logo.jpg Graphic file (type jpg)
-
-<use iitb_logo.jpg>
+ <use iitb_logo.jpg>
 Package pdftex.def Info: iitb_logo.jpg used on input line 54.
 (pdftex.def)             Requested size: 56.90288pt x 56.9051pt.
 
@@ -1571,21 +1571,22 @@ Package pdftex.def Info: iitb_logo.jpg used on input line 331.
 
 ]
 \tf@nav=\write6
-\openout6 = `results_comparison.nav'.
+\openout6 = `algoComparisonUsingRandomMatrix.nav'.
 
 \tf@toc=\write7
-\openout7 = `results_comparison.toc'.
+\openout7 = `algoComparisonUsingRandomMatrix.toc'.
 
 \tf@snm=\write8
-\openout8 = `results_comparison.snm'.
+\openout8 = `algoComparisonUsingRandomMatrix.snm'.
 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 335.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 335.
 
-(./results_comparison.aux)
+(./algoComparisonUsingRandomMatrix.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 335.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 335.
-Package rerunfilecheck Info: File `results_comparison.out' has not changed.
+Package rerunfilecheck Info: File `algoComparisonUsingRandomMatrix.out' has not
+ changed.
 (rerunfilecheck)             Checksum: EF751C94470D3EDE1000F30552115B11;150.
 
 
@@ -1596,18 +1597,19 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 335.
  ) 
 Here is how much of TeX's memory you used:
  23135 strings out of 493029
- 476116 string characters out of 6136234
- 577478 words of memory out of 5000000
+ 476311 string characters out of 6136234
+ 577528 words of memory out of 5000000
  26100 multiletter control sequences out of 15000+600000
  10978 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 56i,15n,67p,425b,576s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,15n,67p,438b,576s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on results_comparison.pdf (13 pages, 221950 bytes).
+Output written on algoComparisonUsingRandomMatrix.pdf (13 pages, 221820 bytes).
+
 PDF statistics:
  452 PDF objects out of 1000 (max. 8388607)
  392 compressed objects within 4 object streams
