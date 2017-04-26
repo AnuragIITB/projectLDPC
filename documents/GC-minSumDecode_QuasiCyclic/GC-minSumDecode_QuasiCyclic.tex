@@ -59,16 +59,20 @@
 \end{textblock*}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ Notations }
+\section{ Introduction }
 \begin{frame}[t]
-\frametitle{ Notations }
+\frametitle{ Introduction }
+
 \begin{itemize}
-\item n - Block size.
-\item Eb/No - Input SNR in db to maintain input BER between $10^{-2}$ to $10^{-3}$.
-\item BER(IN) - Input bit error rate.
-\item BER(OUT) - Output bit error rate.
-\item CDB - Number of correctly decoded blocks.  
-\item Itr - Average number of iterations per block. (out of 25)
+\item Min sum algorithm is implemented for Gaussian channel. 
+\item Quasi-cyclic matrix of block size(n=) 4K, 8K and 12K  are formed using Sridhara-Fuja-Tanner algorithm.
+\item Five different code rates(R=) 0.75, 0.80, 0.85, 0.90 and 0.95 are taken.
+\item Raw input bit error rate(BER(IN)) is between $10^{-2}$ to $10^{-3}$, converted in form of Eb/No(db) to express input SNR in db. 
+\item BER(OUT) : Output bit error rate.
+\item CDB : Number of correctly decoded blocks.  
+\item Itr : Average number of iterations per block.
+\item We have tabulated simulation by sending 100 blocks and noting BER and number of iteration to decode.
+\item We have tabulated when the first block get wrongly decoded till 1 million transmitted blocks.
 \end{itemize}
 \end{frame}
 
@@ -195,7 +199,7 @@ n     & BER(IN)& Eb/No(db) & BER    & CDB & Itr(/25) \\ \hline
 \end{frame}
 
 \begin{frame}[t] 
-\frametitle{First error till 10 million blocks}
+\frametitle{First error till 1 million blocks}
 
 \begin{table}[]
 \centering
@@ -213,12 +217,14 @@ n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.80  \\ \hline
     & $1.0x10^{-3}$   & - & -		\\ \hline 
 \end{tabular}
 \end{table}
-
+\begin{itemize}
+\item -	 : No error found till 1 million blocks. 
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}[t] 
-\frametitle{First error till 10 million blocks}
+\frametitle{First error till 1 million blocks}
 
 \begin{table}[]
 \centering
@@ -226,17 +232,19 @@ n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.80  \\ \hline
 \hline
 n$\simeq$   & BER(In)$\simeq$  & R=0.85  & R=0.9 & R=0.95 \\ \hline
 4K  & $1.0x10^{-2}$    &2.677$x10^{3}$           &1.7819$x10^{4}$       &1       \\ 
-    & $0.5x10^{-3}$    &2.4944$x10^{4}$          &					     &1.79$x10^{2}$   \\ 
-    & $1.0x10^{-3}$    &-        				 &-                		&3.328$x10^{3}$ \\ \hline
+    & $0.5x10^{-3}$    &2.4944$x10^{4}$          &1.65511$x10^{5}$		&1.79$x10^{2}$   \\ 
+    & $1.0x10^{-3}$    &5.47550$x10^{5}$         &4.89654$x10^{5}$     &3.328$x10^{3}$ \\ \hline
 8K  & $1.0x10^{-2}$    &2.3817$x10^{4}$          &1.16847$x10^{5}$        &1   \\ 
     & $0.5x10^{-3}$    &6.9491$x10^{4}$          &1.72263$x10^{5}$        &1.001$x10^{3}$  \\ 
-    & $1.0x10^{-3}$    &-                		 &-                		&9.338$x10^{3}$           \\ \hline
-12K & $1.0x10^{-2}$    &9.7055$x10^{3}$          &       		 		&1       \\
+    & $1.0x10^{-3}$    &9.16505 $x10^{5}$        &6.28939$x10^{5}$       &9.338$x10^{3}$           \\ \hline
+12K & $1.0x10^{-2}$    &9.705$x10^{3}$          &5.37754$x10^{5}$       	&1       \\
     & $0.5x10^{-3}$    &5.6400$x10^{4}$          &-     			 		&1.318$x10^{3}$             \\ 
     & $1.0x10^{-3}$    &- 			             &-    					 &1.6920$x10^{4}$   \\ \hline 
 \end{tabular}
 \end{table}
-
+\begin{itemize}
+\item -	 : No error found till 1 million blocks. 
+\end{itemize}
 \end{frame}
 %-----------------------------last slide------------------------------
 %---------------------------end of document---------------------------

@@ -59,16 +59,20 @@
 \end{textblock*}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{ Notations }
+\section{ Introduction }
 \begin{frame}[t]
-\frametitle{ Notations }
+\frametitle{ Introduction }
+
 \begin{itemize}
-\item n - Block size.
-\item Eb/No - Input SNR in db to maintain input BER between $10^{-2}$ to $10^{-3}$.
-\item BER(IN) - Input bit error rate.
-\item BER(OUT) - Output bit error rate.
-\item CDB - Number of correctly decoded blocks.  
-\item Itr - Average number of iterations per block.
+\item Min sum algorithm is implemented for Gaussian channel. 
+\item Random matrix of block size(n=) 4K, 8K, 12K and 16K are formed using Mackey's algorithm.
+\item Five different code rates(R=) 0.75, 0.80, 0.85, 0.90 and 0.95 are taken.
+\item Raw input bit error rate(BER(IN)) is between $10^{-2}$ to $10^{-3}$, converted in form of Eb/No(db) to express input SNR in db. 
+\item BER(OUT) : Output bit error rate.
+\item CDB : Number of correctly decoded blocks.  
+\item Itr : Average number of iterations per block.
+\item We have tabulated simulation by sending 100 blocks and noting BER and number of iteration to decode.
+\item We have tabulated when the first block get wrongly decoded till 1 million transmitted blocks.
 \end{itemize}
 \end{frame}
 
@@ -196,7 +200,7 @@ n     & Eb/No(db) & BER    & CDB & Itr(/150) \\ \hline
 
 
 \begin{frame}[t] 
-\frametitle{First error till 10 million blocks}
+\frametitle{First error in 1 million blocks}
 
 \begin{table}[]
 \centering
@@ -214,11 +218,13 @@ n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.8  \\ \hline
     & $1.0x10^{-3}$   & -				     & -        \\ \hline   
 \end{tabular}
 \end{table}
-
+\begin{itemize}
+\item -	 : No error found till 1 million blocks. 
+\end{itemize}
 \end{frame}
 
 \begin{frame}[t] 
-\frametitle{First error till 10 million blocks}
+\frametitle{First error in 1 million blocks}
 
 \begin{table}[]
 \centering
@@ -236,6 +242,11 @@ n$\simeq$   & BER(In)$\simeq$    & R=0.85  & R=0.9 & R=0.95 \\ \hline
     & $1.0x10^{-3}$        & -			  			 & -           		& 1.4759$x10^{4}$   \\ \hline
       
 \end{tabular}
+\begin{itemize}
+\item NA : Not Applicable. (Matrix was not formed)
+\item -	 : No error found till 1 million blocks. 
+\end{itemize}
+ 
 \end{table}
 
 \end{frame}
