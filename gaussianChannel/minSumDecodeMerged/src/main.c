@@ -18,6 +18,8 @@ int main(int argc, char* argv[])
 		}
   
 	  ParityCheckMatrix pm;
+	  //
+	  // reading parity check matrix
 	  int read_status = readMatrix(argv[1], &pm);
 	  if ( read_status !=0 )
 		{
@@ -29,9 +31,6 @@ int main(int argc, char* argv[])
 	max_nitr = atoi( argv[4] );
 		
 	int nitr_req;
-//
-//	reading code block 
-//	
 	int block_count = 0 ;
 	FILE *in_code;
 	in_code = fopen( argv[2], "r");
@@ -44,9 +43,12 @@ int main(int argc, char* argv[])
 		
 	while(1)
 		{
+		//
+		// keep reading code blocks till they get exhausted.
 		double code_block[pm.ncols];
 		int read_status;
-		
+		//
+		//	reading code block 	
 		read_status = 	readCodeBlock ( &pm, in_code , code_block);
 		if (read_status != 0)
 			{
@@ -56,16 +58,16 @@ int main(int argc, char* argv[])
 		block_count++;
 //		printf("\t\t\tBlock Count \t\t%d\n", block_count);
 		
-			
-//
-// decoding block 
-//
-		struct timespec tstart={0,0}, tend={0,0};
-		clock_gettime(CLOCK_MONOTONIC, &tstart);
+		//
+		// initializing structure to get time	
+		struct timespec tstart={0,0}, tend={0,0};		// using system call to get time at start of the program
+		clock_gettime(CLOCK_MONOTONIC, &tstart);		
+		//
+		// decoding block 
 		nitr_req = minSumDecode( max_nitr , & pm , code_block ,atof( argv[5]) );
-		tot_itr += nitr_req ;
-		clock_gettime(CLOCK_MONOTONIC, &tend);
-
+		clock_gettime(CLOCK_MONOTONIC, &tend);			// using system call to get time at the end of program 
+		tot_itr += nitr_req ;							// increasing iteration count
+//		
 // BPSk demodulation
 		bpskdemodulation( pm.ncols ,  code_block );
 //
@@ -82,23 +84,27 @@ int main(int argc, char* argv[])
 //		printf( "INFO: Output decoded code word written to ../include/decodedOutput.txt \n");
 //
 // argv[3]		: output
-// -time 		command line output shows time to decode the code block; termed as "time mode".
-// -accuracy		command line output shows number of incorrect bits after decoding of  the code block; termed as "accuracy mode".
+// -time 		: command line output shows time to decode the code block; termed as "time mode".
+// -accuracy	: command line output shows number of incorrect bits after decoding of  the code block; termed as "accuracy mode".
 //	
 		
 		if ( strcmp(argv[3],"-time")==0)
 			{
+			//
+			// performs timing analysis
 			double time_taken = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -  
 		           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
 			printf("\t\t\t-----------------------------------------------------------------------------------------------------\n \
 			Block Number\t %d \t Time to decode \t %.5f seconds \t iteration required \t %d \t\n  \
 			------------------------------------------------------------------------------------------------------\n", block_count,
-		        time_taken, nitr_req) ;
+		    time_taken, nitr_req) ;
 			total_time += time_taken;
 			}
 
 		if ( strcmp(argv[3],"-accuracy")==0)
 			{
+			//
+			// performs accuracy analysis
 			int incorrect_bits;
 			incorrect_bits = findAccuracy( &pm );	
 			if ( incorrect_bits == 0)
@@ -111,14 +117,18 @@ int main(int argc, char* argv[])
 			block_count,incorrect_bits); 
 			total_incorrect_bits += incorrect_bits ;		
 			}
-
-	
+		//
+        // end of decoding of all the code blocks	
 		}
+		
+		//
+		// displaying the results in command line : 
 		long double BER ;
 		BER = ((long double)total_incorrect_bits/(long double)block_count)/(long double)pm.ncols ;
 			if ( strcmp(argv[3],"-time")==0)
 			{
-			
+			//
+			// results of timing analysis	:
 			printf("\t\t\t----------------------------------------------------------------------------------\n \
 			Total block count\t %d \n \
 			Average time to decode \t %.5f seconds \n \
@@ -130,7 +140,8 @@ int main(int argc, char* argv[])
 
 			if ( strcmp(argv[3],"-accuracy")==0)
 			{
-			
+			//
+			// results of accuracy analysis 	:
 			printf("\t\t\t----------------------------------------------------------\n \
 			Total block count\t \t \t %d \n \
 			correctly decoded blocks \t \t %d \n \

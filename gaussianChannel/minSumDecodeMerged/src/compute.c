@@ -6,14 +6,14 @@
 
 #include "compute.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+
 //
 // reading the input parity check matrix in structure
-//
-
 int readMatrix(char* matrix_file_name, ParityCheckMatrix* pm_p ) 
 {
 	FILE* in_file ;
-        in_file = fopen (matrix_file_name, "r");
+    in_file = fopen (matrix_file_name, "r");
 
 	int nrows, ncols ;
 	unsigned ncol_ind ;
@@ -60,9 +60,10 @@ int readMatrix(char* matrix_file_name, ParityCheckMatrix* pm_p )
 	return 0;
 }
 
+//---------------------------------------------------------------------------------------------------------------
+
 //
 // Reading the code block 
-// 
 int readCodeBlock ( ParityCheckMatrix* pm_p, FILE* in_code , double* code_block)
 {
 
@@ -82,24 +83,31 @@ return 0;
 }
 
 
-// 
-// MIn sum algorithm to decode the code block
-//
+//--------------------------------------------------------------------------------------------------------- 
+// Min sum algorithm to decode the code block	:
 int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, double ebbyNodb)
 {
 
 	int nitr = 1;  // initializing number of iterations.
-//
-// Initializing a priori probabilities
-//
-	double aPriori[pm_p->ncols];
+
+	double aPriori[pm_p->ncols];	// aPriori matrix
+	
 	int I;
+	
 	double ebbyNo,sigma2 ;
+	
 	double rate ;
+//	
+//	calculating rate of code	:
 	rate = (double) ((pm_p->ncols)-(pm_p->nrows))/(pm_p->ncols);
+	
 	ebbyNo = pow(10,0.1*ebbyNodb) ; 
+	
 	sigma2 = 1/(2*rate*ebbyNo) ;
+	
 //	printf(" rate = %lf , ebbyNodb = %lf , ebbyNo = %lf , sigma2 = %lf \n", rate, ebbyNodb, ebbyNo, sigma2);
+//
+// 	Initializing a priori probabilities	:
 	for ( I = 0 ; I < pm_p->ncols ; I++ )
 		{
 		// It has a minus sign in contrast to papers.
@@ -118,237 +126,49 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, dou
 // message contain the soft information transferred from bit nodes towards check nodes. 
 // messages are stored in row compressed from similar to parity check matrix.
 // thus indexed same as parity check matrix.
-//
 	double message[pm_p->ncol_ind] ; 
+	
+	initializeMessage ( pm_p, aPriori, message );
 
-	int* chk_node_bit_p;  
-	int row,col;
-		for ( row = 0 ; row < (pm_p->nrows) ; row++ )
-			{
-			if ( row == (pm_p->nrows-1) )
-				{
-				for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
-					{
-					chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
-					message [ (pm_p->row_ptr[row]-1) + col ] = aPriori[ chk_node_bit_p[col]-1] ;
-//					printf( "message( %d,%d ) = %lf \t", row ,col , message [ (pm_p->row_ptr[row]-1) + col ]) ;
-					}
-				}
-			else 
-				{
-				for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
-					{
-					chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
-					message [ (pm_p->row_ptr[row]-1) + col ] = aPriori[ chk_node_bit_p[col]-1] ;
-//			printf( "message( %d,%d ) = %lf \t", row ,col , message [ (pm_p->row_ptr[row]-1) + col ]) ;
-					}
-				}
-			}
-
+//
+//	After initialization starting iterative decoding	:
 	while ( nitr <= max_nitr )
 		{
-
+//
+// 	Initializing a posteriori probabilities	:
 		double aPosteriori[pm_p->ncols];
-		for ( I = 0 ; I < pm_p->ncols ; I++)
-			{
-			aPosteriori[I] = aPriori[I] ;
-			}
-	
+		
+		initialize_aPosteriori( pm_p, aPriori, aPosteriori );	
 //
-// defining and intializing the extrinsic inforamtion
-//
+// 	Intializing the extrinsic inforamtion
 		double ext_info[pm_p->ncol_ind];
-		for ( I = 0 ; I < pm_p->ncols ; I++)
-			{
-			ext_info[I] = 0;
-			}
-	
-
-// variable 	: 	definition
-// check_bit_p  : a pointer that points the bits related to one check node.
-// ext_info     : Contains the exor of bits related to one check node.
-// 
-		int* chk_node_bit_p;
-		int row,col;
-		for ( row = 0 ; row < (pm_p->nrows) ; row++ )
-			{
-// 
-// iterarting through rows one by one.
-// One row corrosponds to one parity check equation.
-// Calculating exor_all.
- 
+		
+		initializeExtrinsicInfo ( pm_p, ext_info );
 //
-// initializing the variables.
-//
-			chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
-			
-//
-// calculating exor_all for a check node.
-//
-			if ( row == (pm_p->nrows-1) )
-				{
-				for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
-					{
-					int I;
-					double val ;
-					int flag = 0 ; 
-					bool exor = 0;
-					int sign ; 
-					for ( I = 0 ; I < CHECK_BIT_COUNT1 ; I++)
-						{
-						if ( I == col)
-						continue;
-						else
-							{
-							
-							// finding sign 
-							if ( message[ (pm_p->row_ptr[row]-1) + I] >= 0 )
-								{
-								exor = exor ^ 0 ;
-								} 
-							else if ( message[ (pm_p->row_ptr[row]-1) + I] < 0 )
-								{
-								exor = exor ^ 1 ; 
-								}
-								
-							// finding minimum of the messages
-							if (flag == 0)
-								{
-								val = fabs(message[ (pm_p->row_ptr[row]-1) + I]);
-								}
-							else
-								{
-								if ( fabs(message[ (pm_p->row_ptr[row]-1) + I]) < val )
-									{
-									val = fabs(message[ (pm_p->row_ptr[row]-1) + I]) ; 
-									}
-								}
-							} 
-						flag = 1 ;
-						}
-					sign = (exor == 0)?1:-1;
-					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
-//					printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
-					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ; 	
-					}
-				}
-			else
-				{
-				for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
-					{
-					int I;
-					double val = 1;
-					int flag = 0 ; 
-					bool exor = 0;
-					int sign ; 
-					for ( I = 0 ; I < CHECK_BIT_COUNT2 ; I++)
-						{
-						if ( I == col)
-						continue;
-						else
-							{
-							
-							// finding sign 
-							if ( message[ (pm_p->row_ptr[row]-1) + I] >= 0 )
-								{
-								exor = exor ^ 0 ;
-								} 
-							else if ( message[ (pm_p->row_ptr[row]-1) + I] < 0 )
-								{
-								exor = exor ^ 1 ; 
-								}
-								
-							// finding minimum of the messages
-							if (flag == 0)
-								{
-								val = fabs(message[ (pm_p->row_ptr[row]-1) + I]);
-								}
-							else
-								{
-								if ( fabs(message[ (pm_p->row_ptr[row]-1) + I]) < val )
-									{
-									val = fabs(message[ (pm_p->row_ptr[row]-1) + I]) ; 
-									}
-								}
-							} 
-						flag = 1 ;
-						}
-					sign = (exor == 0)?1:-1;
-					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ; 
-///					printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
-					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;	 	
-					}
-				}
-			}
-// 
-// Taking decision for the bit
-// 
+//	Performing computation on Check nodes	:
+		checkNodeComputeEngine( pm_p,  message,  ext_info, aPosteriori);
+		
 //			for ( I = 0 ; I < pm_p->ncols ; I++)
 //			{
 //			printf( " aPosteriori = %lf \n",aPosteriori[I]);
 //			}
 
 //
-// 
-		bool is_decoded = 1;
-		int bit;
-		for ( bit = 0 ; bit < pm_p->ncols ; bit++)
-			{
-// 
-// iterating through all code bits
-//
-			if ( aPosteriori[bit] > 0 ) 
-				{
-				if ( code_block[bit] > 0)
-					{
-					is_decoded = 0;
-					}
-				code_block[bit] = -1;
-				}
-				
-			else if ( aPosteriori[bit] < 0 ) 
-				{
-				if ( code_block[bit] < 0)
-					{
-					is_decoded = 0;
-					}
-				code_block[bit] = 1;
-				}
-			}
-		
+//	Modifing the code block according to a posteriori probabilities 
+//	and checking if the new block satisfies all the parity checks.
+        bool is_decoded ;
+        is_decoded = checkIsdecoded( pm_p, code_block , aPosteriori ) ;
+        
 		if (is_decoded == 1 )
-		{
-		break;
-		}
+			{
+			// decoding stops.
+			break;
+			}
 		else 
 			{
-// else we have to update aPriori probability for the next iteration.
-			for ( row = 0 ; row < (pm_p->nrows) ; row++ )
-				{
-				chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
-					if ( row == (pm_p->nrows-1) )
-						{
-						for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
-							{
-								message [ (pm_p->row_ptr[row]-1) + col ] = \
-								aPosteriori[ chk_node_bit_p[col]-1] 	\
-								- ext_info [(pm_p->row_ptr[row]-1) + col] ;
-//				printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
-							}
-						}
-					else 
-						{
-						for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
-							{
-							message [ (pm_p->row_ptr[row]-1) + col ] =\
-							 aPosteriori[ chk_node_bit_p[col]-1] 	\
-							 - ext_info [(pm_p->row_ptr[row]-1) + col] ;
-//				printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
-							}
-						}
-				}
-				
-			}
+			// else we have to update information on Bit Node side.
+			updateMessage( pm_p , ext_info ,aPosteriori , message );
+			}	
 										
 		nitr++ ;
 		}  // end while
@@ -356,6 +176,11 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, dou
 return (nitr=nitr-1) ;
 }
 
+//------------------------------------------------------------------------------------------------------
+
+// Fucnction to BPSK modulate code block 	:
+		// BPSK modulation :	0  ->  -1
+		// 						1  ->   1
 void bpskdemodulation ( int nbits , double* code_block)
 {
 	int I ; 
@@ -366,13 +191,311 @@ void bpskdemodulation ( int nbits , double* code_block)
 		}
 }
 
+//-------------------------------------------------------------------------------------------------------
+
+//
+// Function to modify code block and check if the new code block satisfies all parity checks	:
+// it modifies the code block according to a posteriori probabilities.
+// return the decode status of the code block.
+bool checkIsdecoded( ParityCheckMatrix* pm_p, double* code_block , double* aPosteriori ) 
+{
+		bool is_decoded = 1;					// is_decoded : variable indicated if block is \
+												// fully decoded or require further iteration.
+		int bit;
+		for ( bit = 0 ; bit < pm_p->ncols ; bit++)
+			{
+// 
+// iterating through all code bits	:
+			if ( aPosteriori[bit] > 0 )    		// indicates that code bit is likely to be 0.
+				{
+				if ( code_block[bit] > 0)		// indicates that code bit is 1 at present.
+					{
+					is_decoded = 0;				// flags that a bit got flipped while decoding.
+					}
+				code_block[bit] = -1;			// modifies the code bit.
+				}
+				
+			else if ( aPosteriori[bit] < 0 ) 	// indicates that code bit is likely to be 1.
+				{
+				if ( code_block[bit] < 0)		// indicates that code bit is 0 at present.
+					{	
+					is_decoded = 0;				// flags that a bit got flipped while decoding.
+					}
+				code_block[bit] = 1;			// modifies the code bit.
+				}
+			}
+		return is_decoded ;						// 
+}
+
+//-------------------------------------------------------------------------------------------------------------
+
+//
+//	function to update the bit node information (message) according to a posteriori probability and extrinsic information.
+void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteriori, double* message )
+{
+		int* chk_node_bit_p;					// pointer points first bit node corrosponding to a check
+		int row,col;
+		for ( row = 0 ; row < (pm_p->nrows) ; row++ )
+				{
+				//
+				// iterating through all the check node.
+					chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
+					if ( row == (pm_p->nrows-1) )
+						{
+						//
+						// true for last check node only.
+						for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+							{
+							//
+							//	iterating through all the bit nodes of a check node and updating message.
+								message [ (pm_p->row_ptr[row]-1) + col ] =  \
+								aPosteriori[ chk_node_bit_p[col]-1] - 		\
+								ext_info [(pm_p->row_ptr[row]-1) + col] ;
+//	printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
+							}
+						}
+					else 
+						{
+						//
+						// true for all the check nodes except last check node.
+						for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
+							{
+							//
+							//	iterating through all the bit nodes of a check node and updating message.
+							message [ (pm_p->row_ptr[row]-1) + col ] =    \
+							aPosteriori[ chk_node_bit_p[col]-1]  -  	  \
+							ext_info [(pm_p->row_ptr[row]-1) + col] ;
+//	printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
+							}
+						}
+				}
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+//
+// The function takes messages from bit nodes and compute extrinsic inforamtion for all the edges
+// and a posteriori probabilities for all the bits. 
+void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* aPosteriori)
+{
+		int* chk_node_bit_p;						// pointer points first bit node corrosponding to a check
+		int row,col;
+		for ( row = 0 ; row < (pm_p->nrows) ; row++ )
+			{
+			//
+		    // iterating through all the check node.						
+			chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
+			if ( row == (pm_p->nrows-1) )
+				{
+				//
+				// true for last check node only
+				for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+					{
+					// iterating through all the bit nodes corrosponding to a check 
+					int I;
+					double val ;				// represents magnitude of the extrensic information.
+					int flag = 0 ; 				// represents first iteration through the inner most loop.
+					bool exor = 0;				// represents sign of the extrinsic information.
+					int sign ; 
+					for ( I = 0 ; I < CHECK_BIT_COUNT1 ; I++)
+						{
+						//
+						// To calculating extrinsic information for all the edges from a check to all the bit nodes,
+		    			// iterating through all the bit nodes corrosponding to a perticular check node.
+						if ( I == col)
+						//
+						// skipping the self information .
+						continue;
+						else
+							{
+							//
+							// finding sign of the extrinsic information 
+							if ( message[ (pm_p->row_ptr[row]-1) + I] >= 0 )
+								{
+								exor = exor ^ 0 ;
+								} 
+							else if ( message[ (pm_p->row_ptr[row]-1) + I] < 0 )
+								{
+								exor = exor ^ 1 ; 
+								}
+								
+							// finding minimum of the messages to update magnitude of the extrinsic information.
+							if (flag == 0)
+								{
+								// 
+								// true for first iteration to initialize the magnitude of the extrinsic information.
+								val = fabs(message[ (pm_p->row_ptr[row]-1) + I]);
+								}
+							else
+								{
+								if ( fabs(message[ (pm_p->row_ptr[row]-1) + I]) < val )
+									{
+									val = fabs(message[ (pm_p->row_ptr[row]-1) + I]) ; 
+									}
+								}
+							} 
+						//
+						// update flag to represent that this is not the first iteration to the inner loop.	
+						flag = 1 ;
+						}
+					//
+					//	if exor = 0	: sign of extrinsic information is positive
+					//  if exor = 1 : sign of extrinsic information is negative
+					sign = (exor == 0)?1:-1;
+					//
+					//	Evaluating extrinsic information 
+					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
+					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+					//
+					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ; 	
+					}
+				}
+			else
+				{
+				for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
+					{
+					// iterating through all the bit nodes corrosponding to a check 
+					int I;
+					double val ;				// represents magnitude of the extrensic information.
+					int flag = 0 ; 				// represents first iteration through the inner most loop.
+					bool exor = 0;				// represents sign of the extrinsic information.
+					int sign ; 
+					for ( I = 0 ; I < CHECK_BIT_COUNT2 ; I++)
+						{
+						//
+						// To calculating extrinsic information for all the edges from a check to all the bit nodes,
+		    			// iterating through all the bit nodes corrosponding to a perticular check node.
+						if ( I == col)
+						//
+						// skipping the self information .
+						continue;
+						else
+							{
+							//
+							// finding sign of the extrinsic information 
+							if ( message[ (pm_p->row_ptr[row]-1) + I] >= 0 )
+								{
+								exor = exor ^ 0 ;
+								} 
+							else if ( message[ (pm_p->row_ptr[row]-1) + I] < 0 )
+								{
+								exor = exor ^ 1 ; 
+								}
+								
+							// finding minimum of the messages to update magnitude of the extrinsic information.
+							if (flag == 0)
+								{
+								// 
+								// true for first iteration to initialize the magnitude of the extrinsic information.
+								val = fabs(message[ (pm_p->row_ptr[row]-1) + I]);
+								}
+							else
+								{
+								if ( fabs(message[ (pm_p->row_ptr[row]-1) + I]) < val )
+									{
+									val = fabs(message[ (pm_p->row_ptr[row]-1) + I]) ; 
+									}
+								}
+							} 
+						//
+						// update flag to represent that this is not the first iteration to the inner loop.	
+						flag = 1 ;
+						}
+					//
+					//	if exor = 0	: sign of extrinsic information is positive
+					//  if exor = 1 : sign of extrinsic information is negative
+					sign = (exor == 0)?1:-1;
+					//
+					//	Evaluating extrinsic information 
+					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
+					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+					//
+					// Modify posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ; 	
+					}
+				}
+			}
+			
+}
+
+//-------------------------------------------------------------------------------------------------------------------------
+
+//
+//	the function takes a priori probabilities at bit nodes as a input and initializes the messages passing 
+//	through edges, from bit nodes side to check node side.
+void initializeMessage ( ParityCheckMatrix* pm_p, double* aPriori, double* message )
+{
+	int* chk_node_bit_p;  								// pointer points first bit node corrosponding to a check
+	int row,col;
+		for ( row = 0 ; row < (pm_p->nrows) ; row++ )
+			{
+			//
+			// itratating to all the check nodes
+			if ( row == (pm_p->nrows-1) ) 				
+				{
+				//
+				// true for last check node only.
+				for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+					{
+					// iterating through all the bit nodes of the last check node to initialize message.
+					chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
+					message [ (pm_p->row_ptr[row]-1) + col ] = aPriori[ chk_node_bit_p[col]-1] ;
+//					printf( "message( %d,%d ) = %lf \t", row ,col , message [ (pm_p->row_ptr[row]-1) + col ]) ;
+					}
+				}
+			else 
+				{
+				//
+				// true for all check nodes except last check node.
+				for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
+					{
+					// iterating through all the bit nodes of the last check node to initialize message.
+					chk_node_bit_p = & ( pm_p->col_ind[ pm_p->row_ptr[row]-1 ]) ;
+					message [ (pm_p->row_ptr[row]-1) + col ] = aPriori[ chk_node_bit_p[col]-1] ;
+//					printf( "message( %d,%d ) = %lf \t", row ,col , message [ (pm_p->row_ptr[row]-1) + col ]) ;
+					}
+				}
+			}
+}			
+			
+//-------------------------------------------------------------------------------------------------------------------
+
+//
+// initialize a posteriori probability by a priori probabilities.
+void initialize_aPosteriori ( ParityCheckMatrix* pm_p, double* aPriori, double* aPosteriori )
+{		
+int I;
+for ( I = 0 ; I < pm_p->ncols ; I++)
+			{
+			aPosteriori[I] = aPriori[I] ;
+			}
+}
+
+//----------------------------------------------------------------------------------------------------------------
+
+//
+// initialize extrinsic inforamtion for every iteration to zero.
+void initializeExtrinsicInfo ( ParityCheckMatrix* pm_p, double* ext_info )
+{
+int I;
+		for ( I = 0 ; I < pm_p->ncols ; I++)
+			{
+			ext_info[I] = 0;
+			}
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+//
+// function reads to files	: encode_block_file and decoded_block_file, compare them and
+// count the number of mismatch bits. 			
 int findAccuracy( ParityCheckMatrix* pm_p )
 {
 	FILE* encoded_block;  // -- file has 100*10k zero's 
 	FILE* decoded_block;
 //
 // code_block can't be used as it got modified.
-//
 	encoded_block = fopen( "../include/encodeBlock/encodeBits.txt" , "r");
 	decoded_block = fopen( "../include/decodedBlock/decodedOutput.txt" , "r");
 
@@ -402,4 +525,6 @@ int findAccuracy( ParityCheckMatrix* pm_p )
 		}
 return (inaccurate_bits);	
 }
+
+//--------------------------------------------------------------------------------------------------------------
 

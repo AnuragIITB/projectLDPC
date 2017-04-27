@@ -1,0 +1,72 @@
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+
+The following software contains two folders:
+
+src 	:	contains the source and header files
+include :	contains the input and output files
+
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+To compile the programs : 
+
+>> execute compile.sh file.
+#./compile.sh
+An object file, "min_sum_decode" is made in src folder.
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+Running the software:
+
+NAME:	min_sum_decode
+
+Takes parity check matrix and code block as input files and performs min sum
+algorithm to decode the code blocks. Decoding time analysis and accuracy of the 
+algorithm can be checked. 
+
+---------------------------------------------------------------------------------------------
+
+SYNOPSIS:
+
+sum_product_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration]  [Eb/No db]  
+
+----------------------------------------------------------------------------------------------
+
+DESCRIPTION:
+
+FILE1	 :	parityCheckMatrix.txt file
+
+FILE2	 :	codeBits.txt file
+
+MODE     :	Two mode of operations
+		
+		-time 	:	Decode time analysis.
+		-accuracy :	Accuracy of decoding analysis.
+		
+Eb/No db:	Input SNR in db.
+
+		
+------------------------------------------------------------------------------------------------
+
+EXAMPLES:
+	 
+#./min_sum_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time   85  1
+#./min_sum_decode  ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  1.25
+
+---------------------------------------------------------------------------------------------------
+
+ORGANIZATION OF THE FOLDERS:
+
+src	:
+	-> min_sum_decode (executable file)
+include :
+	-> codeBlock
+		- contains code blocks.
+	-> results
+		- contains time and  accuracy outputs.
+	-> decodeBlock
+		- contains final decoded block.
+	-> encodeBlock
+		- contain encoded block file to for comparison to decoded block.
+
+-----------------------------------------------------------------------------------------------------
