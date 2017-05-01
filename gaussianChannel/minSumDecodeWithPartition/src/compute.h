@@ -4,6 +4,7 @@
 #define CHECK_BIT_COUNT1   ( pm_p->ncol_ind - ( pm_p->row_ptr[row] -1 ) )
 #define CHECK_BIT_COUNT2   ( pm_p->row_ptr[row + 1] ) - ( pm_p->row_ptr[row]  )
 
+#define NUMBER_OF_CHECK_SETS  2 
 
 //
 // structure contain the parity check matrix 
@@ -20,7 +21,7 @@ typedef struct ParityCheckMatrix
 //
 // reads the  parity check matrix
 //
-int readMatrix (char* matrix_file_name, ParityCheckMatrix* pm_p);
+int readMatrix (FILE* matrix_file_name, ParityCheckMatrix* pm_p);
 
 //
 // 	reads the code block 
@@ -30,7 +31,11 @@ int readCodeBlock ( ParityCheckMatrix* pm_p , FILE* in_code , double* code_block
 //
 // decode the code block by min sum decode algrithm
 //
-int minSumDecode ( int max_number_of_iteration , ParityCheckMatrix* pm_p , double* code_block, double EbbyNo );
+int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p11, ParityCheckMatrix* pm_p12,\
+								ParityCheckMatrix* pm_p21, ParityCheckMatrix* pm_p22,\
+								double* code_block1,\
+								double* code_block2,\
+								double ebbyNodb);
 
 //
 //	check the number of decoding errors.
@@ -58,9 +63,9 @@ void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteri
 
 //
 // The function takes messages from bit nodes and compute extrinsic inforamtion for all the edges
-// and a posteriori probabilities for all the code bits. 
-//
-void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* aPosteriori);
+// and a posteriori probabilities for all the code bits. //
+void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* aPosteriori,\
+																	    double* transverse_info);
 
 //
 //	the function takes a priori probabilities at bit nodes as a input and initializes the messages passing 
@@ -77,4 +82,27 @@ void initialize_aPosteriori ( ParityCheckMatrix* pm_p, double* aPriori, double* 
 // initialize extrinsic inforamtion for every iteration to zero.
 //
 void initializeExtrinsicInfo ( ParityCheckMatrix* pm_p, double* ext_info );
+
+//
+// initializing apriori probabiliies
+void initialize_aPriori ( ParityCheckMatrix* pm_p, double* code_block , double ebbyNodb , double* aPriori);
+
+//
+//
+double modifyInfo (double ext_info , double self_inforamtion );
+
+//
+//
+//
+void initializeTransverseInfo ( ParityCheckMatrix* pm_p, double* transverse_info );
+
+//
+//
+//
+void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , double* ext_info );
+
+//
+//
+//
+void	update_aPosteriori ( ParityCheckMatrix* pm_p, double* ext_info , double* aPosteriori );
 #endif

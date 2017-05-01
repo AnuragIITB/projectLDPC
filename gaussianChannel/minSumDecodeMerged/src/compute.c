@@ -116,6 +116,8 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, dou
 		// Here BPSK modulation :	0  ->  -1
 		// 							1  ->   1
 		//
+		//
+		//aPriori[I] = 4*code_block[I]/(2*sigma2) ; 		// for test_matrix
 		aPriori[I] = -4*code_block[I]/(2*sigma2) ;   
 //		printf(" I= %d ,  aPriori[I]=  %lf \n", I , aPriori[I]);
 		}
