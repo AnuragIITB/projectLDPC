@@ -1,2 +1,3 @@
 \beamer@endinputifotherversion {3.36pt}
-\beamer@sectionintoc {1}{ Modified min sum algorithm}{6}{0}{1}
+\beamer@sectionintoc {1}{Modified min sum algorithm}{13}{0}{1}
+\beamer@sectionintoc {2}{ Modified min sum algorithm}{13}{0}{2}

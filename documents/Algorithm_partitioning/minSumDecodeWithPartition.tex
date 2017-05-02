@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{arydshln}   %%% package for dotted line
 
+
 \usepackage{algorithmic}
 \usepackage{hyperref}
 
@@ -72,6 +73,225 @@
 \end{frame}
 
 
+
+
+
+\begin{frame}[t]
+	\frametitle{ Tanner Graph}
+	\begin{itemize}
+	\item LDPC code's parity check equations can be represented by bipartite graph, called the Tanner graph\footnote{R. M. Tanner, “A recursive approach to low complexity codes,” IEEE
+Trans. Inform. Theory, vol. IT-27, no. 5, pp. 533–547, September 1981.}.
+	\end{itemize}
+
+	\begin{columns}[totalwidth=\textwidth]
+		\begin{column}{0.5\textwidth}
+		\centering
+\[
+\begingroup % keep the change local
+\setlength\arraycolsep{1pt}
+\left[ \begin{array} {c|cccccccc} 
+  &    c1 &   c2 &   c3 &  c4  &  c5  &  c6  &  c7  &  c8 \\ \hline
+r1 &    1  &   1  &   1  &   0  &   0  &   0  &   0  &   0 \\
+r2 &    0  &   0  &   0  &   1  &   1  &   1  &   0  &   0 \\ 
+r3 &    1  &   0  &   0  &   1  &   0  &   0  &   1  &   0 \\
+r4 &    0  &   1  &   0  &   0  &   1  &   0  &   0  &   1 \end{array} \right] 
+\endgroup
+\]			
+	\end{column}%    		
+	\begin{column}{0.5\textwidth}
+		\centering
+		\begin{figure}
+		\includegraphics[height=3cm,width=6cm]{minSum1}
+		\caption{ Tanner Graph }
+	\end{figure}
+	\end{column}%
+\end{columns}
+\end{frame}	
+	
+
+\begin{frame}[t]
+\frametitle{ A priori initialization }  
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.4\textwidth}
+	\centering
+	\begin{itemize}
+	\item A priories are calculated by soft information of the code bits.	
+	\item 	$
+	\alert{aPriori[I] =}
+	$
+	$
+	\alert{ -4 * C[I] * R * \dfrac{Eb}{No}}
+	$ 
+	\item where C[I] = $i^{th}$ code block
+	\item R = code rate
+	\item $\dfrac{Eb}{No}$ = signal to noise power ratio
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.6\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4cm,width=7cm]{minSum2}
+	\caption{ A priori initialization }
+	\end{figure}
+	\end{column}%
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}[t]
+\frametitle{ Message initialization }  
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.4\textwidth}
+	\centering
+	\begin{itemize}
+	\item Messages are the information propagating from bit nodes to check nodes.
+	\item These are initialized to a priori of their respective bit node.	
+	\item 	$ \alert{message[I][J] =} 
+	$
+	$
+	\alert{aPriori[I]} 
+	$ 
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.6\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4cm,width=7cm]{minSum3}
+	\caption{ Message initialization }
+	\end{figure}
+	\end{column}%
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Extrinsic information calculation }  
+\vspace{-5mm}
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.3\textwidth}
+	\centering
+	\begin{itemize}
+	\item Extrinsic information of a bit node is calculated min sum of all the message's connected to 
+	that particular check node. 	
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.7\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4.5cm,width=8cm]{minSum4}
+	\end{figure}
+	\end{column}%
+\end{columns}
+
+\begin{itemize}
+
+\item \alert{$|E_{(j,i)}| =  Min_{i'\in B_j \ i'\neq i }|M_{j,i'}|   $ }
+\item \alert{$sign({E_{(j,i)}}) =  \prod_{i'\in B_j \ i'\neq i }sign(M_{j,i'})   $ }
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ A posteriori calculation }  
+\vspace{-5mm}
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.3\textwidth}
+	\centering
+	\begin{itemize}
+	\item A posteriori probabilities are the output bit probabilities.
+	\item These are used to modify the code block after every iteration.
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.7\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4.5cm,width=8cm]{minSum5}
+	\end{figure}
+	\end{column}%
+\end{columns}
+
+\begin{itemize}
+
+\item \alert{$ aPosteriori[I] = \sum_{j\in A_i} E_{j,i} + aPriori[I] $}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ isDecoded block }  
+\vspace{-5mm}
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.48\textwidth}
+	\centering
+	\begin{itemize}
+	\item This block flips a bit if it is different form hard decision 
+	of the a posteriori probability of the bit. Thus, modifies the code block.  
+	\item If, no bit got flipped then decoding stops.
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.52\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=3.5cm,width=5cm]{minSum6}
+	\end{figure}
+	\end{column}%
+\end{columns}
+
+\begin{itemize}
+
+\item \alert{$ is\_decoded =  1$ ;\\
+if $\forall$ i code\_bit[I] = hard\_decision(aPosteriori[I]) }
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Updating messages }  
+\vspace{-5mm}
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.3\textwidth}
+	\centering
+	\begin{itemize}
+	\item Messages are updated and transmitted back to start the next iteration of decoding.
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.7\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=5cm,width=8cm]{minSum7}
+	\end{figure}
+	\end{column}%
+\end{columns}
+
+\begin{itemize}
+
+\item \alert{$   message_{(j,i)} = aPosteriori[i] - E_{(j,i)}  $}
+\end{itemize}
+\end{frame}
+
+
+
+
+
 \begin{frame}[t]
 \frametitle{  }                                 % and a label for
 \alert{ minSumDecode()	: }
@@ -112,6 +332,9 @@
 \end{itemize}
 \end{frame}
 
+
+\section{Modified min sum algorithm}
+
 \section{ Modified min sum algorithm}
 \begin{frame}[t]
 \frametitle{ Partitioning matrix  }  
@@ -147,6 +370,10 @@ r4 &     0  &   0  &   0  &   0  &   1  &   0  &   1  &   1 \end{array} \right]
 
 
 
+
+
+
+
 \begin{frame}[t]
 \frametitle{ Modified min sum algorithm }                                 % and a label for
 \alert{ main.c }
@@ -164,6 +391,129 @@ r4 &     0  &   0  &   0  &   0  &   1  &   0  &   1  &   1 \end{array} \right]
 \end{algorithmic}
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{ A priori initialization }  
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.4\textwidth}
+	\centering
+	\begin{itemize}
+	\item A priories are calculated by soft information of the code bits.	
+	\item 	$
+	\alert{aPriori[I] =}
+	$
+	$
+	\alert{ -4 * C[I] * R * \dfrac{Eb}{No}}
+	$ 
+	\item where C[I] = $i^{th}$ code block
+	\item R = code rate
+	\item $\dfrac{Eb}{No}$ = signal to noise power ratio
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.6\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4cm,width=7cm]{minSum2}
+	\caption{ A priori initialization }
+	\end{figure}
+	\end{column}%
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ A priori initialization }  
+\vspace{-5mm}
+\begin{figure}
+       \includegraphics[height=7cm,width=11cm]{minSumModified1}
+       \end{figure}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Message initialization }  
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.4\textwidth}
+	\centering
+	\begin{itemize}
+	\item Messages are the information propagating from bit nodes to check nodes.
+	\item These are initialized to a priori of their respective bit node.	
+	\item 	$ \alert{message[I][J] =} 
+	$
+	$
+	\alert{aPriori[I]} 
+	$ 
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.6\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4cm,width=7cm]{minSum3}
+	\caption{ Message initialization }
+	\end{figure}
+	\end{column}%
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Message initialization }  
+\vspace{-5mm}
+\begin{figure}
+       \includegraphics[height=7cm,width=11cm]{minSumModified2}
+       \end{figure}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Extrinsic information calculation }  
+\vspace{-5mm}
+\begin{columns}[totalwidth=\textwidth]
+	\begin{column}{0.3\textwidth}
+	\centering
+	\begin{itemize}
+	\item Extrinsic information of a bit node is calculated min sum of all the message's connected to 
+	that particular check node. 	
+	\end{itemize}
+ 
+			
+	\end{column}% 
+	   		
+	\begin{column}{0.7\textwidth}
+	\centering
+	\begin{figure}
+	\includegraphics[height=4.5cm,width=8cm]{minSum4}
+	\end{figure}
+	\end{column}%
+\end{columns}
+
+\begin{itemize}
+
+\item \alert{$|E_{(j,i)}| =  Min_{i'\in B_j \ i'\neq i }|M_{j,i'}|   $ }
+\item \alert{$sign({E_{(j,i)}}) =  \prod_{i'\in B_j \ i'\neq i }sign(M_{j,i'})   $ }
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{ Partial Extrinsic information calculation }  
+\vspace{-5mm}
+\begin{figure}
+       \includegraphics[height=7cm,width=11cm]{minSumModified3}
+       \end{figure}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{ Update extrinsic information }  
+\vspace{-5mm}
+\begin{figure}
+       \includegraphics[height=7cm,width=11cm]{minSumModified4}
+       \end{figure}
+\end{frame}
 
 \begin{frame}[t]
 \frametitle{  }                                 % and a label for
