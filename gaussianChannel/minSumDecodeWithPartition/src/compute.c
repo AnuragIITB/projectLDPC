@@ -152,28 +152,28 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p11, ParityCheckMatrix* pm
 //
 //	Performing computation on Check nodes	:
 		
-		checkNodeComputeEngine( pm_p11,  message11,  ext_info11, aPosteriori1, transverse_info11_12);
-		checkNodeComputeEngine( pm_p22,  message22,  ext_info22, aPosteriori2, transverse_info22_21 );
+		checkNodeComputeEngine( pm_p11,  message11,  ext_info11, transverse_info11_12);
+		checkNodeComputeEngine( pm_p22,  message22,  ext_info22, transverse_info22_21 );
 		
 		
-		checkNodeComputeEngine( pm_p12,  message12,  ext_info12, aPosteriori2, transverse_info12_11 );
-		checkNodeComputeEngine( pm_p21,  message21,  ext_info21, aPosteriori1, transverse_info21_22 );
+		checkNodeComputeEngine( pm_p12,  message12,  ext_info12, transverse_info12_11 );
+		checkNodeComputeEngine( pm_p21,  message21,  ext_info21, transverse_info21_22 );
 		
 //
 // Performing transverse correction	:
 
-		transverseCorrection ( pm_p11 , transverse_info12_11 , ext_info11 ) ; 
-		transverseCorrection ( pm_p12 , transverse_info11_12 , ext_info12 ) ; 
-		transverseCorrection ( pm_p21 , transverse_info22_21 , ext_info21 ) ; 
-		transverseCorrection ( pm_p22 , transverse_info21_22 , ext_info22 ) ; 
+		transverseCorrection ( pm_p11 , transverse_info12_11 , ext_info11 , aPosteriori1) ; 
+		transverseCorrection ( pm_p12 , transverse_info11_12 , ext_info12 , aPosteriori2) ; 
+		transverseCorrection ( pm_p21 , transverse_info22_21 , ext_info21 , aPosteriori1) ; 
+		transverseCorrection ( pm_p22 , transverse_info21_22 , ext_info22 , aPosteriori2) ; 
 		
 //
 // Performing a posteriori calculation		: (Must done now when all extrinsic information are correct)
 
-		update_aPosteriori ( pm_p11 , ext_info11 , aPosteriori1);
-		update_aPosteriori ( pm_p12 , ext_info12 , aPosteriori2);
-		update_aPosteriori ( pm_p21 , ext_info21 , aPosteriori1);
-		update_aPosteriori ( pm_p22 , ext_info22 , aPosteriori2);
+		//update_aPosteriori ( pm_p11 , ext_info11 , aPosteriori1);
+		//update_aPosteriori ( pm_p12 , ext_info12 , aPosteriori2);
+		//update_aPosteriori ( pm_p21 , ext_info21 , aPosteriori1);
+		//update_aPosteriori ( pm_p22 , ext_info22 , aPosteriori2);
 				
 /*			for (int I = 0 ; I < pm_p11->ncols ; I++)
 			{
@@ -315,8 +315,7 @@ void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteri
 //
 // The function takes messages from bit nodes and compute extrinsic inforamtion for all the edges
 // and a posteriori probabilities for all the bits. 
-void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* aPosteriori,\
-																	    double* transverse_info)
+void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* transverse_info)
 {
 		int* chk_node_bit_p;						// pointer points first bit node corrosponding to a check
 		int row,col;
@@ -511,7 +510,7 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 //
 //
 //
-void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , double* ext_info )
+void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , double* ext_info, double* aPosteriori)
 {
 		int* chk_node_bit_p;						// pointer points first bit node corrosponding to a check
 		int row,col;
@@ -524,42 +523,80 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 				{
 				//
 				// true for last check node only
-				if ( ( CHECK_BIT_COUNT1 > 1) && ( transverse_info[row] !=0 ) ) 
-				{
-				//
-				// if only more than one edge is connected then exterinsic info can be calculated
-				// case is possible after partitioning
-				for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+				if  ( CHECK_BIT_COUNT1 > 1) 
 					{
-					ext_info[ (pm_p->row_ptr[row]-1) + col ] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ],\
+					//
+					// if only more than one edge is connected then exterinsic info can be calculated
+					// case is possible after partitioning
+					if ( transverse_info[row] !=0 )
+						{
+						for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+							{
+							ext_info[ (pm_p->row_ptr[row]-1) + col ] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ],\
 																							 transverse_info[row] ) ;
-					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							}
+						}
+					else
+						{
+						for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+							{
+							ext_info[ (pm_p->row_ptr[row]-1) + col ] = ext_info[ (pm_p->row_ptr[row]-1) + col ] ; // dummy statement
+							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							}
+						}				
 					}
-				}
 				else if ( CHECK_BIT_COUNT1 == 1)
 					{
 					ext_info[ (pm_p->row_ptr[row]-1) ] = transverse_info[row] ; 
 					//printf( "ext_info( %d) = %lf \t", row  , ext_info[ (pm_p->row_ptr[row]-1)  ] ) ;
+					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+					aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
 					}
 				}
+
 			else
 				{
-				if ( ( CHECK_BIT_COUNT2 > 1) && ( transverse_info[row] !=0 ) ) 
-				{
-				// if only more than one edge is connected then exterinsic info can be calculated
-				// case is possible after partitioning
-				for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
+				//
+				// true for last check node only
+				if  ( CHECK_BIT_COUNT2 > 1) 
 					{
-					ext_info[ (pm_p->row_ptr[row]-1) + col ] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ],\
-																							 transverse_info[row] ) ;	
-					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+					//
+					// if only more than one edge is connected then exterinsic info can be calculated
+					// case is possible after partitioning
+					if ( transverse_info[row] !=0 )
+						{
+						for ( col = 0 ; col < CHECK_BIT_COUNT2 ; col++)
+							{
+							ext_info[ (pm_p->row_ptr[row]-1) + col ] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ],\
+																							 transverse_info[row] ) ;
+							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							}
+						}
+					else
+						{
+						for ( col = 0 ; col < CHECK_BIT_COUNT1 ; col++)
+							{
+							ext_info[ (pm_p->row_ptr[row]-1) + col ] = ext_info[ (pm_p->row_ptr[row]-1) + col ] ; // dummy statement
+							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							}
+						}				
 					}
-				}
-			else if ( CHECK_BIT_COUNT2 == 1)
-				{
-				ext_info[ (pm_p->row_ptr[row]-1) ] = transverse_info[row] ;
-				//printf( "ext_info( %d ) = %lf \t", row  , ext_info[ (pm_p->row_ptr[row]-1) ] ) ;
-				}
+				else if ( CHECK_BIT_COUNT2 == 1)
+					{
+					ext_info[ (pm_p->row_ptr[row]-1) ] = transverse_info[row] ; 
+					//printf( "ext_info( %d) = %lf \t", row  , ext_info[ (pm_p->row_ptr[row]-1)  ] ) ;
+					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
+					aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
+					}
 				}
 			}
 			
@@ -667,6 +704,7 @@ void initialize_aPriori ( ParityCheckMatrix* pm_p, double* code_block , double e
 		//printf(" I= %d ,  aPriori[I]=  %lf \n", I , aPriori[I]);
 		}
 }
+//--------------------------------------------------------------------------------------------------------------------
 
 //
 // function reads to files	: encode_block_file and decoded_block_file, compare them and

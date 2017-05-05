@@ -13,12 +13,12 @@ To compile the programs :
 
 >> execute compile.sh file.
 #./compile.sh
-An object file, "min_sum_decode" is made in src folder.
+An object file, "modified_min_sum_decode" is made in src folder.
 ---------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------
 Running the software:
 
-NAME:	min_sum_decode
+NAME:	modified_min_sum_decode
 
 Takes parity check matrix and code block as input files and performs min sum
 algorithm to decode the code blocks. Decoding time analysis and accuracy of the 
@@ -28,7 +28,7 @@ algorithm can be checked.
 
 SYNOPSIS:
 
-sum_product_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration]  [Eb/No db]  
+modified_min_sum_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration]  [Eb/No db]  
 
 ----------------------------------------------------------------------------------------------
 
@@ -50,15 +50,15 @@ Eb/No db:	Input SNR in db.
 
 EXAMPLES:
 	 
-#./min_sum_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time   85  1
-#./min_sum_decode  ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  1.25
+#./modified_min_sum_decode ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -time   85  1
+#./modified_min_sum_decode  ../include/parityCheckMatrix/parityCheckMatrix.txt  ../include/codeBlock/codeBits_xxx.txt  -accuracy  150  1.25
 
 ---------------------------------------------------------------------------------------------------
 
 ORGANIZATION OF THE FOLDERS:
 
 src	:
-	-> min_sum_decode (executable file)
+	-> modified_min_sum_decode (executable file)
 include :
 	-> codeBlock
 		- contains code blocks.

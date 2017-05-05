@@ -77,4 +77,8 @@ void initialize_aPosteriori ( ParityCheckMatrix* pm_p, double* aPriori, double* 
 // initialize extrinsic inforamtion for every iteration to zero.
 //
 void initializeExtrinsicInfo ( ParityCheckMatrix* pm_p, double* ext_info );
+
+//
+//
+void initialize_aPriori ( ParityCheckMatrix* pm_p, double* code_block , double ebbyNodb , double* aPriori);
 #endif

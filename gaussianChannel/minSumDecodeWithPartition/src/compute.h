@@ -64,8 +64,7 @@ void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteri
 //
 // The function takes messages from bit nodes and compute extrinsic inforamtion for all the edges
 // and a posteriori probabilities for all the code bits. //
-void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* aPosteriori,\
-																	    double* transverse_info);
+void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* ext_info, double* transverse_info);
 
 //
 //	the function takes a priori probabilities at bit nodes as a input and initializes the messages passing 
@@ -99,7 +98,7 @@ void initializeTransverseInfo ( ParityCheckMatrix* pm_p, double* transverse_info
 //
 //
 //
-void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , double* ext_info );
+void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , double* ext_info , double* aPosteriori) ;
 
 //
 //

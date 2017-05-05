@@ -1,2 +1,2 @@
 cd src
-gcc -o min_sum_decode main.c compute.c -lm -lrt
+gcc -o modified_min_sum_decode main.c compute.c -lm -lrt

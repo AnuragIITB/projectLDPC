@@ -91,36 +91,10 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, dou
 	int nitr = 1;  // initializing number of iterations.
 
 	double aPriori[pm_p->ncols];	// aPriori matrix
-	
-	int I;
-	
-	double ebbyNo,sigma2 ;
-	
-	double rate ;
-//	
-//	calculating rate of code	:
-	rate = (double) ((pm_p->ncols)-(pm_p->nrows))/(pm_p->ncols);
-	
-	ebbyNo = pow(10,0.1*ebbyNodb) ; 
-	
-	sigma2 = 1/(2*rate*ebbyNo) ;
-	
-//	printf(" rate = %lf , ebbyNodb = %lf , ebbyNo = %lf , sigma2 = %lf \n", rate, ebbyNodb, ebbyNo, sigma2);
+
 //
-// 	Initializing a priori probabilities	:
-	for ( I = 0 ; I < pm_p->ncols ; I++ )
-		{
-		// It has a minus sign in contrast to papers.
-		// Reason is :
-		//
-		// Here BPSK modulation :	0  ->  -1
-		// 							1  ->   1
-		//
-		//
-		//aPriori[I] = 4*code_block[I]/(2*sigma2) ; 		// for test_matrix
-		aPriori[I] = -4*code_block[I]/(2*sigma2) ;   
-//		printf(" I= %d ,  aPriori[I]=  %lf \n", I , aPriori[I]);
-		}
+// initializing apriori probabiliies	
+	initialize_aPriori ( pm_p , code_block , ebbyNodb , aPriori );
 		
 //
 // Message initialization:
@@ -529,4 +503,43 @@ return (inaccurate_bits);
 }
 
 //--------------------------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------------------------
+
+//
+// initializing apriori probabiliies
+void initialize_aPriori ( ParityCheckMatrix* pm_p, double* code_block , double ebbyNodb , double* aPriori)
+{
+	int I;
+	
+	double ebbyNo,sigma2 ;
+	
+	double rate ;
+//	
+//	calculating rate of code	:
+	rate = (double) ((pm_p->ncols)-(pm_p->nrows))/(pm_p->ncols);
+	
+	ebbyNo = pow(10,0.1*ebbyNodb) ; 
+	
+	sigma2 = 1/(2*rate*ebbyNo) ;
+	
+//	printf(" rate = %lf , ebbyNodb = %lf , ebbyNo = %lf , sigma2 = %lf \n", rate, ebbyNodb, ebbyNo, sigma2);
+//
+// 	Initializing a priori probabilities	:
+	for ( I = 0 ; I < pm_p->ncols ; I++ )
+		{
+		// It has a minus sign in contrast to papers.
+		// Reason is :
+		//
+		// Here BPSK modulation :	0  ->  -1
+		// 				1  ->   1
+		//
+		//
+		//aPriori[I] = 4*code_block[I]/(2*sigma2) ;    // for test_matrix 
+		aPriori[I] = -4*code_block[I]/(2*sigma2) ;   
+		//printf(" I= %d ,  aPriori[I]=  %lf \n", I , aPriori[I]);
+		}
+}
+
 
