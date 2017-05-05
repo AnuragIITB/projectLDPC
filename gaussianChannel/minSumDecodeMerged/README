@@ -28,7 +28,7 @@ algorithm can be checked.
 
 SYNOPSIS:
 
-sum_product_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration]  [Eb/No db]  
+min_sum_decode  [FILE1]  [FILE2]  [MODE]  [Number of iteration]  [Eb/No db]  
 
 ----------------------------------------------------------------------------------------------
 
