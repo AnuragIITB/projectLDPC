@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.11)  2 MAY 2017 09:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.1.11)  9 MAY 2017 20:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1806,7 +1806,7 @@ Overfull \vbox (14.72377pt too high) detected at line 565
 
 ] [24
 
-] <minSumModified.png, id=731, 883.3pt x 607.26875pt>
+] <minSumModified.png, id=732, 883.3pt x 607.26875pt>
 File: minSumModified.png Graphic file (type png)
 
 <use minSumModified.png>
@@ -1820,6 +1820,37 @@ Overfull \hbox (5.68405pt too wide) in paragraph at lines 597--597
 [25
 
  <./minSumModified.png>]
+<stateDiagram.png, id=762, 686.565pt x 651.43375pt>
+File: stateDiagram.png Graphic file (type png)
+ <use stateDiagram.png>
+Package pdftex.def Info: stateDiagram.png used on input line 604.
+(pdftex.def)             Requested size: 227.61476pt x 199.16908pt.
+File: iitb_logo.jpg Graphic file (type jpg)
+
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 604.
+(pdftex.def)             Requested size: 42.67886pt x 42.67532pt.
+
+Overfull \vbox (8.12221pt too high) detected at line 604
+ []
+
+[26
+
+ <./stateDiagram.png>]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 617.
+(pdftex.def)             Requested size: 42.67886pt x 42.67532pt.
+ [27
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 625.
+(pdftex.def)             Requested size: 42.67886pt x 42.67532pt.
+ [28
+
+]
 \tf@nav=\write6
 \openout6 = `minSumDecodeWithPartition.nav'.
 
@@ -1829,11 +1860,12 @@ Overfull \hbox (5.68405pt too wide) in paragraph at lines 597--597
 \tf@snm=\write8
 \openout8 = `minSumDecodeWithPartition.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 601.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 601.
- (./minSumDecodeWithPartition.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 601.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 601.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 630.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 630.
+
+(./minSumDecodeWithPartition.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 630.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 630.
 Package rerunfilecheck Info: File `minSumDecodeWithPartition.out' has not chang
 ed.
 (rerunfilecheck)             Checksum: 1F59368FE6F697916A881AED9156C69E;123.
@@ -1842,13 +1874,13 @@ ed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 601.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 630.
  ) 
 Here is how much of TeX's memory you used:
- 23503 strings out of 493029
- 481640 string characters out of 6136234
+ 23520 strings out of 493029
+ 481844 string characters out of 6136234
  585518 words of memory out of 5000000
- 26419 multiletter control sequences out of 15000+600000
+ 26429 multiletter control sequences out of 15000+600000
  14864 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,15n,67p,432b,661s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1865,10 +1897,10 @@ sfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 >
-Output written on minSumDecodeWithPartition.pdf (25 pages, 840052 bytes).
+Output written on minSumDecodeWithPartition.pdf (28 pages, 911009 bytes).
 PDF statistics:
- 817 PDF objects out of 1000 (max. 8388607)
- 719 compressed objects within 8 object streams
- 53 named destinations out of 1000 (max. 500000)
- 225 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 903 PDF objects out of 1000 (max. 8388607)
+ 798 compressed objects within 8 object streams
+ 59 named destinations out of 1000 (max. 500000)
+ 230 words of extra memory for PDF output out of 10000 (max. 10000000)
 

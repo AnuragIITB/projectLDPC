@@ -595,6 +595,35 @@ r4 &     0  &   0  &   0  &   0  &   1  &   0  &   1  &   1 \end{array} \right]
        \includegraphics[height=7cm,width=11cm]{minSumModified}
        \end{figure}
 \end{frame}
+
+\begin{frame}[t]
+\frametitle{ State Diagram }  
+\begin{figure}
+       \includegraphics[height=7cm,width=8cm]{stateDiagram}
+       \end{figure}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{ Matrix Initialization }  
+\begin{itemize}
+\item Maximum file length till matrix order 12k is $\approx$ 60k, thus we have to store 60k values of type uint16\_t.
+\item thus taking 4 memory of 20k each .\\
+ $uint16\_t \ mem[20,000]$
+\item populate it with reading a pipe of size 64bits.
+\item Thus writing 4 word at a time.
+\item $\approx (60k/4)/4 $ clocks to write matrix in memory.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{ Code block input }  
+\begin{itemize}
+\item Code block file length till matrix order 12k is $\approx$13k, thus we have to store $\approx$13k values of bit data type.
+\item We can choose a thick pipe width of 256 bits or 512 bits. Thus it will take upto 64 or 32 clock cycles respectively to input a code block.
+\end{itemize}
+\end{frame}
+
 %-----------------------------last slide------------------------------
 %---------------------------end of document---------------------------
 
