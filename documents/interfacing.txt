@@ -1,0 +1,198 @@
+// min sum decode RTL algorithm in pseudo code
+	
+//
+//		
+	 	main() 
+		->
+		// loop1 -- breaks when all code blocks are finished
+		
+		minSumDecode() 
+		-> 
+		initialize_aPriori() 
+		initialize_aPriori() 
+		->
+		initializeMessage()
+		initializeMessage()
+		initializeMessage()
+		initializeMessage()
+		->
+		// loop2 -- breaks when decoding done or iterations exceeds the maximum limit
+		
+		initialize_aPosteriori()
+		initialize_aPosteriori()
+		->
+		initializeExtrinsicInfo()
+		initializeExtrinsicInfo()
+		initializeExtrinsicInfo()
+		initializeExtrinsicInfo()
+		->
+		initializeTransverseInfo()
+		initializeTransverseInfo()
+		initializeTransverseInfo()
+		initializeTransverseInfo()
+		->
+		checkNodeComputeEngine()
+		checkNodeComputeEngine()
+		checkNodeComputeEngine()
+		checkNodeComputeEngine()
+		->
+		transverseCorrection()
+		transverseCorrection()
+		transverseCorrection()
+		transverseCorrection()
+		->
+		update_aPosteriori()
+		update_aPosteriori()
+		->
+		update_aPosteriori()
+		update_aPosteriori()
+		->
+		checkIsdecoded()
+		checkIsdecoded()
+		->
+		// either we break or update message and repeat loop2
+		
+		updateMessage()
+		updateMessage()
+		updateMessage()
+		updateMessage()
+		
+//		top level thread main read parity check matrix and code 
+//		block and put them in memory [?]
+//		
+//		Then the flow above show the calls from main to other
+//		parallel executing threads
+
+//
+// 	core
+//		interface -
+//
+//		inputs - parity check matrix , code block , EbByNo , maximum number of iteration  
+//		output - code block , BER 
+//	
+//
+//	
+//					test-bench  												core
+//	1. parity check matrix
+//					reads a FILE* of the matrix file				reads the pipe and store value in 					
+//					and write every entry of matrix 				memory array.
+//					through pipe.										parity check matrix structure is populated 
+//					 														by matrix array.
+//-----------------------------------------------------------------------------------------------------------
+// 	example	:
+uint16_t mem1[20,000];
+void getParityCheckMatrix()
+{
+	int I;
+	//
+	// Populating mem1 with parity check matrix H11
+	for(I = 0; I < 3; I++)
+		mem1[I] = read_uint16("half_word_constants_pipe1");  
+	for(I = 0; I < mem1[2] ; I++)
+		mem1[I+3] = read_uint16("half_word_constants_pipe1"); 
+	for(I = 0; I < mem1[0] ; I++)
+		mem1[I+3+mem1[2]] = read_uint16("half_word_constants_pipe1");		
+}			
+//
+// reading the input parity check matrix in structure
+void readMatrix( ParityCheckMatrix* pm_p , uint16_t* mem) 
+{
+	uint16_t nrows, ncols ;
+	uint16_t ncol_ind ;
+
+	pm_p->nrows = mem[0];
+	pm_p->ncols = mem[1];
+	pm_p->ncol_ind = mem[2];
+	pm_p->col_ind = &(mem[3]) ;
+	pm_p->row_ptr = &( mem[ (3+mem[2]) ] ) ;
+
+	return 0;
+}
+//-------------------------------------------------------------------------------------------------------
+//
+// 	core
+//		interface -	
+//					test-bench  												core
+//2. code block
+//					send code block by a									reads code block in a variable
+//					pipe of 64 bit size									
+//																				Possibility 1:
+//																				 assign all 64 bits of the variable indivisually to a bool arr[64]
+//																				Possibility 2:
+//																				let it get stored in the memory and change the code accordingly. 
+//		example	:
+	
+	
+					
+// Thread initialize_aPriori()
+//
+// inputs = { code bits, nrows , ncols , EbByNo }
+//
+//	one memory state to get nrows ,
+// next for ncols then we get rate in same cycle we can get EbByNo
+// then if 64 number of code bits we can take in one cycle
+// then (n/2)/64 cycles to calculate apriori
+
+
+// Thread initializeMessage ()
+//
+// inputs - { ParityCheckMatrix* pm_p, aPriori, message }
+//
+// nearly p/4 memory access 
+
+
+// Thread initialize_aPosteriori()
+//
+//	input - { ParityCheckMatrix* pm_p, aPriori, aPosteriori }
+// 
+
+// Thread initializeExtrinsicInfo()
+//
+// input - {ParityCheckMatrix* pm_p, double* ext_info}
+// 
+
+
+// Thread checkNodeComputeEngine()
+//
+// input - { ParityCheckMatrix* pm_p, message, ext_info, transverse_info}
+// 
+
+
+// Thread initializeTransverseInfo ( )
+//
+// input - {ParityCheckMatrix* pm_p, transverse_info}
+// 
+
+
+// Thread transverseCorrection ()
+// input - {ParityCheckMatrix* pm_p, transverse_info , ext_info , aPosteriori}
+// 
+
+
+// Thread update_aPosteriori()
+//
+// input -  { ParityCheckMatrix* pm_p, ext_info , aPosteriori}
+//  (m/2)*(p/4) cycles.
+
+
+// Thread update_aPosteriori()
+//
+// input -  { ParityCheckMatrix* pm_p, ext_info , aPosteriori}
+//  
+
+
+
+// Thread checkIsdecoded()
+//
+// input - {ParityCheckMatrix* pm_p, code_block , aPosteriori}
+//  
+
+
+// Thread updateMessage()
+//
+// input - {pm_p11 , ext_info11 ,aPosteriori1 , message11}
+// 
+
+
+
+
