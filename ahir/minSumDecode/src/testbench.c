@@ -2,13 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#ifdef USE_GNUPTH
-#include <pth.h>
-#include <GnuPthUtils.h>
-#else
+#include <math.h>
 #include <pthread.h>
 #include <pthreadUtils.h>
-#endif 
 #include <Pipes.h>
 #include <pipeHandler.h>
 #include "prog.h"
@@ -16,6 +12,7 @@
 #include "vhdlCStubs.h"
 #endif
 
+//------------------------------------------------------------------------------
 float expected_result [4];
 void Exit(int sig)
 {
@@ -23,61 +20,91 @@ void Exit(int sig)
 	exit(0);
 }
 
-void sendInputs()
+//
+// reading the input parity check matrix in structure
+void sendInputs( FILE* in_file,uint8_t maxNitr,float ebbyNo  ) 
 {
-		FILE* in_file ;
-      in_file = fopen ("../include/parityCheckMatrix/test_minSumdivideAndConquer/test_minSumMatrixDivideAndConquer.txt", "r");
+		//
+		// write maximum number of iterations
+		write_uint16("maxNitr_in", maxNitr );
 
-		readParityCheckMatrixFile(in_file) ;
-		readParityCheckMatrixFile(in_file) ;
-		readParityCheckMatrixFile(in_file) ;
-		readParityCheckMatrixFile(in_file) ;
- 
-	  	fclose(matrix_file);	
-}
+		//
+		// write SNR in db
+		write_float32("ebbyNo_in", ebbyNo );
+		//
+		// write matrix entries from matrix pipe
+		//
 
-readParityCheckMatrixFile(FILE* in_file) ;
-{
-		uint16_t nrows, ncols ;
-		uint16_t ncol_ind ;
-		fscanf(in_file,"%d\n %d\n %d\n ", &nrows, &ncols, &ncol_ind );
-		write_uint16("matrix_in", nrows);
-		uint16_t rV = read_uint16("matrix_out");
-		fprintf(stderr," read-back %d \n", rV);
-		write_uint16("matrix_in", ncols);
-		uint16_t rV = read_uint16("matrix_out");
-		fprintf(stderr," read-back %d \n", rV);
-		write_uint16("matrix_in", ncol_ind);
-		uint16_t rV = read_uint16("matrix_out");
-		fprintf(stderr," read-back %d \n", rV);
-		uint16_t val; 
-		for(I = 0; I < ( nrows+ncol_ind ); I++)
+		uint16_t numread, val;
+		while(1) 
 		{
-		fscanf(in_file,"%d\n ", &val);
-		write_uint16("matrix_in", val);
-		uint16_t rV = read_uint16("matrix_out");
-		fprintf(stderr," read-back %d \n", rV);
-		}
+		numread = fscanf(in_file,"%d\n", &val );
+		if (numread != 1)
+			{
+			fprintf (stderr,"ERROR : In reading matrix file \n");
+			break;
+			}			
+			fprintf(stderr,"Info: write to pipe = %d\n",val);	
+			write_uint16("matrix_in", val);			
+		} 	
 }
+
+//
+//----------------------------------------------------------------------------------------------------
+
+//
+//
+void sendCodeBlock(FILE* in_file)
+{
+	float val;
+	while(1) 
+		{
+		uint16_t numread;
+		numread = fscanf(in_file,"%f\n", &val );
+		if (numread != 1)
+			{
+			fprintf (stderr,"ERROR : In reading code_block file \n");
+			break;
+			}			
+			fprintf(stderr,"Info: write to code_block_in pipe = %f\n",val);	
+			write_float32("code_block_in", val);			
+		} 
+}
+
 #ifdef SW
-DEFINE_THREAD(Daemon)
+DEFINE_THREAD(daemon)
 #endif
 
-int main(void)
+int main(int argc,char* argv[])
 {
 
 #ifdef SW
 	init_pipe_handler();
-	PTHREAD_DECL(Daemon);
-	PTHREAD_CREATE(Daemon);
+	PTHREAD_DECL(daemon);
+	PTHREAD_CREATE(daemon);
 #endif
-
-    sendInputs();
-}
+	FILE* matrix_file ;
+	uint8_t maxNitr;
+	float ebbyNodb ;
+	float ebbyNo ;
+	
+	matrix_file = fopen (argv[1], "r");
+	maxNitr = atoi( argv[4] );
+	ebbyNodb= atof( argv[5] );
+	
+	ebbyNo = pow(10,0.1*ebbyNodb) ;
+	sendInputs(matrix_file, maxNitr, ebbyNo );
+	fclose(matrix_file);
+	
+	FILE* code_block_file ;	
+	code_block_file = fopen(argv[2],"r");
+	sendCodeBlock(code_block_file);
+	fclose(code_block_file);
+	
 
 #ifdef SW
 	close_pipe_handler();
-	PTHREAD_CANCEL(Daemon);
+	PTHREAD_CANCEL(daemon);
 #endif
     return 0;
 }
