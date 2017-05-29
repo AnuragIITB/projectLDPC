@@ -100,7 +100,7 @@ int main(int argc,char* argv[])
 	sendCodeBlock(code_block_file);
 	fclose(code_block_file);
 	
-			uint16_t ncols = read_uint16("ncols_out");
+	uint16_t ncols = read_uint16("ncols_out");
 	uint16_t I ;
 	float code_block[MATRIX_ORDER];
 	for ( I = 0 ; I < ncols ; I++ )
