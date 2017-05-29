@@ -73,7 +73,7 @@ uint16_t I,val,range;
 	for(I = 0; I < range ; I++)
 		{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 		val = read_uint16("matrix_in");
 		mem[I+3] = val ;
@@ -96,7 +96,7 @@ void readCodeBlock ()
 	for(I = 0; I < ncols; I++)
 			{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 			float code_bit = read_float32("code_block_in");
 #ifdef SW
@@ -127,7 +127,7 @@ void initialize_aPriori ( )
 	for ( I = 0 ; I < ncols ; I++ )
 		{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 		// It has a minus sign in contrast to papers.
 		// Reason is :
@@ -158,7 +158,7 @@ void initializeMessage ()
 	for ( I=0 ; I < ncol_ind ; I++)
 	{
 #ifndef SW
-	__loop_pipelining_on__(63,2,0);
+	__loop_pipelining_on__(16,2,1);
 #endif
 	message[I] = aPriori[mem[3+I]-1];	
 #ifdef SW
@@ -178,7 +178,7 @@ void initialize_aPosteriori ( )
 	for ( I = 0 ; I < ncols ; I++)
 			{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 			aPosteriori[I] = aPriori[I] ;
 			}
@@ -197,7 +197,7 @@ uint16_t I;
 		for ( I = 0 ; I < ncol_ind ; I++)
 			{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 			ext_info[I] = 0;
 			}
@@ -221,7 +221,7 @@ void checkNodeComputeEngine ()
 	for ( row = 0 ; row < nrows ; row++ )
 		{
 #ifndef SW
-		__loop_pipelining_on__(63,2,0);
+		__loop_pipelining_on__(16,2,1);
 #endif						
 		
 		if ( row == (nrows-1) )
@@ -232,7 +232,7 @@ void checkNodeComputeEngine ()
 		for ( col = 0 ; col < range ; col++)
 			{
 #ifndef SW	
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif 			
 			// iterating through all the bit nodes corrosponding to a check 
 			uint16_t I = 0 ;
@@ -243,7 +243,7 @@ void checkNodeComputeEngine ()
 			for ( I = 0 ; I < range ; I++)
 				{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif			
 				uint16_t index =  mem[3 + ncol_ind + row] -1 + I  ;
 				//
@@ -326,7 +326,7 @@ uint8_t checkIsdecoded()
 	for( I = 0 ; I < ncols ; I++)
 		{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif 
 //	 iterating through all code bits	:
 		if ( aPosteriori[I] > 0.0 )    		// indicates that code bit is likely to be 0.
@@ -362,7 +362,7 @@ void updateMessage ()
 		for ( row = 0 ; row < nrows ; row++ )
 				{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 				uint16_t range ;
 				if ( row == (nrows-1) )
@@ -374,7 +374,7 @@ void updateMessage ()
 				for ( col = 0 ; col < range ; col++)
 					{
 #ifndef SW
-			__loop_pipelining_on__(63,2,0);
+			__loop_pipelining_on__(16,2,1);
 #endif
 					//
 					//	iterating through all the bit nodes of a check node and updating message.
@@ -437,7 +437,7 @@ void top_daemon ()
 		}
 #endif
 	
-		write_uint16("ncols_out",ncols);
+	write_uint16("ncols_out",ncols);
 	uint16_t K ;
 	
 	for ( K = 0 ; K < ncols ; K++ )

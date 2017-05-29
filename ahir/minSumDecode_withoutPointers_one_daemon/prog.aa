@@ -240,8 +240,8 @@ $is
     iNsTr_10 := ($cast ($uint<32>) iNsTr_9)
     iNsTr_11 :=  ( $cast ($float<8,23>)  ( $bitcast ( $int< 32 > ) iNsTr_10) ) 
     //iNsTr_12 := (iNsTr_7 / iNsTr_11)
-    $call fpdiv32_inner(iNsTr_7 iNsTr_11) (iNsTr_12)	
-    ->(rate) := iNsTr_12
+    	$call fpdiv32_inner(iNsTr_7 iNsTr_11) (iNsTr_12)
+	->(rate) := iNsTr_12
     ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
     $place [bb_0_bb_1]
     //begin: basic-block bb_1

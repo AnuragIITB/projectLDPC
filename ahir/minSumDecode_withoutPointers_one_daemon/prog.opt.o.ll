@@ -85,7 +85,7 @@ define void @initMem() nounwind {
   br i1 %26, label %27, label %38
 
 ; <label>:27                                      ; preds = %21
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %28 = call zeroext i16 @read_uint16(i8* getelementptr inbounds ([10 x i8]* @.str2, i32 0, i32 0))
   store i16 %28, i16* %val, align 2
   %29 = load i16* %val, align 2
@@ -124,7 +124,7 @@ define void @readCodeBlock() nounwind {
   br i1 %6, label %7, label %16
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = call float @read_float32(i8* getelementptr inbounds ([14 x i8]* @.str3, i32 0, i32 0))
   store float %8, float* %code_bit, align 4
   %9 = load float* %code_bit, align 4
@@ -171,7 +171,7 @@ define void @initialize_aPriori() nounwind {
   br i1 %16, label %17, label %33
 
 ; <label>:17                                      ; preds = %11
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %18 = load i16* %I, align 2
   %19 = zext i16 %18 to i64
   %20 = getelementptr inbounds [13000 x float]* @code_block, i32 0, i64 %19
@@ -211,7 +211,7 @@ define void @initializeMessage() nounwind {
   br i1 %6, label %7, label %25
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %I, align 2
   %9 = zext i16 %8 to i32
   %10 = add nsw i32 3, %9
@@ -253,7 +253,7 @@ define void @initialize_aPosteriori() nounwind {
   br i1 %6, label %7, label %18
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %I, align 2
   %9 = zext i16 %8 to i64
   %10 = getelementptr inbounds [13000 x float]* @aPriori, i32 0, i64 %9
@@ -288,7 +288,7 @@ define void @initializeExtrinsicInfo() nounwind {
   br i1 %6, label %7, label %14
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %I, align 2
   %9 = zext i16 %8 to i64
   %10 = getelementptr inbounds [20000 x float]* @ext_info, i32 0, i64 %9
@@ -330,7 +330,7 @@ define void @checkNodeComputeEngine() nounwind {
   br i1 %6, label %7, label %206
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %row, align 2
   %9 = zext i16 %8 to i32
   %10 = load i16* getelementptr inbounds ([20000 x i16]* @mem, i32 0, i64 0)
@@ -398,7 +398,7 @@ define void @checkNodeComputeEngine() nounwind {
   br i1 %60, label %61, label %202
 
 ; <label>:61                                      ; preds = %55
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   store i16 0, i16* %I, align 2
   store float 0.000000e+00, float* %val, align 4
   store i8 0, i8* %flag, align 1
@@ -416,7 +416,7 @@ define void @checkNodeComputeEngine() nounwind {
   br i1 %67, label %68, label %132
 
 ; <label>:68                                      ; preds = %62
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %69 = load i16* getelementptr inbounds ([20000 x i16]* @mem, i32 0, i64 2)
   %70 = zext i16 %69 to i32
   %71 = add nsw i32 3, %70
@@ -651,7 +651,7 @@ define zeroext i8 @checkIsdecoded() nounwind {
   br i1 %6, label %7, label %50
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %I, align 2
   %9 = zext i16 %8 to i64
   %10 = getelementptr inbounds [13000 x float]* @aPosteriori, i32 0, i64 %9
@@ -742,7 +742,7 @@ define void @updateMessage() nounwind {
   br i1 %6, label %7, label %126
 
 ; <label>:7                                       ; preds = %1
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %8 = load i16* %row, align 2
   %9 = zext i16 %8 to i32
   %10 = load i16* getelementptr inbounds ([20000 x i16]* @mem, i32 0, i64 0)
@@ -810,7 +810,7 @@ define void @updateMessage() nounwind {
   br i1 %60, label %61, label %122
 
 ; <label>:61                                      ; preds = %55
-  call void @__loop_pipelining_on__(i32 63, i32 2, i32 0)
+  call void @__loop_pipelining_on__(i32 16, i32 2, i32 1)
   %62 = load i16* getelementptr inbounds ([20000 x i16]* @mem, i32 0, i64 2)
   %63 = zext i16 %62 to i32
   %64 = add nsw i32 3, %63
