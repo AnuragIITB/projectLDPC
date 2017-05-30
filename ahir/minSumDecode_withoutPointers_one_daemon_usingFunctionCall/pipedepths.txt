@@ -1,0 +1,14 @@
+matrix_in   2
+matrix_out  2
+maxNitr_in  2
+ebbyNodb_in 2
+
+code_block_in 2
+
+reading_code_block_done 2
+
+stop_the daemon1 2
+stop_the daemon2 2
+stop_the daemon3 2
+stop_the daemon4 2
+

@@ -1088,7 +1088,7 @@ $is
     $storage  I_alloc : $uint<16> // memory space index = 29  base address = 0  word size = 16
     // can point into 
     $storage  rate_alloc : $float<8,23> // memory space index = 30  base address = 0  word size = 32
-    // can point into  foreign( $void )
+    // can point into 
     I := @(I_alloc)
     rate := @(rate_alloc)
     iNsTr_0 := @(mem[($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  )])
@@ -1103,7 +1103,7 @@ $is
     iNsTr_9 := ->(iNsTr_8)
     iNsTr_10 := ($cast ($uint<32>) iNsTr_9 )
     iNsTr_11 := ($cast ($float<8,23>) ($bitcast ($int<32>) iNsTr_10 ) )
-    $call fpdiv32_inner (iNsTr_7 iNsTr_11 ) (iNsTr_12 ) 
+    iNsTr_12 := (iNsTr_7 / iNsTr_11)
     ->(rate) := iNsTr_12
     ->(I) := ($bitcast ($uint<16>) _b0000000000000000  )
     $place[bb_0_bb_1]

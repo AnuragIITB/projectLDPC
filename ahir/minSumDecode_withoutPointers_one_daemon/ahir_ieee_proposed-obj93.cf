@@ -1,5 +1,9 @@
 v 3
+<<<<<<< HEAD
 file / "/home/anurag/anurag_drive/Assignment2_InstallAhir/ahir/release/vhdl/aHiR_ieee_proposed.vhdl" "20170519165717.000" "20170529222634.354":
+=======
+file / "/home/anurag/AHIR/ahir/release/vhdl/aHiR_ieee_proposed.vhdl" "20170528111633.000" "20170528165135.623":
+>>>>>>> e2585ec05c71830ef31e4efd84156f926a632dfc
   package math_utility_pkg at 4570( 183222) + 0 on 16;
   package fixed_float_types at 4604( 184634) + 0 on 17;
   package fixed_pkg at 4642( 186311) + 0 on 18;

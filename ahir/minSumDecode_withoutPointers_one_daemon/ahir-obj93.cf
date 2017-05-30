@@ -1,5 +1,9 @@
 v 3
+<<<<<<< HEAD
 file / "/home/anurag/anurag_drive/Assignment2_InstallAhir/ahir/release/vhdl/ahir.vhdl" "20170519165717.000" "20170529222635.184":
+=======
+file / "/home/anurag/AHIR/ahir/release/vhdl/ahir.vhdl" "20170528111633.000" "20170528165136.653":
+>>>>>>> e2585ec05c71830ef31e4efd84156f926a632dfc
   package globalconstants at 33( 1834) + 0 on 11;
   package types at 81( 4270) + 0 on 12;
   package utilities at 139( 7047) + 0 on 13 body;
