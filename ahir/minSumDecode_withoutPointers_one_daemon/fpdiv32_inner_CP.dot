@@ -9,8 +9,8 @@ digraph control_path {
   e_7 [shape = diamond];
   e_8 [shape = triangle];
   e_9: exit_node : s ;
-  e_3 -> e_1;
   e_5 -> e_1;
+  e_3 -> e_1;
   e_0 -> e_2;
   e_0 -> e_3;
   e_0 -> e_4;

@@ -1465,15 +1465,17 @@ void top_daemon_1 ()
 		}
 #endif
 	
-/*		write_uint16("ncols_out",ncols);
+	write_uint8("stop_the daemon1",1);
+	
 	uint16_t K ;
 	
 	for ( K = 0 ; K < ncols ; K++ )
 	{
-	write_float32("code_block_out",code_block[K]);
+	write_float32("code_block1_out",code_block1[K]);
+	write_float32("code_block2_out",code_block2[K]);
 	}
-*/		
-	write_uint8("stop_the daemon1",1);	 
+	
+		 
 }
 
 void top_daemon_2()
