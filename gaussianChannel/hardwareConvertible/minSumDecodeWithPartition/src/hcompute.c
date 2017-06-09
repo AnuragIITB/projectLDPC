@@ -8,50 +8,71 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
+
+uint16_t mem1[20,000];
+uint16_t mem2[20,000];
+uint16_t mem3[20,000];
+uint16_t mem4[20,000];
+uint16_t maxNitr     ;
+double   ebbyNodb    ; 
+
+
+void getInputs()
+{
+	int I;
+	//
+	// Populating mem1 with parity check matrix H11
+	for(I = 0; I < 3; I++)
+		mem1[I] = read_uint16("half_word_constants_pipe1");  
+	for(I = 0; I < mem1[2] ; I++)
+		mem1[I+3] = read_uint16("half_word_constants_pipe1"); 
+	for(I = 0; I < mem1[0] ; I++)
+		mem1[I+3+mem1[2]] = read_uint16("half_word_constants_pipe1");		
+	//
+	// Populating mem2 with parity check matrix H12	
+	for(I = 0; I < 3; I++)
+		mem2[I] = read_uint16("half_word_constants_pipe2");  
+	for(I = 0; I < mem2[2] ; I++)
+		mem2[I+3] = read_uint16("half_word_constants_pipe2"); 
+	for(I = 0; I < mem2[0] ; I++)
+		mem2[I+3+mem2[2]] = read_uint16("half_word_constants_pipe2");
+	//
+	// Populating mem3 with parity check matrix H21	
+	for(I = 0; I < 3; I++)
+		mem3[I] = read_uint16("half_word_constants_pipe3");  
+	for(I = 0; I < mem3[2] ; I++)
+		mem3[I+3] = read_uint16("half_word_constants_pipe3"); 
+	for(I = 0; I < mem3[0] ; I++)
+		mem3[I+3+mem3[2]] = read_uint16("half_word_constants_pipe3");	
+	//
+	// Populating mem4 with parity check matrix H22	
+	for(I = 0; I < 3; I++)
+		mem4[I] = read_uint16("half_word_constants_pipe4");  
+	for(I = 0; I < mem4[2] ; I++)
+		mem4[I+3] = read_uint16("half_word_constants_pipe4"); 
+	for(I = 0; I < mem4[0] ; I++)
+		mem4[I+3+mem4[2]] = read_uint16("half_word_constants_pipe4");
+	//
+	// reading maxinum number of iteration
+	maxNitr = read_uint16("half_word_constants_pipe5"); 
+	//
+	// reading signal to noise power ration
+	ebbyNodb = read_uint16("half_word_constants_pipe5"); 
+}
+
+
 //
 // reading the input parity check matrix in structure
-int readMatrix( FILE* in_file, ParityCheckMatrix* pm_p ) 
+void readMatrix( ParityCheckMatrix* pm_p , uint16_t* mem) 
 {
-	int nrows, ncols ;
-	unsigned ncol_ind ;
+	uint16_t nrows, ncols ;
+	uint16_t ncol_ind ;
 
-	int numread = fscanf(in_file,"%d\n %d\n %u\n ", &nrows, &ncols, &ncol_ind );
-	if ( numread != 3)
-		{
-		fprintf(stderr, "ERROR: parity check matrix file not properly written." );
-		return(-1);
-		}
-	pm_p->nrows = nrows;
-	pm_p->ncols = ncols;
-	pm_p->ncol_ind = ncol_ind;
-
-	pm_p->col_ind = malloc ( ncol_ind* sizeof( int ));
-	if (pm_p->col_ind == NULL)
-		{
-		fprintf( stderr, "ERROR : Not enough memory.");
-		return (-1);		
-		}
-	
-	int i;
-	for ( i = 0; i < ncol_ind ; i++)
-		{
-		numread = fscanf( in_file, "%d \n", &(pm_p->col_ind[i]));
-		if (numread !=1)
-			{
-			fprintf(stderr, "ERROR: col_index matrix not read properly.");
-			return(-1);
-			}
-		}
-	pm_p->row_ptr = malloc ( nrows* sizeof( int));
-	for ( i = 0; i < nrows ; i++)
-		{
-		numread = fscanf( in_file, "%d \n", &(pm_p->row_ptr[i]));
-		if (numread !=1)
-			{
-			fprintf(stderr, "ERROR: row_ptr matrix not read properly.");
-			return(-1);
-			}
-		} 
+	pm_p->nrows = mem[0];
+	pm_p->ncols = mem[1];
+	pm_p->ncol_ind = mem[2];
+	pm_p->col_ind = &(mem[3]) ;
+	pm_p->row_ptr = &( mem[ (3+mem[2]) ] ) ;
 
 	return 0;
 }
@@ -109,7 +130,8 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p11, ParityCheckMatrix* pm
 	double message12[pm_p12->ncol_ind] ;
 	double message21[pm_p21->ncol_ind] ;
 	double message22[pm_p22->ncol_ind] ;
-		
+	
+	
 	initializeMessage ( pm_p11, aPriori1, message11 );
 	initializeMessage ( pm_p12, aPriori2, message12 );
 	initializeMessage ( pm_p21, aPriori1, message21 );
@@ -169,14 +191,12 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p11, ParityCheckMatrix* pm
 //
 // Performing a posteriori calculation		: (Must done now when all extrinsic information are correct)
 
-		update_aPosteriori ( pm_p11 , ext_info11 , aPosteriori1);
-		update_aPosteriori ( pm_p12 , ext_info12 , aPosteriori2);
-		
-		update_aPosteriori ( pm_p21 , ext_info21 , aPosteriori1);
-		update_aPosteriori ( pm_p22 , ext_info22 , aPosteriori2);
+		//update_aPosteriori ( pm_p11 , ext_info11 , aPosteriori1);
+		//update_aPosteriori ( pm_p12 , ext_info12 , aPosteriori2);
+		//update_aPosteriori ( pm_p21 , ext_info21 , aPosteriori1);
+		//update_aPosteriori ( pm_p22 , ext_info22 , aPosteriori2);
 				
-/*			
-		for (int I = 0 ; I < pm_p11->ncols ; I++)
+/*			for (int I = 0 ; I < pm_p11->ncols ; I++)
 			{
 			printf( " aPosteriori1 = %lf \n",aPosteriori1[I]);
 			}
@@ -537,7 +557,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 																							 transverse_info[row] ) ;
 							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-							//aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
 							}
 						}
 					else
@@ -547,7 +567,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 							ext_info[ (pm_p->row_ptr[row]-1) + col ] = ext_info[ (pm_p->row_ptr[row]-1) + col ] ; // dummy statement
 							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-							//aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
 							}
 						}				
 					}
@@ -556,7 +576,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 					ext_info[ (pm_p->row_ptr[row]-1) ] = transverse_info[row] ; 
 					//printf( "ext_info( %d) = %lf \t", row  , ext_info[ (pm_p->row_ptr[row]-1)  ] ) ;
 					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-					//aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
+					aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
 					}
 				}
 
@@ -577,7 +597,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 																							 transverse_info[row] ) ;
 							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-							//aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
 							}
 						}
 					else
@@ -587,7 +607,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 							ext_info[ (pm_p->row_ptr[row]-1) + col ] = ext_info[ (pm_p->row_ptr[row]-1) + col ] ; // dummy statement
 							//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 											// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-							//aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
+							aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ;
 							}
 						}				
 					}
@@ -596,7 +616,7 @@ void transverseCorrection ( ParityCheckMatrix* pm_p, double* transverse_info , d
 					ext_info[ (pm_p->row_ptr[row]-1) ] = transverse_info[row] ; 
 					//printf( "ext_info( %d) = %lf \t", row  , ext_info[ (pm_p->row_ptr[row]-1)  ] ) ;
 					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
-					//aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
+					aPosteriori[chk_node_bit_p[0]-1 ] += ext_info[ (pm_p->row_ptr[row]-1)  ] ;
 					}
 				}
 			}
@@ -672,7 +692,7 @@ int I;
 //---------------------------------------------------------------------------------------------------------------
 
 //
-// initializing apriori probabilities
+// initializing apriori probabiliies
 void initialize_aPriori ( ParityCheckMatrix* pm_p, double* code_block , double ebbyNodb , double* aPriori)
 {
 	int I;
@@ -840,4 +860,48 @@ void	update_aPosteriori ( ParityCheckMatrix* pm_p, double* ext_info , double* aP
 			}
 			
 
+}
+//
+//
+//------------------------------------------------------------------------------------------------------------------
+
+void Daemon(void)
+{
+
+   getInputs();
+	
+	ParityCheckMatrix pm11;
+	ParityCheckMatrix pm12;
+	ParityCheckMatrix pm21;
+	ParityCheckMatrix pm22;
+	
+	readMatrix( &pm11 , mem1 );
+	readMatrix( &pm12 , mem2 );
+	readMatrix( &pm21 , mem3 );
+	readMatrix( &pm22 , mem4 );
+	
+   
+    
+    
+    while(1)
+    {
+    
+		read_status1 = 	readCodeBlock ();
+		if (read_status1 != 0)
+			{
+			printf( "\t\t\tINFO: End of decoding.\n");
+			break;
+			}
+		block_count++;
+		
+	for (i = 0; i < 16; i++) {
+	    block[i] = read_uint8("input_block_pipe");
+	}
+
+	encrypt();
+
+	for (i = 0; i < 16; i++) {
+	     write_uint8("output_block_pipe",block[i]);
+	}
+    }
 }

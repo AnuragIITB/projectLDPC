@@ -1,0 +1,27 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}Theory of LDPC}{2}{chapter.2}
+\contentsline {subsection}{\numberline {2.0.1}Parity Check Matrix}{2}{subsection.2.0.1}
+\contentsline {subsection}{\numberline {2.0.2}Encoding of Message}{3}{subsection.2.0.2}
+\contentsline {subsection}{\numberline {2.0.3}Error Detection \& Correction}{4}{subsection.2.0.3}
+\contentsline {chapter}{\numberline {3}Generation of different LDPC matrices}{5}{chapter.3}
+\contentsline {chapter}{\numberline {4}Decoding Algorithms}{10}{chapter.4}
+\contentsline {subsection}{\numberline {4.0.1}Message Passing Decoding}{10}{subsection.4.0.1}
+\contentsline {subsection}{\numberline {4.0.2}Bit Flipping Decoding}{11}{subsection.4.0.2}
+\contentsline {subsection}{\numberline {4.0.3}Belief Propagation Decoding (Sum-Product Decoding)}{12}{subsection.4.0.3}
+\contentsline {subsection}{\numberline {4.0.4}Min Sum Decode}{14}{subsection.4.0.4}
+\contentsline {chapter}{\numberline {5}Results of Software level verification}{16}{chapter.5}
+\contentsline {section}{\numberline {5.1}Results of Sum Product Algorithm}{16}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Random Matrix}{16}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Quasi cyclic Matrix}{16}{subsection.5.1.2}
+\contentsline {section}{\numberline {5.2}Results of Min Sum Decode Algorithm}{16}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Random Matrix}{16}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Quasi cyclic Matrix}{17}{subsection.5.2.2}
+\contentsline {chapter}{\numberline {6}Partitioning of the Parity Check Matrix}{18}{chapter.6}
+\contentsline {section}{\numberline {6.1}Introduction}{18}{section.6.1}
+\contentsline {section}{\numberline {6.2}Partitioning}{19}{section.6.2}
+\contentsline {section}{\numberline {6.3}Procedure}{20}{section.6.3}
+\contentsline {section}{\numberline {6.4}Results of partitioning applied to matrices}{22}{section.6.4}
+\contentsline {chapter}{\numberline {7}Proposed modification in Min Sum Algorithm using partitioning}{24}{chapter.7}
+\contentsline {chapter}{\numberline {8}Converting Algorithm to hardware using AHIR tool chain}{25}{chapter.8}
+\contentsline {chapter}{\numberline {9}Results and comparisons}{26}{chapter.9}
+\contentsline {chapter}{Bibliography}{27}{chapter*.11}

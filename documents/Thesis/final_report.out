@@ -1,0 +1,27 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Theory of LDPC}{}% 2
+\BOOKMARK [1][-]{subsection.2.0.1}{Parity Check Matrix}{chapter.2}% 3
+\BOOKMARK [2][-]{subsection.2.0.2}{Encoding of Message}{subsection.2.0.1}% 4
+\BOOKMARK [2][-]{subsection.2.0.3}{Error Detection \046 Correction}{subsection.2.0.1}% 5
+\BOOKMARK [0][-]{chapter.3}{Generation of different LDPC matrices}{}% 6
+\BOOKMARK [0][-]{chapter.4}{Decoding Algorithms}{}% 7
+\BOOKMARK [1][-]{subsection.4.0.1}{Message Passing Decoding}{chapter.4}% 8
+\BOOKMARK [2][-]{subsection.4.0.2}{Bit Flipping Decoding}{subsection.4.0.1}% 9
+\BOOKMARK [2][-]{subsection.4.0.3}{Belief Propagation Decoding \(Sum-Product Decoding\)}{subsection.4.0.1}% 10
+\BOOKMARK [2][-]{subsection.4.0.4}{Min Sum Decode}{subsection.4.0.1}% 11
+\BOOKMARK [0][-]{chapter.5}{Results of Software level verification}{}% 12
+\BOOKMARK [1][-]{section.5.1}{Results of Sum Product Algorithm}{chapter.5}% 13
+\BOOKMARK [2][-]{subsection.5.1.1}{Random Matrix}{section.5.1}% 14
+\BOOKMARK [2][-]{subsection.5.1.2}{Quasi cyclic Matrix}{section.5.1}% 15
+\BOOKMARK [1][-]{section.5.2}{Results of Min Sum Decode Algorithm}{chapter.5}% 16
+\BOOKMARK [2][-]{subsection.5.2.1}{Random Matrix}{section.5.2}% 17
+\BOOKMARK [2][-]{subsection.5.2.2}{Quasi cyclic Matrix}{section.5.2}% 18
+\BOOKMARK [0][-]{chapter.6}{Partitioning of the Parity Check Matrix}{}% 19
+\BOOKMARK [1][-]{section.6.1}{Introduction}{chapter.6}% 20
+\BOOKMARK [1][-]{section.6.2}{Partitioning}{chapter.6}% 21
+\BOOKMARK [1][-]{section.6.3}{Procedure}{chapter.6}% 22
+\BOOKMARK [1][-]{section.6.4}{Results of partitioning applied to matrices}{chapter.6}% 23
+\BOOKMARK [0][-]{chapter.7}{Proposed modification in Min Sum Algorithm using partitioning}{}% 24
+\BOOKMARK [0][-]{chapter.8}{Converting Algorithm to hardware using AHIR tool chain}{}% 25
+\BOOKMARK [0][-]{chapter.9}{Results and comparisons}{}% 26
+\BOOKMARK [0][-]{chapter*.11}{Bibliography}{}% 27
