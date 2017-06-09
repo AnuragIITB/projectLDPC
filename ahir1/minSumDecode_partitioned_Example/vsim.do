@@ -15,16 +15,16 @@ vcom -work ahir /home/anurag/AHIR/ahir/release/vhdl/ahir.vhdl
 # anurag_modified_begin
 vlib work
 vmap work work
-vcom -work work /home/anurag/LDPC/projectLDPC/ahir/minSumDecode_partitioned_Example/ahir_system_global_package.vhdl
+vcom -work work /home/anurag/LDPC/projectLDPC/ahir1/minSumDecode_partitioned_Example/ahir_system_global_package.vhdl
 # anurag_modified_end
 
 vlib work
 vmap work work
-vcom -work work /home/anurag/LDPC/projectLDPC/ahir/minSumDecode_partitioned_Example/ahir_system.vhdl
+vcom -work work /home/anurag/LDPC/projectLDPC/ahir1/minSumDecode_partitioned_Example/ahir_system.vhdl
 
 vlib work
 vmap work work
-vcom -work work /home/anurag/LDPC/projectLDPC/ahir/minSumDecode_partitioned_Example/ahir_system_test_bench.vhdl
+vcom -work work /home/anurag/LDPC/projectLDPC/ahir1/minSumDecode_partitioned_Example/ahir_system_test_bench.vhdl
 
 vsim -novopt -t ps -foreign "initForeign libFli.so" work.ahir_system_test_bench
 
