@@ -1,0 +1,1522 @@
+// Aa code produced by llvm2aa (version 1.0)
+$record [structx_x_IO_FILE] < $uint<32> > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< structx_x_IO_marker > > < $pointer< structx_x_IO_FILE > > < $uint<32> > < $uint<32> > < $uint<64> > < $uint<16> > < $uint<8> > < $array [1] $of $uint<8> > < $pointer< $uint<8> > > < $uint<64> > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $pointer< $uint<8> > > < $uint<64> > < $uint<32> > < $array [20] $of $uint<8> > 
+$record [structx_x_IO_marker] < $pointer< structx_x_IO_marker > > < $pointer< structx_x_IO_FILE > > < $uint<32> > 
+$pipe aPosteriori_out : $float<8,23> $depth 4
+$pipe code_block_in : $float<8,23> $depth 1
+$pipe code_block_out : $float<8,23> $depth 4
+$pipe code_block_written : $uint<8> $depth 1
+$pipe ebbyNo_in : $float<8,23> $depth 1
+$pipe initialize_aPriori1 : $float<8,23> $depth 1
+$pipe initialize_aPriori2 : $float<8,23> $depth 1
+$pipe inputs_written : $uint<8> $depth 1
+$pipe is_decoded_out : $uint<8> $depth 4
+$pipe matrix_in : $uint<16> $depth 1
+$pipe maxNitr_in : $uint<16> $depth 1
+$pipe rate_in : $float<8,23> $depth 4
+$storage mem:$array [20000] $of $uint<16>
+$storage maxNitr:$uint<16>
+$storage ebbyNo:$float<8,23>
+$module [ebbyNo_initializer_in_progx_xoptx_xo] $in () $out () $is 
+{
+  ebbyNo := _h0
+  $attribute nooptimize 
+}
+$storage rate:$float<8,23>
+$module [rate_initializer_in_progx_xoptx_xo] $in () $out () $is 
+{
+  rate := _h0
+  $attribute nooptimize 
+}
+$storage code_block:$array [13000] $of $float<8,23>
+$storage aPriori:$array [13000] $of $float<8,23>
+$storage stderr:$pointer< structx_x_IO_FILE >
+$storage progx_xoptx_xo_iNtErNal_xx_xstr7:$array [19] $of $uint<8>
+$module [progx_xoptx_xo_iNtErNal_xx_xstr7_initializer_in_progx_xoptx_xo] $in () $out () $is 
+{
+  progx_xoptx_xo_iNtErNal_xx_xstr7[0] := _b01100001
+  progx_xoptx_xo_iNtErNal_xx_xstr7[1] := _b01010000
+  progx_xoptx_xo_iNtErNal_xx_xstr7[2] := _b01110010
+  progx_xoptx_xo_iNtErNal_xx_xstr7[3] := _b01101001
+  progx_xoptx_xo_iNtErNal_xx_xstr7[4] := _b01101111
+  progx_xoptx_xo_iNtErNal_xx_xstr7[5] := _b01110010
+  progx_xoptx_xo_iNtErNal_xx_xstr7[6] := _b01101001
+  progx_xoptx_xo_iNtErNal_xx_xstr7[7] := _b01011011
+  progx_xoptx_xo_iNtErNal_xx_xstr7[8] := _b00100101
+  progx_xoptx_xo_iNtErNal_xx_xstr7[9] := _b01100100
+  progx_xoptx_xo_iNtErNal_xx_xstr7[10] := _b01011101
+  progx_xoptx_xo_iNtErNal_xx_xstr7[11] := _b00100000
+  progx_xoptx_xo_iNtErNal_xx_xstr7[12] := _b00111101
+  progx_xoptx_xo_iNtErNal_xx_xstr7[13] := _b00100000
+  progx_xoptx_xo_iNtErNal_xx_xstr7[14] := _b00100101
+  progx_xoptx_xo_iNtErNal_xx_xstr7[15] := _b01100110
+  progx_xoptx_xo_iNtErNal_xx_xstr7[16] := _b00100000
+  progx_xoptx_xo_iNtErNal_xx_xstr7[17] := _b00001010
+  $attribute nooptimize 
+}
+$storage message:$array [20000] $of $float<8,23>
+$storage aPosteriori:$array [13000] $of $float<8,23>
+$storage ext_info:$array [20000] $of $float<8,23>
+$module [progx_xoptx_xo_storage_initializer_] $in () $out () $is 
+{
+  $parallelblock [pb] 
+  {
+    $call ebbyNo_initializer_in_progx_xoptx_xo () () 
+    $call rate_initializer_in_progx_xoptx_xo () () 
+    $call progx_xoptx_xo_iNtErNal_xx_xstr7_initializer_in_progx_xoptx_xo () () 
+  }
+  $attribute initializer
+}
+$module [initMem] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    $storage val_alloc : $uint<16>
+    $storage range_alloc : $uint<16>
+    I := @(I_alloc)
+    val := @(val_alloc)
+    range := @(range_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    // compare instruction
+    iNsTr_4 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) ( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  ) )
+    $if iNsTr_4 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    iNsTr_7 := matrix_in
+    ->(val) := iNsTr_7
+    // load 
+    iNsTr_9 := ->(val) 
+    // load 
+    iNsTr_10 := ->(I) 
+    iNsTr_11 := ($cast ($uint<64>) iNsTr_10)
+    iNsTr_12 := @(mem[iNsTr_11])
+    ->(iNsTr_12) := iNsTr_9
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_26 := ->(I) 
+    iNsTr_27 := (iNsTr_26 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_27
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    iNsTr_15 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_16 := ->(iNsTr_15) 
+    iNsTr_17 := ($cast ($uint<32>) iNsTr_16)
+    iNsTr_18 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_19 := ->(iNsTr_18) 
+    iNsTr_20 := ($cast ($uint<32>) iNsTr_19)
+    iNsTr_21 := (iNsTr_17 + iNsTr_20)
+    iNsTr_22 := ($cast ($uint<16>) iNsTr_21)
+    ->(range) := iNsTr_22
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_4_bb_5]
+    //begin: basic-block bb_5
+    $merge bb_4_bb_5 bb_7_bb_5
+    $endmerge
+    // load 
+    iNsTr_30 := ->(I) 
+    iNsTr_31 := ($cast ($uint<32>) iNsTr_30)
+    // load 
+    iNsTr_32 := ->(range) 
+    iNsTr_33 := ($cast ($uint<32>) iNsTr_32)
+    // compare instruction
+    iNsTr_34 := ( ($bitcast ( $int<32>) iNsTr_31) <   ($bitcast ( $int<32>) iNsTr_33 ) )
+    $if iNsTr_34 $then  $place [bb_5_bb_6] $else $place [bb_5_bb_8] $endif 
+    //begin: basic-block bb_6
+    $merge bb_5_bb_6
+    $endmerge
+    iNsTr_38 := matrix_in
+    ->(val) := iNsTr_38
+    // load 
+    iNsTr_40 := ->(val) 
+    // load 
+    iNsTr_41 := ->(I) 
+    iNsTr_42 := ($cast ($uint<32>) iNsTr_41)
+    iNsTr_43 := (iNsTr_42 + ( $bitcast ($uint<32> ) _b00000000000000000000000000000011 ) )
+    iNsTr_44 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_43) )
+    iNsTr_45 := @(mem[iNsTr_44])
+    ->(iNsTr_45) := iNsTr_40
+    $place [bb_6_bb_7]
+    //begin: basic-block bb_7
+    $merge bb_6_bb_7
+    $endmerge
+    // load 
+    iNsTr_49 := ->(I) 
+    iNsTr_50 := (iNsTr_49 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_50
+    $place [bb_7_bb_5]
+    //begin: basic-block bb_8
+    $merge bb_5_bb_8
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [initInputs] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage nitr_alloc : $uint<16>
+    $storage SNR_alloc : $float<8,23>
+    $storage Rate_alloc : $float<8,23>
+    nitr := @(nitr_alloc)
+    SNR := @(SNR_alloc)
+    Rate := @(Rate_alloc)
+    iNsTr_1 := maxNitr_in
+    ->(nitr) := iNsTr_1
+    // load 
+    iNsTr_3 := ->(nitr) 
+    maxNitr := iNsTr_3
+    iNsTr_6 := ebbyNo_in
+    ->(SNR) := iNsTr_6
+    // load 
+    iNsTr_8 := ->(SNR) 
+    ebbyNo := iNsTr_8
+    $call initMem ()  ()
+    iNsTr_12 := rate_in
+    ->(Rate) := iNsTr_12
+    // load 
+    iNsTr_14 := ->(Rate) 
+    rate := iNsTr_14
+    inputs_written := ( $bitcast ($uint<8> ) _b00000001 ) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [readCodeBlock] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    $storage code_bit_alloc : $float<8,23>
+    I := @(I_alloc)
+    code_bit := @(code_bit_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    iNsTr_11 := code_block_in
+    ->(code_bit) := iNsTr_11
+    // load 
+    iNsTr_13 := ->(code_bit) 
+    // load 
+    iNsTr_14 := ->(I) 
+    iNsTr_15 := ($cast ($uint<64>) iNsTr_14)
+    iNsTr_16 := @(code_block[iNsTr_15])
+    ->(iNsTr_16) := iNsTr_13
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_22 := ->(I) 
+    iNsTr_23 := (iNsTr_22 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_23
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    code_block_written := ( $bitcast ($uint<8> ) _b00000001 ) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [initialize_aPriori] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    $storage val1_alloc : $float<8,23>
+    $storage val2_alloc : $float<8,23>
+    I := @(I_alloc)
+    val1 := @(val1_alloc)
+    val2 := @(val2_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_9 := ->(I) 
+    iNsTr_10 := ($cast ($uint<64>) iNsTr_9)
+    iNsTr_11 := @(code_block[iNsTr_10])
+    // load 
+    iNsTr_12 := ->(iNsTr_11) 
+    iNsTr_13 := (( $bitcast ($float<8,23> ) _f-4.000000e+00 )  * iNsTr_12)
+    // load 
+    iNsTr_14 := rate
+    // load 
+    iNsTr_15 := ebbyNo
+    iNsTr_16 := (iNsTr_14 * iNsTr_15)
+    iNsTr_17 := (iNsTr_13 * iNsTr_16)
+    // load 
+    iNsTr_18 := ->(I) 
+    iNsTr_19 := ($cast ($uint<64>) iNsTr_18)
+    iNsTr_20 := @(aPriori[iNsTr_19])
+    ->(iNsTr_20) := iNsTr_17
+    // load 
+    iNsTr_22 := stderr
+    // load 
+    iNsTr_23 := ->(I) 
+    iNsTr_24 := ($cast ($uint<32>) iNsTr_23)
+    // load 
+    iNsTr_25 := ->(I) 
+    iNsTr_26 := ($cast ($uint<64>) iNsTr_25)
+    iNsTr_27 := @(aPriori[iNsTr_26])
+    // load 
+    iNsTr_28 := ->(iNsTr_27) 
+    iNsTr_29 := ($cast ($float<11,52>) iNsTr_28)
+    iNsTr_30 := @(progx_xoptx_xo_iNtErNal_xx_xstr7[( $bitcast ($uint<32> ) _b00000000000000000000000000000000 ) ])
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_46 := ->(I) 
+    iNsTr_47 := (iNsTr_46 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_47
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    iNsTr_33 := @(aPriori[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_34 := ->(iNsTr_33) 
+    ->(val1) := iNsTr_34
+    // load 
+    iNsTr_36 := ->(val1) 
+    initialize_aPriori1 := iNsTr_36
+    iNsTr_39 := @(aPriori[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_40 := ->(iNsTr_39) 
+    ->(val2) := iNsTr_40
+    // load 
+    iNsTr_42 := ->(val2) 
+    initialize_aPriori2 := iNsTr_42
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [initializeMessage] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    I := @(I_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_10 := ->(I) 
+    iNsTr_11 := ($cast ($uint<32>) iNsTr_10)
+    iNsTr_12 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_11)
+    iNsTr_13 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_12) )
+    iNsTr_14 := @(mem[iNsTr_13])
+    // load 
+    iNsTr_15 := ->(iNsTr_14) 
+    iNsTr_16 := ($cast ($uint<32>) iNsTr_15)
+    iNsTr_17 := (iNsTr_16 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_18 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_17) )
+    iNsTr_19 := @(aPriori[iNsTr_18])
+    // load 
+    iNsTr_20 := ->(iNsTr_19) 
+    // load 
+    iNsTr_21 := ->(I) 
+    iNsTr_22 := ($cast ($uint<64>) iNsTr_21)
+    iNsTr_23 := @(message[iNsTr_22])
+    ->(iNsTr_23) := iNsTr_20
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_27 := ->(I) 
+    iNsTr_28 := (iNsTr_27 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_28
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [initialize_aPosteriori] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    I := @(I_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_10 := ->(I) 
+    iNsTr_11 := ($cast ($uint<64>) iNsTr_10)
+    iNsTr_12 := @(aPriori[iNsTr_11])
+    // load 
+    iNsTr_13 := ->(iNsTr_12) 
+    // load 
+    iNsTr_14 := ->(I) 
+    iNsTr_15 := ($cast ($uint<64>) iNsTr_14)
+    iNsTr_16 := @(aPosteriori[iNsTr_15])
+    ->(iNsTr_16) := iNsTr_13
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_20 := ->(I) 
+    iNsTr_21 := (iNsTr_20 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_21
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [initializeExtrinsicInfo] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    I := @(I_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_10 := ->(I) 
+    iNsTr_11 := ($cast ($uint<64>) iNsTr_10)
+    iNsTr_12 := @(ext_info[iNsTr_11])
+    ->(iNsTr_12) := ( $bitcast ($float<8,23> ) _h0 ) 
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_16 := ->(I) 
+    iNsTr_17 := (iNsTr_16 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_17
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [checkNodeComputeEngine] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage row_alloc : $uint<16>
+    $storage col_alloc : $uint<16>
+    $storage range_alloc : $uint<16>
+    $storage I_alloc : $uint<16>
+    $storage val_alloc : $float<8,23>
+    $storage flag_alloc : $uint<8>
+    $storage exor_alloc : $uint<8>
+    $storage sign_alloc : $float<8,23>
+    $storage index_alloc : $uint<16>
+    row := @(row_alloc)
+    col := @(col_alloc)
+    range := @(range_alloc)
+    I := @(I_alloc)
+    val := @(val_alloc)
+    flag := @(flag_alloc)
+    exor := @(exor_alloc)
+    sign := @(sign_alloc)
+    index := @(index_alloc)
+    ->(row) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    ->(col) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    ->(range) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    ->(row) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_28_bb_1
+    $endmerge
+    // load 
+    iNsTr_5 := ->(row) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    iNsTr_7 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_8 := ->(iNsTr_7) 
+    iNsTr_9 := ($cast ($uint<32>) iNsTr_8)
+    // compare instruction
+    iNsTr_10 := ( ($bitcast ( $int<32>) iNsTr_6) <   ($bitcast ( $int<32>) iNsTr_9 ) )
+    $if iNsTr_10 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_29] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_13 := ->(row) 
+    iNsTr_14 := ($cast ($uint<32>) iNsTr_13)
+    iNsTr_15 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_16 := ->(iNsTr_15) 
+    iNsTr_17 := ($cast ($uint<32>) iNsTr_16)
+    iNsTr_18 := (iNsTr_17 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // compare instruction
+    iNsTr_19 := (iNsTr_14 == iNsTr_18 )
+    $if iNsTr_19 $then  $place [bb_2_bb_3] $else $place [bb_2_bb_4] $endif 
+    //begin: basic-block bb_4
+    $merge bb_2_bb_4
+    $endmerge
+    iNsTr_41 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_42 := ->(iNsTr_41) 
+    iNsTr_43 := ($cast ($uint<32>) iNsTr_42)
+    iNsTr_44 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_43)
+    // load 
+    iNsTr_45 := ->(row) 
+    iNsTr_46 := ($cast ($uint<32>) iNsTr_45)
+    iNsTr_47 := (iNsTr_44 + iNsTr_46)
+    iNsTr_48 := (iNsTr_47 + ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_49 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_48) )
+    iNsTr_50 := @(mem[iNsTr_49])
+    // load 
+    iNsTr_51 := ->(iNsTr_50) 
+    iNsTr_52 := ($cast ($uint<32>) iNsTr_51)
+    iNsTr_53 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_54 := ->(iNsTr_53) 
+    iNsTr_55 := ($cast ($uint<32>) iNsTr_54)
+    iNsTr_56 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_55)
+    // load 
+    iNsTr_57 := ->(row) 
+    iNsTr_58 := ($cast ($uint<32>) iNsTr_57)
+    iNsTr_59 := (iNsTr_56 + iNsTr_58)
+    iNsTr_60 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_59) )
+    iNsTr_61 := @(mem[iNsTr_60])
+    // load 
+    iNsTr_62 := ->(iNsTr_61) 
+    iNsTr_63 := ($cast ($uint<32>) iNsTr_62)
+    iNsTr_64 := (iNsTr_52 - iNsTr_63)
+    iNsTr_65 := ($cast ($uint<16>) iNsTr_64)
+    ->(range) := iNsTr_65
+    $place [bb_4_bb_5]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    iNsTr_22 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_23 := ->(iNsTr_22) 
+    iNsTr_24 := ($cast ($uint<32>) iNsTr_23)
+    iNsTr_25 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_26 := ->(iNsTr_25) 
+    iNsTr_27 := ($cast ($uint<32>) iNsTr_26)
+    iNsTr_28 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_27)
+    // load 
+    iNsTr_29 := ->(row) 
+    iNsTr_30 := ($cast ($uint<32>) iNsTr_29)
+    iNsTr_31 := (iNsTr_28 + iNsTr_30)
+    iNsTr_32 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_31) )
+    iNsTr_33 := @(mem[iNsTr_32])
+    // load 
+    iNsTr_34 := ->(iNsTr_33) 
+    iNsTr_35 := ($cast ($uint<32>) iNsTr_34)
+    iNsTr_36 := (iNsTr_35 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_37 := (iNsTr_24 - iNsTr_36)
+    iNsTr_38 := ($cast ($uint<16>) iNsTr_37)
+    ->(range) := iNsTr_38
+    $place [bb_3_bb_5]
+    //begin: basic-block bb_5
+    $merge bb_3_bb_5 bb_4_bb_5
+    $endmerge
+    ->(col) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_5_bb_6]
+    //begin: basic-block bb_6
+    $merge bb_26_bb_6 bb_5_bb_6
+    $endmerge
+    // load 
+    iNsTr_70 := ->(col) 
+    iNsTr_71 := ($cast ($uint<32>) iNsTr_70)
+    // load 
+    iNsTr_72 := ->(range) 
+    iNsTr_73 := ($cast ($uint<32>) iNsTr_72)
+    // compare instruction
+    iNsTr_74 := ( ($bitcast ( $int<32>) iNsTr_71) <   ($bitcast ( $int<32>) iNsTr_73 ) )
+    $if iNsTr_74 $then  $place [bb_6_bb_7] $else $place [bb_6_bb_27] $endif 
+    //begin: basic-block bb_7
+    $merge bb_6_bb_7
+    $endmerge
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    ->(val) := ( $bitcast ($float<8,23> ) _h0 ) 
+    ->(flag) := ( $bitcast ($uint<8> ) _b00000000 ) 
+    ->(exor) := ( $bitcast ($uint<8> ) _b00000000 ) 
+    ->(sign) := ( $bitcast ($float<8,23> ) _h0 ) 
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_7_bb_8]
+    //begin: basic-block bb_8
+    $merge bb_21_bb_8 bb_7_bb_8
+    $endmerge
+    // load 
+    iNsTr_85 := ->(I) 
+    iNsTr_86 := ($cast ($uint<32>) iNsTr_85)
+    // load 
+    iNsTr_87 := ->(range) 
+    iNsTr_88 := ($cast ($uint<32>) iNsTr_87)
+    // compare instruction
+    iNsTr_89 := ( ($bitcast ( $int<32>) iNsTr_86) <   ($bitcast ( $int<32>) iNsTr_88 ) )
+    $if iNsTr_89 $then  $place [bb_8_bb_9] $else $place [bb_8_bb_22] $endif 
+    //begin: basic-block bb_9
+    $merge bb_8_bb_9
+    $endmerge
+    iNsTr_96 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_97 := ->(iNsTr_96) 
+    iNsTr_98 := ($cast ($uint<32>) iNsTr_97)
+    iNsTr_99 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_98)
+    // load 
+    iNsTr_100 := ->(row) 
+    iNsTr_101 := ($cast ($uint<32>) iNsTr_100)
+    iNsTr_102 := (iNsTr_99 + iNsTr_101)
+    iNsTr_103 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_102) )
+    iNsTr_104 := @(mem[iNsTr_103])
+    // load 
+    iNsTr_105 := ->(iNsTr_104) 
+    iNsTr_106 := ($cast ($uint<32>) iNsTr_105)
+    iNsTr_107 := (iNsTr_106 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // load 
+    iNsTr_108 := ->(I) 
+    iNsTr_109 := ($cast ($uint<32>) iNsTr_108)
+    iNsTr_110 := (iNsTr_107 + iNsTr_109)
+    iNsTr_111 := ($cast ($uint<16>) iNsTr_110)
+    ->(index) := iNsTr_111
+    // load 
+    iNsTr_113 := ->(I) 
+    iNsTr_114 := ($cast ($uint<32>) iNsTr_113)
+    // load 
+    iNsTr_115 := ->(col) 
+    iNsTr_116 := ($cast ($uint<32>) iNsTr_115)
+    // compare instruction
+    iNsTr_117 := (iNsTr_114 == iNsTr_116 )
+    $if iNsTr_117 $then  $place [bb_9_bb_10] $else $place [bb_9_bb_11] $endif 
+    //begin: basic-block bb_11
+    $merge bb_9_bb_11
+    $endmerge
+    // load 
+    iNsTr_124 := ->(index) 
+    iNsTr_125 := ($cast ($uint<64>) iNsTr_124)
+    iNsTr_126 := @(message[iNsTr_125])
+    // load 
+    iNsTr_127 := ->(iNsTr_126) 
+    iNsTr_128 := ($cast ($float<11,52>) iNsTr_127)
+    // compare instruction
+    iNsTr_129 := (iNsTr_128 >= ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_129 $then  $place [bb_11_bb_12] $else $place [bb_11_bb_13] $endif 
+    //begin: basic-block bb_13
+    $merge bb_11_bb_13
+    $endmerge
+    // load 
+    iNsTr_145 := ->(exor) 
+    iNsTr_146 := ($cast ($uint<32>) iNsTr_145)
+    iNsTr_147 := (iNsTr_146 ^ ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_148 := ($cast ($uint<8>) iNsTr_147)
+    ->(exor) := iNsTr_148
+    $place [bb_13_bb_14]
+    //begin: basic-block bb_12
+    $merge bb_11_bb_12
+    $endmerge
+    // load 
+    iNsTr_139 := ->(exor) 
+    iNsTr_140 := ($cast ($uint<32>) iNsTr_139)
+    iNsTr_141 := (iNsTr_140 ^ ( $bitcast ($uint<32> ) _b00000000000000000000000000000000 ) )
+    iNsTr_142 := ($cast ($uint<8>) iNsTr_141)
+    ->(exor) := iNsTr_142
+    $place [bb_12_bb_14]
+    //begin: basic-block bb_14
+    $merge bb_12_bb_14 bb_13_bb_14
+    $endmerge
+    // load 
+    iNsTr_173 := ->(flag) 
+    iNsTr_174 := ($cast ($uint<32>) iNsTr_173)
+    // compare instruction
+    iNsTr_175 := (iNsTr_174 == ( $bitcast ($uint<32> ) _b00000000000000000000000000000000 )  )
+    $if iNsTr_175 $then  $place [bb_14_bb_15] $else $place [bb_14_bb_16] $endif 
+    //begin: basic-block bb_16
+    $merge bb_14_bb_16
+    $endmerge
+    // load 
+    iNsTr_188 := ->(index) 
+    iNsTr_189 := ($cast ($uint<64>) iNsTr_188)
+    iNsTr_190 := @(message[iNsTr_189])
+    // load 
+    iNsTr_191 := ->(iNsTr_190) 
+    $call absf (iNsTr_191 )  (iNsTr_192)
+    // load 
+    iNsTr_193 := ->(val) 
+    // compare instruction
+    iNsTr_194 := (iNsTr_192 < iNsTr_193 )
+    $if iNsTr_194 $then  $place [bb_16_bb_17] $else $place [bb_16_bb_18] $endif 
+    //begin: basic-block bb_17
+    $merge bb_16_bb_17
+    $endmerge
+    // load 
+    iNsTr_197 := ->(index) 
+    iNsTr_198 := ($cast ($uint<64>) iNsTr_197)
+    iNsTr_199 := @(message[iNsTr_198])
+    // load 
+    iNsTr_200 := ->(iNsTr_199) 
+    $call absf (iNsTr_200 )  (iNsTr_201)
+    ->(val) := iNsTr_201
+    $place [bb_17_bb_18]
+    //begin: basic-block bb_18
+    $merge bb_16_bb_18 bb_17_bb_18
+    $endmerge
+    $place [bb_18_bb_19]
+    //begin: basic-block bb_15
+    $merge bb_14_bb_15
+    $endmerge
+    // load 
+    iNsTr_181 := ->(index) 
+    iNsTr_182 := ($cast ($uint<64>) iNsTr_181)
+    iNsTr_183 := @(message[iNsTr_182])
+    // load 
+    iNsTr_184 := ->(iNsTr_183) 
+    $call absf (iNsTr_184 )  (iNsTr_185)
+    ->(val) := iNsTr_185
+    $place [bb_15_bb_19]
+    //begin: basic-block bb_19
+    $merge bb_15_bb_19 bb_18_bb_19
+    $endmerge
+    $place [bb_19_bb_20]
+    //begin: basic-block bb_20
+    $merge bb_19_bb_20
+    $endmerge
+    ->(flag) := ( $bitcast ($uint<8> ) _b00000001 ) 
+    $place [bb_20_bb_21]
+    //begin: basic-block bb_10
+    $merge bb_9_bb_10
+    $endmerge
+    $place [bb_10_bb_21]
+    //begin: basic-block bb_21
+    $merge bb_10_bb_21 bb_20_bb_21
+    $endmerge
+    // load 
+    iNsTr_135 := ->(I) 
+    iNsTr_136 := (iNsTr_135 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_136
+    $place [bb_21_bb_8]
+    //begin: basic-block bb_22
+    $merge bb_8_bb_22
+    $endmerge
+    // load 
+    iNsTr_119 := ->(exor) 
+    iNsTr_120 := ($cast ($uint<32>) iNsTr_119)
+    // compare instruction
+    iNsTr_121 := (iNsTr_120 == ( $bitcast ($uint<32> ) _b00000000000000000000000000000000 )  )
+    $if iNsTr_121 $then  $place [bb_22_bb_23] $else $place [bb_22_bb_24] $endif 
+    //begin: basic-block bb_23
+    $merge bb_22_bb_23
+    $endmerge
+    ->(sign) := ( $bitcast ($float<8,23> ) _f1.000000e+00 ) 
+    $place [bb_23_bb_25]
+    //begin: basic-block bb_24
+    $merge bb_22_bb_24
+    $endmerge
+    ->(sign) := ( $bitcast ($float<8,23> ) _f-1.000000e+00 ) 
+    $place [bb_24_bb_25]
+    //begin: basic-block bb_25
+    $merge bb_23_bb_25 bb_24_bb_25
+    $endmerge
+    // load 
+    iNsTr_151 := ->(val) 
+    // load 
+    iNsTr_152 := ->(sign) 
+    iNsTr_153 := (iNsTr_151 * iNsTr_152)
+    iNsTr_154 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_155 := ->(iNsTr_154) 
+    iNsTr_156 := ($cast ($uint<32>) iNsTr_155)
+    iNsTr_157 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_156)
+    // load 
+    iNsTr_158 := ->(row) 
+    iNsTr_159 := ($cast ($uint<32>) iNsTr_158)
+    iNsTr_160 := (iNsTr_157 + iNsTr_159)
+    iNsTr_161 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_160) )
+    iNsTr_162 := @(mem[iNsTr_161])
+    // load 
+    iNsTr_163 := ->(iNsTr_162) 
+    iNsTr_164 := ($cast ($uint<32>) iNsTr_163)
+    iNsTr_165 := (iNsTr_164 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // load 
+    iNsTr_166 := ->(col) 
+    iNsTr_167 := ($cast ($uint<32>) iNsTr_166)
+    iNsTr_168 := (iNsTr_165 + iNsTr_167)
+    iNsTr_169 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_168) )
+    iNsTr_170 := @(ext_info[iNsTr_169])
+    ->(iNsTr_170) := iNsTr_153
+    $place [bb_25_bb_26]
+    //begin: basic-block bb_26
+    $merge bb_25_bb_26
+    $endmerge
+    // load 
+    iNsTr_177 := ->(col) 
+    iNsTr_178 := (iNsTr_177 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(col) := iNsTr_178
+    $place [bb_26_bb_6]
+    //begin: basic-block bb_27
+    $merge bb_6_bb_27
+    $endmerge
+    $place [bb_27_bb_28]
+    //begin: basic-block bb_28
+    $merge bb_27_bb_28
+    $endmerge
+    // load 
+    iNsTr_91 := ->(row) 
+    iNsTr_92 := (iNsTr_91 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(row) := iNsTr_92
+    $place [bb_28_bb_1]
+    //begin: basic-block bb_29
+    $merge bb_1_bb_29
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [absf] 
+$in (f : $float<8,23> )
+$out (ret_val__ : $float<8,23>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage iNsTr_0_alloc : $float<8,23>
+    $storage ret_alloc : $float<8,23>
+    iNsTr_0 := @(iNsTr_0_alloc)
+    ret := @(ret_alloc)
+    ->(iNsTr_0) := f
+    // load 
+    iNsTr_2 := ->(iNsTr_0) 
+    iNsTr_3 := ($cast ($float<11,52>) iNsTr_2)
+    // compare instruction
+    iNsTr_4 := (iNsTr_3 < ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_4 $then  $place [bb_0_bb_1] $else $place [bb_0_bb_2] $endif 
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1
+    $endmerge
+    // load 
+    iNsTr_6 := ->(iNsTr_0) 
+    iNsTr_7 := (( $bitcast ($float<8,23> ) _h80000000 )  - iNsTr_6)
+    ->(ret) := iNsTr_7
+    $place [bb_1_bb_3]
+    //begin: basic-block bb_2
+    $merge bb_0_bb_2
+    $endmerge
+    // load 
+    iNsTr_10 := ->(iNsTr_0) 
+    ->(ret) := iNsTr_10
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_1_bb_3 bb_2_bb_3
+    $endmerge
+    // load 
+    ret_val__ := ->(ret) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [update_aPosteriori] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage I_alloc : $uint<16>
+    I := @(I_alloc)
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_3_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(I) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_4] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_9 := ->(I) 
+    iNsTr_10 := ($cast ($uint<64>) iNsTr_9)
+    iNsTr_11 := @(ext_info[iNsTr_10])
+    // load 
+    iNsTr_12 := ->(iNsTr_11) 
+    // load 
+    iNsTr_13 := ->(I) 
+    iNsTr_14 := ($cast ($uint<32>) iNsTr_13)
+    iNsTr_15 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_14)
+    iNsTr_16 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_15) )
+    iNsTr_17 := @(mem[iNsTr_16])
+    // load 
+    iNsTr_18 := ->(iNsTr_17) 
+    iNsTr_19 := ($cast ($uint<32>) iNsTr_18)
+    iNsTr_20 := (iNsTr_19 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_21 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_20) )
+    iNsTr_22 := @(aPosteriori[iNsTr_21])
+    // load 
+    iNsTr_23 := ->(iNsTr_22) 
+    iNsTr_24 := (iNsTr_23 + iNsTr_12)
+    ->(iNsTr_22) := iNsTr_24
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_28 := ->(I) 
+    iNsTr_29 := (iNsTr_28 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_29
+    $place [bb_3_bb_1]
+    //begin: basic-block bb_4
+    $merge bb_1_bb_4
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [checkIsdecoded] 
+$in ()
+$out (ret_val__ : $uint<8>)
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage is_decoded_alloc : $uint<8>
+    $storage I_alloc : $uint<16>
+    is_decoded := @(is_decoded_alloc)
+    I := @(I_alloc)
+    ->(is_decoded) := ( $bitcast ($uint<8> ) _b00000001 ) 
+    ->(I) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_12_bb_1
+    $endmerge
+    // load 
+    iNsTr_3 := ->(I) 
+    iNsTr_4 := ($cast ($uint<32>) iNsTr_3)
+    iNsTr_5 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_6 := ->(iNsTr_5) 
+    iNsTr_7 := ($cast ($uint<32>) iNsTr_6)
+    // compare instruction
+    iNsTr_8 := ( ($bitcast ( $int<32>) iNsTr_4) <   ($bitcast ( $int<32>) iNsTr_7 ) )
+    $if iNsTr_8 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_13] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_11 := ->(I) 
+    iNsTr_12 := ($cast ($uint<64>) iNsTr_11)
+    iNsTr_13 := @(aPosteriori[iNsTr_12])
+    // load 
+    iNsTr_14 := ->(iNsTr_13) 
+    iNsTr_15 := ($cast ($float<11,52>) iNsTr_14)
+    // compare instruction
+    iNsTr_16 := (iNsTr_15 > ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_16 $then  $place [bb_2_bb_3] $else $place [bb_2_bb_6] $endif 
+    //begin: basic-block bb_6
+    $merge bb_2_bb_6
+    $endmerge
+    // load 
+    iNsTr_27 := ->(I) 
+    iNsTr_28 := ($cast ($uint<64>) iNsTr_27)
+    iNsTr_29 := @(aPosteriori[iNsTr_28])
+    // load 
+    iNsTr_30 := ->(iNsTr_29) 
+    iNsTr_31 := ($cast ($float<11,52>) iNsTr_30)
+    // compare instruction
+    iNsTr_32 := (iNsTr_31 < ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_32 $then  $place [bb_6_bb_7] $else $place [bb_6_bb_10] $endif 
+    //begin: basic-block bb_7
+    $merge bb_6_bb_7
+    $endmerge
+    // load 
+    iNsTr_41 := ->(I) 
+    iNsTr_42 := ($cast ($uint<64>) iNsTr_41)
+    iNsTr_43 := @(code_block[iNsTr_42])
+    // load 
+    iNsTr_44 := ->(iNsTr_43) 
+    iNsTr_45 := ($cast ($float<11,52>) iNsTr_44)
+    // compare instruction
+    iNsTr_46 := (iNsTr_45 < ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_46 $then  $place [bb_7_bb_8] $else $place [bb_7_bb_9] $endif 
+    //begin: basic-block bb_8
+    $merge bb_7_bb_8
+    $endmerge
+    ->(is_decoded) := ( $bitcast ($uint<8> ) _b00000000 ) 
+    $place [bb_8_bb_9]
+    //begin: basic-block bb_9
+    $merge bb_7_bb_9 bb_8_bb_9
+    $endmerge
+    // load 
+    iNsTr_52 := ->(I) 
+    iNsTr_53 := ($cast ($uint<64>) iNsTr_52)
+    iNsTr_54 := @(code_block[iNsTr_53])
+    ->(iNsTr_54) := ( $bitcast ($float<8,23> ) _f1.000000e+00 ) 
+    $place [bb_9_bb_10]
+    //begin: basic-block bb_10
+    $merge bb_6_bb_10 bb_9_bb_10
+    $endmerge
+    $place [bb_10_bb_11]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    // load 
+    iNsTr_20 := ->(I) 
+    iNsTr_21 := ($cast ($uint<64>) iNsTr_20)
+    iNsTr_22 := @(code_block[iNsTr_21])
+    // load 
+    iNsTr_23 := ->(iNsTr_22) 
+    iNsTr_24 := ($cast ($float<11,52>) iNsTr_23)
+    // compare instruction
+    iNsTr_25 := (iNsTr_24 > ( $bitcast ($float<11,52> ) _h0 )  )
+    $if iNsTr_25 $then  $place [bb_3_bb_4] $else $place [bb_3_bb_5] $endif 
+    //begin: basic-block bb_4
+    $merge bb_3_bb_4
+    $endmerge
+    ->(is_decoded) := ( $bitcast ($uint<8> ) _b00000000 ) 
+    $place [bb_4_bb_5]
+    //begin: basic-block bb_5
+    $merge bb_3_bb_5 bb_4_bb_5
+    $endmerge
+    // load 
+    iNsTr_36 := ->(I) 
+    iNsTr_37 := ($cast ($uint<64>) iNsTr_36)
+    iNsTr_38 := @(code_block[iNsTr_37])
+    ->(iNsTr_38) := ( $bitcast ($float<8,23> ) _f-1.000000e+00 ) 
+    $place [bb_5_bb_11]
+    //begin: basic-block bb_11
+    $merge bb_10_bb_11 bb_5_bb_11
+    $endmerge
+    $place [bb_11_bb_12]
+    //begin: basic-block bb_12
+    $merge bb_11_bb_12
+    $endmerge
+    // load 
+    iNsTr_57 := ->(I) 
+    iNsTr_58 := (iNsTr_57 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(I) := iNsTr_58
+    $place [bb_12_bb_1]
+    //begin: basic-block bb_13
+    $merge bb_1_bb_13
+    $endmerge
+    // load 
+    ret_val__ := ->(is_decoded) 
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [updateMessage] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage row_alloc : $uint<16>
+    $storage col_alloc : $uint<16>
+    $storage range_alloc : $uint<16>
+    row := @(row_alloc)
+    col := @(col_alloc)
+    range := @(range_alloc)
+    ->(row) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_10_bb_1
+    $endmerge
+    // load 
+    iNsTr_2 := ->(row) 
+    iNsTr_3 := ($cast ($uint<32>) iNsTr_2)
+    iNsTr_4 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_5 := ->(iNsTr_4) 
+    iNsTr_6 := ($cast ($uint<32>) iNsTr_5)
+    // compare instruction
+    iNsTr_7 := ( ($bitcast ( $int<32>) iNsTr_3) <   ($bitcast ( $int<32>) iNsTr_6 ) )
+    $if iNsTr_7 $then  $place [bb_1_bb_2] $else $place [bb_1_bb_11] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    // load 
+    iNsTr_10 := ->(row) 
+    iNsTr_11 := ($cast ($uint<32>) iNsTr_10)
+    iNsTr_12 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000000 ) ])
+    // load 
+    iNsTr_13 := ->(iNsTr_12) 
+    iNsTr_14 := ($cast ($uint<32>) iNsTr_13)
+    iNsTr_15 := (iNsTr_14 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // compare instruction
+    iNsTr_16 := (iNsTr_11 == iNsTr_15 )
+    $if iNsTr_16 $then  $place [bb_2_bb_3] $else $place [bb_2_bb_4] $endif 
+    //begin: basic-block bb_4
+    $merge bb_2_bb_4
+    $endmerge
+    iNsTr_38 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_39 := ->(iNsTr_38) 
+    iNsTr_40 := ($cast ($uint<32>) iNsTr_39)
+    iNsTr_41 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_40)
+    // load 
+    iNsTr_42 := ->(row) 
+    iNsTr_43 := ($cast ($uint<32>) iNsTr_42)
+    iNsTr_44 := (iNsTr_41 + iNsTr_43)
+    iNsTr_45 := (iNsTr_44 + ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_46 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_45) )
+    iNsTr_47 := @(mem[iNsTr_46])
+    // load 
+    iNsTr_48 := ->(iNsTr_47) 
+    iNsTr_49 := ($cast ($uint<32>) iNsTr_48)
+    iNsTr_50 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_51 := ->(iNsTr_50) 
+    iNsTr_52 := ($cast ($uint<32>) iNsTr_51)
+    iNsTr_53 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_52)
+    // load 
+    iNsTr_54 := ->(row) 
+    iNsTr_55 := ($cast ($uint<32>) iNsTr_54)
+    iNsTr_56 := (iNsTr_53 + iNsTr_55)
+    iNsTr_57 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_56) )
+    iNsTr_58 := @(mem[iNsTr_57])
+    // load 
+    iNsTr_59 := ->(iNsTr_58) 
+    iNsTr_60 := ($cast ($uint<32>) iNsTr_59)
+    iNsTr_61 := (iNsTr_49 - iNsTr_60)
+    iNsTr_62 := ($cast ($uint<16>) iNsTr_61)
+    ->(range) := iNsTr_62
+    $place [bb_4_bb_5]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3
+    $endmerge
+    iNsTr_19 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_20 := ->(iNsTr_19) 
+    iNsTr_21 := ($cast ($uint<32>) iNsTr_20)
+    iNsTr_22 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_23 := ->(iNsTr_22) 
+    iNsTr_24 := ($cast ($uint<32>) iNsTr_23)
+    iNsTr_25 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_24)
+    // load 
+    iNsTr_26 := ->(row) 
+    iNsTr_27 := ($cast ($uint<32>) iNsTr_26)
+    iNsTr_28 := (iNsTr_25 + iNsTr_27)
+    iNsTr_29 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_28) )
+    iNsTr_30 := @(mem[iNsTr_29])
+    // load 
+    iNsTr_31 := ->(iNsTr_30) 
+    iNsTr_32 := ($cast ($uint<32>) iNsTr_31)
+    iNsTr_33 := (iNsTr_32 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_34 := (iNsTr_21 - iNsTr_33)
+    iNsTr_35 := ($cast ($uint<16>) iNsTr_34)
+    ->(range) := iNsTr_35
+    $place [bb_3_bb_5]
+    //begin: basic-block bb_5
+    $merge bb_3_bb_5 bb_4_bb_5
+    $endmerge
+    ->(col) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_5_bb_6]
+    //begin: basic-block bb_6
+    $merge bb_5_bb_6 bb_8_bb_6
+    $endmerge
+    // load 
+    iNsTr_67 := ->(col) 
+    iNsTr_68 := ($cast ($uint<32>) iNsTr_67)
+    // load 
+    iNsTr_69 := ->(range) 
+    iNsTr_70 := ($cast ($uint<32>) iNsTr_69)
+    // compare instruction
+    iNsTr_71 := ( ($bitcast ( $int<32>) iNsTr_68) <   ($bitcast ( $int<32>) iNsTr_70 ) )
+    $if iNsTr_71 $then  $place [bb_6_bb_7] $else $place [bb_6_bb_9] $endif 
+    //begin: basic-block bb_7
+    $merge bb_6_bb_7
+    $endmerge
+    iNsTr_74 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_75 := ->(iNsTr_74) 
+    iNsTr_76 := ($cast ($uint<32>) iNsTr_75)
+    iNsTr_77 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_76)
+    // load 
+    iNsTr_78 := ->(row) 
+    iNsTr_79 := ($cast ($uint<32>) iNsTr_78)
+    iNsTr_80 := (iNsTr_77 + iNsTr_79)
+    iNsTr_81 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_80) )
+    iNsTr_82 := @(mem[iNsTr_81])
+    // load 
+    iNsTr_83 := ->(iNsTr_82) 
+    iNsTr_84 := ($cast ($uint<32>) iNsTr_83)
+    iNsTr_85 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_84)
+    iNsTr_86 := (iNsTr_85 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // load 
+    iNsTr_87 := ->(col) 
+    iNsTr_88 := ($cast ($uint<32>) iNsTr_87)
+    iNsTr_89 := (iNsTr_86 + iNsTr_88)
+    iNsTr_90 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_89) )
+    iNsTr_91 := @(mem[iNsTr_90])
+    // load 
+    iNsTr_92 := ->(iNsTr_91) 
+    iNsTr_93 := ($cast ($uint<32>) iNsTr_92)
+    iNsTr_94 := (iNsTr_93 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    iNsTr_95 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_94) )
+    iNsTr_96 := @(aPosteriori[iNsTr_95])
+    // load 
+    iNsTr_97 := ->(iNsTr_96) 
+    iNsTr_98 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_99 := ->(iNsTr_98) 
+    iNsTr_100 := ($cast ($uint<32>) iNsTr_99)
+    iNsTr_101 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_100)
+    // load 
+    iNsTr_102 := ->(row) 
+    iNsTr_103 := ($cast ($uint<32>) iNsTr_102)
+    iNsTr_104 := (iNsTr_101 + iNsTr_103)
+    iNsTr_105 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_104) )
+    iNsTr_106 := @(mem[iNsTr_105])
+    // load 
+    iNsTr_107 := ->(iNsTr_106) 
+    iNsTr_108 := ($cast ($uint<32>) iNsTr_107)
+    iNsTr_109 := (iNsTr_108 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // load 
+    iNsTr_110 := ->(col) 
+    iNsTr_111 := ($cast ($uint<32>) iNsTr_110)
+    iNsTr_112 := (iNsTr_109 + iNsTr_111)
+    iNsTr_113 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_112) )
+    iNsTr_114 := @(ext_info[iNsTr_113])
+    // load 
+    iNsTr_115 := ->(iNsTr_114) 
+    iNsTr_116 := (iNsTr_97 - iNsTr_115)
+    iNsTr_117 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000010 ) ])
+    // load 
+    iNsTr_118 := ->(iNsTr_117) 
+    iNsTr_119 := ($cast ($uint<32>) iNsTr_118)
+    iNsTr_120 := (( $bitcast ($uint<32> ) _b00000000000000000000000000000011 )  + iNsTr_119)
+    // load 
+    iNsTr_121 := ->(row) 
+    iNsTr_122 := ($cast ($uint<32>) iNsTr_121)
+    iNsTr_123 := (iNsTr_120 + iNsTr_122)
+    iNsTr_124 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_123) )
+    iNsTr_125 := @(mem[iNsTr_124])
+    // load 
+    iNsTr_126 := ->(iNsTr_125) 
+    iNsTr_127 := ($cast ($uint<32>) iNsTr_126)
+    iNsTr_128 := (iNsTr_127 - ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    // load 
+    iNsTr_129 := ->(col) 
+    iNsTr_130 := ($cast ($uint<32>) iNsTr_129)
+    iNsTr_131 := (iNsTr_128 + iNsTr_130)
+    iNsTr_132 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_131) )
+    iNsTr_133 := @(message[iNsTr_132])
+    ->(iNsTr_133) := iNsTr_116
+    $place [bb_7_bb_8]
+    //begin: basic-block bb_8
+    $merge bb_7_bb_8
+    $endmerge
+    // load 
+    iNsTr_137 := ->(col) 
+    iNsTr_138 := (iNsTr_137 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(col) := iNsTr_138
+    $place [bb_8_bb_6]
+    //begin: basic-block bb_9
+    $merge bb_6_bb_9
+    $endmerge
+    $place [bb_9_bb_10]
+    //begin: basic-block bb_10
+    $merge bb_9_bb_10
+    $endmerge
+    // load 
+    iNsTr_141 := ->(row) 
+    iNsTr_142 := (iNsTr_141 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(row) := iNsTr_142
+    $place [bb_10_bb_1]
+    //begin: basic-block bb_11
+    $merge bb_1_bb_11
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}
+$module [top_daemon] 
+$in ()
+$out ()
+$is 
+{
+  $branchblock [body] 
+  {
+    //begin: basic-block bb_0
+    $storage nitr_alloc : $uint<8>
+    $storage P_alloc : $uint<32>
+    $storage is_decoded_alloc : $uint<8>
+    $storage K_alloc : $uint<16>
+    nitr := @(nitr_alloc)
+    P := @(P_alloc)
+    is_decoded := @(is_decoded_alloc)
+    K := @(K_alloc)
+    $call initInputs ()  ()
+    $call readCodeBlock ()  ()
+    ->(nitr) := ( $bitcast ($uint<8> ) _b00000001 ) 
+    $call initialize_aPriori ()  ()
+    $call initializeMessage ()  ()
+    $place [bb_0_bb_1]
+    //begin: basic-block bb_1
+    $merge bb_0_bb_1 bb_9_bb_1
+    $endmerge
+    // load 
+    iNsTr_6 := ->(nitr) 
+    iNsTr_7 := ($cast ($uint<32>) iNsTr_6)
+    // load 
+    iNsTr_8 := maxNitr
+    iNsTr_9 := ($cast ($uint<32>) iNsTr_8)
+    // compare instruction
+    iNsTr_10 := ( ($bitcast ( $int<32>) iNsTr_7) <   ($bitcast ( $int<32>) iNsTr_9 ) )
+    $if iNsTr_10 $then  $place [bb_1_bb_2] $else $place [bb_1_xx_xloopexit] $endif 
+    //begin: basic-block bb_2
+    $merge bb_1_bb_2
+    $endmerge
+    $call initialize_aPosteriori ()  ()
+    $call initializeExtrinsicInfo ()  ()
+    $call checkNodeComputeEngine ()  ()
+    $call update_aPosteriori ()  ()
+    ->(P) := ( $bitcast ($uint<32> ) _b00000000000000000000000000000000 ) 
+    ->(P) := ( $bitcast ($uint<32> ) _b00000000000000000000000000000000 ) 
+    $place [bb_2_bb_3]
+    //begin: basic-block bb_3
+    $merge bb_2_bb_3 bb_5_bb_3
+    $endmerge
+    // load 
+    iNsTr_20 := ->(P) 
+    iNsTr_21 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_22 := ->(iNsTr_21) 
+    iNsTr_23 := ($cast ($uint<32>) iNsTr_22)
+    // compare instruction
+    iNsTr_24 := ( ($bitcast ( $int<32>) iNsTr_20) <   ($bitcast ( $int<32>) iNsTr_23 ) )
+    $if iNsTr_24 $then  $place [bb_3_bb_4] $else $place [bb_3_bb_6] $endif 
+    //begin: basic-block bb_4
+    $merge bb_3_bb_4
+    $endmerge
+    // load 
+    iNsTr_28 := ->(P) 
+    iNsTr_29 :=  ($bitcast ($uint<64>) ( $cast ($int< 64 > ) iNsTr_28) )
+    iNsTr_30 := @(aPosteriori[iNsTr_29])
+    // load 
+    iNsTr_31 := ->(iNsTr_30) 
+    aPosteriori_out := iNsTr_31
+    $place [bb_4_bb_5]
+    //begin: basic-block bb_5
+    $merge bb_4_bb_5
+    $endmerge
+    // load 
+    iNsTr_50 := ->(P) 
+    iNsTr_51 := (iNsTr_50 + ( $bitcast ($uint<32> ) _b00000000000000000000000000000001 ) )
+    ->(P) := iNsTr_51
+    $place [bb_5_bb_3]
+    //begin: basic-block bb_6
+    $merge bb_3_bb_6
+    $endmerge
+    $call checkIsdecoded ()  (iNsTr_35)
+    ->(is_decoded) := iNsTr_35
+    // load 
+    iNsTr_37 := ->(is_decoded) 
+    is_decoded_out := iNsTr_37
+    // load 
+    iNsTr_40 := ->(is_decoded) 
+    // compare instruction
+    iNsTr_41 := ( ($bitcast ( $int<8>) iNsTr_40) !=   ($bitcast ( $int<8>) ( $bitcast ($uint<8> ) _b00000000 )  ) )
+    $if iNsTr_41 $then  $place [bb_6_bb_7] $else $place [bb_6_bb_8] $endif 
+    //begin: basic-block bb_7
+    $merge bb_6_bb_7
+    $endmerge
+    $place [bb_7_bb_11]
+    //begin: basic-block bb_8
+    $merge bb_6_bb_8
+    $endmerge
+    $call updateMessage ()  ()
+    $place [bb_8_bb_9]
+    //begin: basic-block bb_9
+    $merge bb_8_bb_9
+    $endmerge
+    // load 
+    iNsTr_65 := ->(nitr) 
+    iNsTr_66 := (iNsTr_65 + ( $bitcast ($uint<8> ) _b00000001 ) )
+    ->(nitr) := iNsTr_66
+    $place [bb_9_bb_1]
+    //begin: basic-block xx_xloopexit
+    $merge bb_1_xx_xloopexit
+    $endmerge
+    $place [xx_xloopexit_bb_11]
+    //begin: basic-block bb_11
+    $merge bb_7_bb_11 xx_xloopexit_bb_11
+    $endmerge
+    ->(K) := ( $bitcast ($uint<16> ) _b0000000000000000 ) 
+    $place [bb_11_bb_12]
+    //begin: basic-block bb_12
+    $merge bb_11_bb_12 bb_14_bb_12
+    $endmerge
+    // load 
+    iNsTr_43 := ->(K) 
+    iNsTr_44 := ($cast ($uint<32>) iNsTr_43)
+    iNsTr_45 := @(mem[( $bitcast ($uint<64> ) _b0000000000000000000000000000000000000000000000000000000000000001 ) ])
+    // load 
+    iNsTr_46 := ->(iNsTr_45) 
+    iNsTr_47 := ($cast ($uint<32>) iNsTr_46)
+    // compare instruction
+    iNsTr_48 := ( ($bitcast ( $int<32>) iNsTr_44) <   ($bitcast ( $int<32>) iNsTr_47 ) )
+    $if iNsTr_48 $then  $place [bb_12_bb_13] $else $place [bb_12_bb_15] $endif 
+    //begin: basic-block bb_13
+    $merge bb_12_bb_13
+    $endmerge
+    // load 
+    iNsTr_57 := ->(K) 
+    iNsTr_58 := ($cast ($uint<64>) iNsTr_57)
+    iNsTr_59 := @(code_block[iNsTr_58])
+    // load 
+    iNsTr_60 := ->(iNsTr_59) 
+    code_block_out := iNsTr_60
+    $place [bb_13_bb_14]
+    //begin: basic-block bb_14
+    $merge bb_13_bb_14
+    $endmerge
+    // load 
+    iNsTr_69 := ->(K) 
+    iNsTr_70 := (iNsTr_69 + ( $bitcast ($uint<16> ) _b0000000000000001 ) )
+    ->(K) := iNsTr_70
+    $place [bb_14_bb_12]
+    //begin: basic-block bb_15
+    $merge bb_12_bb_15
+    $endmerge
+    $place [return__]
+    $merge return__ $endmerge
+  }
+}

@@ -1,0 +1,181 @@
+Info:pThreadUtils: started thread top_daemon_1
+Info:pThreadUtils: started thread top_daemon_2
+Info:pThreadUtils: started thread daemon_3
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe maxNitr_in, will register it as a FIFO with depth 1.
+Info:pThreadUtils: started thread daemon_4
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe reading_code_block_done, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe message12_initialized, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe message11_initialized, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe ebbyNo_in, will register it as a FIFO with depth 1.
+Info:read maxNitr = 25
+Info: write to pipe = 2
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe matrix_in, will register it as a FIFO with depth 1.
+Info:read SNR = 3.999448
+Info: write to pipe = 4
+Info: read data = 2
+Info: read data = 4
+Info: write to pipe = 4
+Info: write to pipe = 1
+Info: read data = 4
+Info: write to pipe = 2
+Info: read data = 1
+Info: write to pipe = 3
+Info: read data = 2
+Info: write to pipe = 4
+Info: read data = 3
+Info: write to pipe = 1
+Info: read data = 4
+Info: write to pipe = 4
+Info: read data = 1
+Info: write to pipe = 2
+Info: read data = 4
+Info: write to pipe = 4
+Info: write to pipe = 2
+Info: read data = 2
+Info: read data = 4
+Info: read data = 2
+Info: write to pipe = 1
+Info: write to pipe = 2
+Info: read data = 1
+Info: write to pipe = 1
+Info: write to pipe = 1
+Info: read data = 2
+Info: read data = 1
+Info: read data = 1
+Info: write to pipe = 2
+Info: write to pipe = 4
+Info: read data = 2
+Info: read data = 4
+Info: write to pipe = 3
+Info: write to pipe = 1
+Info: read data = 3
+Info: read data = 1
+Info: write to pipe = 4
+Info: write to pipe = 2
+Info: read data = 4
+Info: read data = 2
+Info: write to pipe = 1
+Info: write to pipe = 3
+Info: read data = 1
+Info: read data = 3
+Info: write to pipe = 2
+Info: write to pipe = 4
+Info: read data = 2
+Info: read data = 4
+Info: write to pipe = 3
+Info: write to pipe = 3
+Info: write to pipe = 1
+Info: read data = 3
+Info: read data = 3
+Info: read data = 1
+Info: write to pipe = 4
+Info: write to pipe = 1
+Info: write to pipe = 2
+Info: read data = 4
+Info: read data = 1
+ERROR : In reading matrix file 
+Info: read data = 2
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe code_block_in, will register it as a FIFO with depth 1.
+ read code_bit[0] = -0.800000 
+ read code_bit[1] = 0.700000 
+ read code_bit[2] = -0.900000 
+ read code_bit[3] = 0.700000 
+ read code_bit[0] = 0.500000 
+ read code_bit[1] = -1.500000 
+ read code_bit[2] = -2.400000 
+ read code_bit[3] = -1.200000 
+ERROR : In reading code_block file 
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe stop_the daemon1, will register it as a FIFO with depth 1.
+ I= 0 ,  aPriori1[I]=  6.399116 
+ I= 1 ,  aPriori1[I]=  -5.599226 
+ I= 2 ,  aPriori1[I]=  7.199006 
+ I= 3 ,  aPriori1[I]=  -5.599226 
+ I= 0 ,  aPriori2[I]=  -3.999448 
+ message11[0]= 6.399116 
+  message11[1]= -5.599226 
+  message11[2]= 7.199006 
+  message11[3]= -5.599226 
+  I= 1 ,  aPriori2[I]=  11.998343 
+ message21[0]= 6.399116 
+  message21[1]= -5.599226 
+  message21[2]= -5.599226 
+  I= 2 ,  aPriori2[I]=  19.197350 
+ I= 3 ,  aPriori2[I]=  9.598675 
+ message12[0]= -3.999448 
+  aPosteriori1 initialized 
+ext_info11 initialized 
+trans_info11 initialized 
+ext_info21 initialized 
+trans_info21 initialized 
+ message12[1]= 11.998343 
+ trasnverse_info11_12( 0 ) = -5.599226 
+ message22[0]= 19.197350 
+ trasnverse_info21_22( 0 ) = -5.599226 
+trasnverse_info21_22( 1 ) = -5.599226 
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe trans_info21_22_calulation_done, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe trans_info22_21_calulation_done, will register it as a FIFO with depth 1.
+ message22[1]= -3.999448 
+  aPosteriori2 initialized 
+ext_info12 initialized 
+trans_info12 initialized 
+trasnverse_info12_11( 1 ) = -3.999448 
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe trans_info12_11_calulation_done, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe trans_info11_12_calulation_done, will register it as a FIFO with depth 1.
+ message22[2]= 9.598675 
+ ext_info22 initialized 
+trans_info22 initialized 
+trasnverse_info22_21( 0 ) = 19.197350 
+trasnverse_info22_21( 1 ) = -3.999448 
+Buddy! I am wait for - aPosteriori2_phase_1_done 
+Buddy! I am wait for - aPosteriori1_phase_1_done 
+ 
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe aPosteriori1_phase_1_done, will register it as a FIFO with depth 1.
+trasnverse_info11_12( 1 ) = -5.599226 
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe aPosteriori2_phase_1_done, will register it as a FIFO with depth 1.
+ext_info12( 1,0 ) = -3.999448 	ext_info11( 0,0 ) = 5.599226 	ext_info11( 0,1 ) = -5.599226 	ext_info11( 0,2 ) = 5.599226 	ext_info11( 1) = -5.599226 	Now! write aPosteriori2_phase_1_done -daemon 2 
+ 
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe aPosteriori2_phase_2_done, will register it as a FIFO with depth 1.
+ext_info21( 0,0 ) = 5.599226 	ext_info21( 0,1 ) = -5.599226 	ext_info21( 1) = -5.599226 	
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe is_decoded_d4, will register it as a FIFO with depth 1.
+ext_info12( 1,1 ) = 3.999448 	Now! write aPosteriori1_phase_1_done - daemon1 
+aPosteriori1_phase_1_done = 0 
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe aPosteriori1_phase_2_done, will register it as a FIFO with depth 1.
+ext_info22( 0) = 19.197350 	check is decoded2 done 
+ext_info22( 1,0 ) = -3.999448 	ext_info22( 1,1 ) = 3.999448 	
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe is_decoded_2, will register it as a FIFO with depth 1.
+check is decoded1 done 
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe is_decoded_d3, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:read_from_pipe: job used unregistered pipe is_decoded_d2, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe is_decoded_d2, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe stop_the daemon2, will register it as a FIFO with depth 1.
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe stop_the daemon4, will register it as a FIFO with depth 1.
+ number of iteration required = 1 
+
+Warning: pipeHandler:write_to_pipe: job used unregistered pipe stop_the daemon3, will register it as a FIFO with depth 1.
+code_block1[0] = -1.000000 
+code_block2[0] = 1.000000 
+code_block1[1] = 1.000000 
+code_block2[1] = -1.000000 
+code_block1[2] = -1.000000 
+code_block2[2] = -1.000000 
+code_block1[3] = 1.000000 
+code_block2[3] = -1.000000 

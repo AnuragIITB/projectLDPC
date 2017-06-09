@@ -1,0 +1,1518 @@
+clang -O0 -std=gnu89   -I/home/anurag/anurag_drive/Assignment2_InstallAhir/ahir/release/include -I/home/anurag/anurag_drive/Assignment2_InstallAhir/ahir/release/functionLibrary//include -emit-llvm -c src/prog.c
+opt --indvars --loopsimplify prog.o -o prog.opt.o
+llvm-dis prog.opt.o
+llvm2aa -extract_do_while=true --storageinit=true  prog.opt.o | vcFormat >  prog.aa
+Warning: no modules specified.. will translate all functions
+Info: -storageinit=true: storage initializers will be generated
+Info: -extract_do_while=true: storage initializers will be generated
+Info: locating portname in constant GEP [11 x i8] c"maxNitr_in\00"
+
+Info: added pipe maxNitr_in with type $uint<16>
+Info: locating portname in constant GEP [10 x i8] c"ebbyNo_in\00"
+
+Info: added pipe ebbyNo_in with type $float<8,23>
+Info: locating portname in constant GEP [10 x i8] c"matrix_in\00"
+
+Info: added pipe matrix_in with type $uint<16>
+Info: locating portname in constant GEP [10 x i8] c"matrix_in\00"
+
+Info: locating portname in constant GEP [15 x i8] c"matrix_written\00"
+
+Info: added pipe matrix_written with type $uint<8>
+Info: locating portname in constant GEP [14 x i8] c"code_block_in\00"
+
+Info: added pipe code_block_in with type $float<8,23>
+Info: locating portname in constant GEP [19 x i8] c"code_block_written\00"
+
+Info: added pipe code_block_written with type $uint<8>
+Info: locating portname in constant GEP [19 x i8] c"code_block_written\00"
+
+Info: locating portname in constant GEP [16 x i8] c"aPriori_written\00"
+
+Info: added pipe aPriori_written with type $uint<8>
+Info: locating portname in constant GEP [16 x i8] c"aPriori_written\00"
+
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: added pipe message_written with type $uint<8>
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: locating portname in constant GEP [20 x i8] c"aPosteriori_written\00"
+
+Info: added pipe aPosteriori_written with type $uint<8>
+Info: locating portname in constant GEP [20 x i8] c"aPosteriori_written\00"
+
+Info: locating portname in constant GEP [17 x i8] c"ext_info_written\00"
+
+Info: added pipe ext_info_written with type $uint<8>
+Info: locating portname in constant GEP [17 x i8] c"ext_info_written\00"
+
+Info: locating portname in constant GEP [17 x i8] c"computation_done\00"
+
+Info: added pipe computation_done with type $uint<8>
+Info: locating portname in constant GEP [17 x i8] c"computation_done\00"
+
+Info: locating portname in constant GEP [16 x i8] c"is_decoded_done\00"
+
+Info: added pipe is_decoded_done with type $uint<8>
+Info: locating portname in constant GEP [16 x i8] c"is_decoded_done\00"
+
+Info: locating portname in constant GEP [19 x i8] c"code_block_decoded\00"
+
+Info: added pipe code_block_decoded with type $uint<8>
+Info: locating portname in constant GEP [14 x i8] c"nitr_required\00"
+
+Info: added pipe nitr_required with type $uint<8>
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: locating portname in constant GEP [15 x i8] c"matrix_written\00"
+
+Info: locating portname in constant GEP [19 x i8] c"code_block_decoded\00"
+
+Info: locating portname in constant GEP [14 x i8] c"nitr_required\00"
+
+Info: locating portname in constant GEP [16 x i8] c"stop_the_daemon\00"
+
+Info: added pipe stop_the_daemon with type $uint<8>
+Info: Initial value specified for ebbyNo: will create initializer module
+Info: generating storage initialization module which calls all initializers in parallel
+Info: visiting function initInputs
+Info: traversal: visited block bb_0
+Info: starting new BB-chain-dag with header bb_0
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr since it is not (really) used in any function..
+Info: locating portname in constant GEP [11 x i8] c"maxNitr_in\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr1 since it is not (really) used in any function..
+Info: locating portname in constant GEP [10 x i8] c"ebbyNo_in\00"
+
+Info: visiting function read_uint16
+Info: ignoring external function read_uint16
+Info: visiting function read_float32
+Info: ignoring external function read_float32
+Info: visiting function initMem
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_8
+Info: traversal: visited block bb_7
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: starting new BB-chain-dag with header bb_4
+Info: starting new BB-chain-dag with header bb_5
+Info: starting new BB-chain-dag with header bb_6
+Info: added chain-link bb_6 -> bb_7
+Info: starting new BB-chain-dag with header bb_8
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_3
+Basic-block-chain-DAG with header = bb_4
+ bb_4
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_4
+Basic-block-chain-DAG with header = bb_5
+ bb_5
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_5
+Basic-block-chain-DAG with header = bb_6
+ bb_6
+   -> bb_7
+   <- 
+ bb_7
+   -> 
+   <- bb_6
+loop-backs 
+exit-points 
+  bb_7
+Basic-block-chain-DAG with header = bb_8
+ bb_8
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr2 since it is not (really) used in any function..
+Info: locating portname in constant GEP [10 x i8] c"matrix_in\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr2 since it is not (really) used in any function..
+Info: locating portname in constant GEP [10 x i8] c"matrix_in\00"
+
+Info: visiting function __loop_pipelining_on__
+Info: ignoring external function __loop_pipelining_on__
+Info: visiting function readMatrix
+Info: traversal: visited block bb_0
+Info: starting new BB-chain-dag with header bb_0
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: visiting function readCodeBlock
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_3
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: added chain-link bb_2 -> bb_3
+Info: starting new BB-chain-dag with header bb_4
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> bb_3
+   <- 
+ bb_3
+   -> 
+   <- bb_2
+loop-backs 
+exit-points 
+  bb_3
+Basic-block-chain-DAG with header = bb_4
+ bb_4
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr3 since it is not (really) used in any function..
+Info: locating portname in constant GEP [15 x i8] c"matrix_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr4 since it is not (really) used in any function..
+Info: locating portname in constant GEP [14 x i8] c"code_block_in\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr5 since it is not (really) used in any function..
+Info: locating portname in constant GEP [19 x i8] c"code_block_written\00"
+
+Info: visiting function read_uint8
+Info: ignoring external function read_uint8
+Info: visiting function write_uint8
+Info: ignoring external function write_uint8
+Info: visiting function initialize_aPriori
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_3
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: added chain-link bb_2 -> bb_3
+Info: starting new BB-chain-dag with header bb_4
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> bb_3
+   <- 
+ bb_3
+   -> 
+   <- bb_2
+loop-backs 
+exit-points 
+  bb_3
+Basic-block-chain-DAG with header = bb_4
+ bb_4
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr5 since it is not (really) used in any function..
+Info: locating portname in constant GEP [19 x i8] c"code_block_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr6 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"aPriori_written\00"
+
+Info: visiting function initializeMessage
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_11
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_7
+Info: traversal: visited block bb_9
+Info: traversal: visited block bb_8
+Info: traversal: visited block bb_10
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: added chain-link bb_2 -> bb_3
+Info: added chain-link bb_3 -> bb_5
+Info: added chain-link bb_5 -> bb_6
+Info: added chain-link bb_6 -> bb_7
+Info: added chain-link bb_6 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_2 -> bb_4
+Info: added chain-link bb_4 -> bb_5
+Info: added chain-link bb_5 -> bb_6
+Info: added chain-link bb_6 -> bb_7
+Info: added chain-link bb_6 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: invalidate chain-element bb_6
+Info: invalidate chain-element bb_9
+Info: invalidate chain-element bb_10
+Info: invalidate chain-element bb_7
+Info: starting new BB-chain-dag with header bb_6
+Info: starting new BB-chain-dag with header bb_7
+Info: added chain-link bb_7 -> bb_8
+Info: starting new BB-chain-dag with header bb_9
+Info: starting new BB-chain-dag with header bb_10
+Info: starting new BB-chain-dag with header bb_11
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> bb_3,  bb_4
+   <- 
+ bb_4
+   -> bb_5
+   <- bb_2
+ bb_3
+   -> bb_5
+   <- bb_2
+ bb_5
+   -> 
+   <- bb_3,  bb_4
+loop-backs 
+exit-points 
+  bb_5
+Basic-block-chain-DAG with header = bb_6
+ bb_6
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_6
+Basic-block-chain-DAG with header = bb_7
+ bb_7
+   -> bb_8
+   <- 
+ bb_8
+   -> 
+   <- bb_7
+loop-backs 
+exit-points 
+  bb_8
+Basic-block-chain-DAG with header = bb_9
+ bb_9
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_9
+Basic-block-chain-DAG with header = bb_10
+ bb_10
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_10
+Basic-block-chain-DAG with header = bb_11
+ bb_11
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr6 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"aPriori_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: branch expression terminating basic block bb_2 is linear.
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr7 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: visiting function initialize_aPosteriori
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_7
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_5
+Warning: traversal of basic blocks covers 8  blocks, and does not seem to cover all the defined blocks (9) in Function initialize_aPosteriori.
+ Blocks traversed 
+ block bb_0
+ block bb_1
+ block bb_2
+ block bb_3
+ block bb_4
+ block bb_5
+ block bb_6
+ block bb_7
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: starting new BB-chain-dag with header bb_4
+Info: added chain-link bb_4 -> bb_5
+Info: starting new BB-chain-dag with header bb_6
+Info: starting new BB-chain-dag with header bb_7
+Info: starting new BB-chain-dag with header bb_8
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_3
+Basic-block-chain-DAG with header = bb_4
+ bb_4
+   -> bb_5
+   <- 
+ bb_5
+   -> 
+   <- bb_4
+loop-backs 
+exit-points 
+  bb_5
+Basic-block-chain-DAG with header = bb_6
+ bb_6
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_6
+Basic-block-chain-DAG with header = bb_7
+ bb_7
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_7
+Basic-block-chain-DAG with header = bb_8
+ bb_8
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr7 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr8 since it is not (really) used in any function..
+Info: locating portname in constant GEP [20 x i8] c"aPosteriori_written\00"
+
+Info: visiting function initializeExtrinsicInfo
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_4
+Warning: traversal of basic blocks covers 6  blocks, and does not seem to cover all the defined blocks (7) in Function initializeExtrinsicInfo.
+ Blocks traversed 
+ block bb_0
+ block bb_1
+ block bb_2
+ block bb_3
+ block bb_4
+ block bb_5
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: added chain-link bb_3 -> bb_4
+Info: starting new BB-chain-dag with header bb_5
+Info: starting new BB-chain-dag with header bb_6
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> bb_4
+   <- 
+ bb_4
+   -> 
+   <- bb_3
+loop-backs 
+exit-points 
+  bb_4
+Basic-block-chain-DAG with header = bb_5
+ bb_5
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_5
+Basic-block-chain-DAG with header = bb_6
+ bb_6
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr8 since it is not (really) used in any function..
+Info: locating portname in constant GEP [20 x i8] c"aPosteriori_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr9 since it is not (really) used in any function..
+Info: locating portname in constant GEP [17 x i8] c"ext_info_written\00"
+
+Info: visiting function checkNodeComputeEngine
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_30
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_7
+Info: traversal: visited block bb_8
+Info: traversal: visited block bb_28
+Info: traversal: visited block bb_9
+Info: traversal: visited block bb_29
+Info: traversal: visited block bb_10
+Info: traversal: visited block bb_23
+Info: traversal: visited block bb_11
+Info: traversal: visited block bb_12
+Info: traversal: visited block bb_24
+Info: traversal: visited block bb_25
+Info: traversal: visited block bb_22
+Info: traversal: visited block bb_13
+Info: traversal: visited block bb_14
+Info: traversal: visited block bb_26
+Info: traversal: visited block bb_15
+Info: traversal: visited block bb_27
+Info: traversal: visited block bb_16
+Info: traversal: visited block bb_17
+Info: traversal: visited block bb_20
+Info: traversal: visited block bb_18
+Info: traversal: visited block bb_19
+Info: traversal: visited block bb_21
+Warning: traversal of basic blocks covers 31  blocks, and does not seem to cover all the defined blocks (32) in Function checkNodeComputeEngine.
+ Blocks traversed 
+ block bb_0
+ block bb_1
+ block bb_2
+ block bb_3
+ block bb_4
+ block bb_5
+ block bb_6
+ block bb_7
+ block bb_8
+ block bb_9
+ block bb_10
+ block bb_11
+ block bb_12
+ block bb_13
+ block bb_14
+ block bb_15
+ block bb_16
+ block bb_17
+ block bb_18
+ block bb_19
+ block bb_20
+ block bb_21
+ block bb_22
+ block bb_23
+ block bb_24
+ block bb_25
+ block bb_26
+ block bb_27
+ block bb_28
+ block bb_29
+ block bb_30
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: added chain-link bb_3 -> bb_4
+Info: added chain-link bb_4 -> bb_6
+Info: added chain-link bb_6 -> bb_7
+Info: added chain-link bb_7 -> bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_10 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_13 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_12 -> bb_14
+Info: added chain-link bb_14 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_9 -> bb_23
+Info: added chain-link bb_23 -> bb_24
+Info: added chain-link bb_24 -> bb_26
+Info: added chain-link bb_23 -> bb_25
+Info: added chain-link bb_25 -> bb_26
+Info: added chain-link bb_7 -> bb_28
+Info: added chain-link bb_28 -> bb_29
+Info: added chain-link bb_3 -> bb_5
+Info: added chain-link bb_5 -> bb_6
+Info: added chain-link bb_6 -> bb_7
+Info: added chain-link bb_7 -> bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_10 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_13 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_12 -> bb_14
+Info: added chain-link bb_14 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_9 -> bb_23
+Info: added chain-link bb_23 -> bb_24
+Info: added chain-link bb_24 -> bb_26
+Info: added chain-link bb_23 -> bb_25
+Info: added chain-link bb_25 -> bb_26
+Info: added chain-link bb_7 -> bb_28
+Info: added chain-link bb_28 -> bb_29
+Info: invalidate chain-element bb_7
+Info: invalidate chain-element bb_28
+Info: invalidate chain-element bb_29
+Info: invalidate chain-element bb_8
+Info: invalidate chain-element bb_9
+Info: invalidate chain-element bb_23
+Info: invalidate chain-element bb_25
+Info: invalidate chain-element bb_24
+Info: invalidate chain-element bb_26
+Info: invalidate chain-element bb_10
+Info: invalidate chain-element bb_12
+Info: invalidate chain-element bb_14
+Info: invalidate chain-element bb_13
+Info: invalidate chain-element bb_15
+Info: invalidate chain-element bb_17
+Info: invalidate chain-element bb_18
+Info: invalidate chain-element bb_19
+Info: invalidate chain-element bb_16
+Info: invalidate chain-element bb_20
+Info: invalidate chain-element bb_21
+Info: invalidate chain-element bb_11
+Info: starting new BB-chain-dag with header bb_7
+Info: starting new BB-chain-dag with header bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_10 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_13 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_12 -> bb_14
+Info: added chain-link bb_14 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_9 -> bb_23
+Info: added chain-link bb_23 -> bb_24
+Info: added chain-link bb_24 -> bb_26
+Info: added chain-link bb_26 -> bb_27
+Info: added chain-link bb_23 -> bb_25
+Info: added chain-link bb_25 -> bb_26
+Info: added chain-link bb_26 -> bb_27
+Info: invalidate chain-element bb_9
+Info: invalidate chain-element bb_23
+Info: invalidate chain-element bb_25
+Info: invalidate chain-element bb_24
+Info: invalidate chain-element bb_26
+Info: invalidate chain-element bb_27
+Info: invalidate chain-element bb_10
+Info: invalidate chain-element bb_12
+Info: invalidate chain-element bb_14
+Info: invalidate chain-element bb_13
+Info: invalidate chain-element bb_15
+Info: invalidate chain-element bb_17
+Info: invalidate chain-element bb_18
+Info: invalidate chain-element bb_19
+Info: invalidate chain-element bb_16
+Info: invalidate chain-element bb_20
+Info: invalidate chain-element bb_21
+Info: invalidate chain-element bb_11
+Info: starting new BB-chain-dag with header bb_9
+Info: starting new BB-chain-dag with header bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_11 -> bb_22
+Info: added chain-link bb_10 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_13 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: added chain-link bb_12 -> bb_14
+Info: added chain-link bb_14 -> bb_15
+Info: added chain-link bb_15 -> bb_16
+Info: added chain-link bb_16 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: added chain-link bb_15 -> bb_17
+Info: added chain-link bb_17 -> bb_18
+Info: added chain-link bb_18 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: added chain-link bb_17 -> bb_19
+Info: added chain-link bb_19 -> bb_20
+Info: added chain-link bb_20 -> bb_21
+Info: added chain-link bb_21 -> bb_22
+Info: starting new BB-chain-dag with header bb_23
+Info: starting new BB-chain-dag with header bb_24
+Info: starting new BB-chain-dag with header bb_25
+Info: starting new BB-chain-dag with header bb_26
+Info: starting new BB-chain-dag with header bb_27
+Info: starting new BB-chain-dag with header bb_28
+Info: starting new BB-chain-dag with header bb_29
+Info: starting new BB-chain-dag with header bb_30
+Info: starting new BB-chain-dag with header bb_31
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> bb_4,  bb_5
+   <- 
+ bb_5
+   -> bb_6
+   <- bb_3
+ bb_4
+   -> bb_6
+   <- bb_3
+ bb_6
+   -> 
+   <- bb_4,  bb_5
+loop-backs 
+exit-points 
+  bb_6
+Basic-block-chain-DAG with header = bb_7
+ bb_7
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_7
+Basic-block-chain-DAG with header = bb_8
+ bb_8
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_8
+Basic-block-chain-DAG with header = bb_9
+ bb_9
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_9
+Basic-block-chain-DAG with header = bb_10
+ bb_10
+   -> bb_11,  bb_12
+   <- 
+ bb_12
+   -> bb_13,  bb_14
+   <- bb_10
+ bb_14
+   -> bb_15
+   <- bb_12
+ bb_13
+   -> bb_15
+   <- bb_12
+ bb_15
+   -> bb_16,  bb_17
+   <- bb_13,  bb_14
+ bb_17
+   -> bb_18,  bb_19
+   <- bb_15
+ bb_18
+   -> bb_19
+   <- bb_17
+ bb_19
+   -> bb_20
+   <- bb_18,  bb_17
+ bb_16
+   -> bb_20
+   <- bb_15
+ bb_20
+   -> bb_21
+   <- bb_16,  bb_19
+ bb_21
+   -> bb_22
+   <- bb_20
+ bb_11
+   -> bb_22
+   <- bb_10
+ bb_22
+   -> 
+   <- bb_11,  bb_21
+loop-backs 
+exit-points 
+  bb_22
+Basic-block-chain-DAG with header = bb_23
+ bb_23
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_23
+Basic-block-chain-DAG with header = bb_24
+ bb_24
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_24
+Basic-block-chain-DAG with header = bb_25
+ bb_25
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_25
+Basic-block-chain-DAG with header = bb_26
+ bb_26
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_26
+Basic-block-chain-DAG with header = bb_27
+ bb_27
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_27
+Basic-block-chain-DAG with header = bb_28
+ bb_28
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_28
+Basic-block-chain-DAG with header = bb_29
+ bb_29
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_29
+Basic-block-chain-DAG with header = bb_30
+ bb_30
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_30
+Basic-block-chain-DAG with header = bb_31
+ bb_31
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr9 since it is not (really) used in any function..
+Info: locating portname in constant GEP [17 x i8] c"ext_info_written\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: branch expression terminating basic block bb_3 is linear.
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: branch expression terminating basic block bb_12 is linear.
+Info: branch expression terminating basic block bb_23 is linear.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr10 since it is not (really) used in any function..
+Info: locating portname in constant GEP [17 x i8] c"computation_done\00"
+
+Info: visiting function absf
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_3
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: branch expression terminating basic block bb_0 is linear.
+Info: visiting function checkIsdecoded
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_14
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_7
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_8
+Info: traversal: visited block bb_11
+Info: traversal: visited block bb_12
+Info: traversal: visited block bb_9
+Info: traversal: visited block bb_10
+Info: traversal: visited block bb_13
+Warning: traversal of basic blocks covers 15  blocks, and does not seem to cover all the defined blocks (16) in Function checkIsdecoded.
+ Blocks traversed 
+ block bb_0
+ block bb_1
+ block bb_2
+ block bb_3
+ block bb_4
+ block bb_5
+ block bb_6
+ block bb_7
+ block bb_8
+ block bb_9
+ block bb_10
+ block bb_11
+ block bb_12
+ block bb_13
+ block bb_14
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: added chain-link bb_3 -> bb_4
+Info: added chain-link bb_4 -> bb_5
+Info: added chain-link bb_5 -> bb_6
+Info: added chain-link bb_6 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_4 -> bb_6
+Info: added chain-link bb_6 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_3 -> bb_7
+Info: added chain-link bb_7 -> bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_11 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_8 -> bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: added chain-link bb_11 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_7 -> bb_11
+Info: added chain-link bb_11 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: starting new BB-chain-dag with header bb_14
+Info: starting new BB-chain-dag with header bb_15
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> bb_4,  bb_7
+   <- 
+ bb_7
+   -> bb_8,  bb_11
+   <- bb_3
+ bb_8
+   -> bb_9,  bb_10
+   <- bb_7
+ bb_9
+   -> bb_10
+   <- bb_8
+ bb_10
+   -> bb_11
+   <- bb_9,  bb_8
+ bb_11
+   -> bb_12
+   <- bb_10,  bb_7
+ bb_4
+   -> bb_5,  bb_6
+   <- bb_3
+ bb_5
+   -> bb_6
+   <- bb_4
+ bb_6
+   -> bb_12
+   <- bb_5,  bb_4
+ bb_12
+   -> bb_13
+   <- bb_6,  bb_11
+ bb_13
+   -> 
+   <- bb_12
+loop-backs 
+exit-points 
+  bb_13
+Basic-block-chain-DAG with header = bb_14
+ bb_14
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_14
+Basic-block-chain-DAG with header = bb_15
+ bb_15
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr10 since it is not (really) used in any function..
+Info: locating portname in constant GEP [17 x i8] c"computation_done\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr11 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"is_decoded_done\00"
+
+Info: visiting function updateMessage
+Info: traversal: visited block bb_0
+Info: traversal: visited block bb_1
+Info: traversal: visited block bb_2
+Info: traversal: visited block bb_3
+Info: traversal: visited block bb_16
+Info: traversal: visited block bb_4
+Info: traversal: visited block bb_5
+Info: traversal: visited block bb_14
+Info: traversal: visited block bb_6
+Info: traversal: visited block bb_7
+Info: traversal: visited block bb_15
+Info: traversal: visited block bb_8
+Info: traversal: visited block bb_9
+Info: traversal: visited block bb_10
+Info: traversal: visited block bb_12
+Info: traversal: visited block bb_11
+Info: traversal: visited block bb_13
+Info: starting new BB-chain-dag with header bb_0
+Info: starting new BB-chain-dag with header bb_1
+Info: starting new BB-chain-dag with header bb_2
+Info: starting new BB-chain-dag with header bb_3
+Info: starting new BB-chain-dag with header bb_4
+Info: starting new BB-chain-dag with header bb_5
+Info: added chain-link bb_5 -> bb_6
+Info: added chain-link bb_6 -> bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_9 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: added chain-link bb_5 -> bb_7
+Info: added chain-link bb_7 -> bb_8
+Info: added chain-link bb_8 -> bb_9
+Info: added chain-link bb_9 -> bb_10
+Info: added chain-link bb_9 -> bb_12
+Info: added chain-link bb_12 -> bb_13
+Info: invalidate chain-element bb_9
+Info: invalidate chain-element bb_12
+Info: invalidate chain-element bb_13
+Info: invalidate chain-element bb_10
+Info: starting new BB-chain-dag with header bb_9
+Info: starting new BB-chain-dag with header bb_10
+Info: added chain-link bb_10 -> bb_11
+Info: starting new BB-chain-dag with header bb_12
+Info: starting new BB-chain-dag with header bb_13
+Info: starting new BB-chain-dag with header bb_14
+Info: starting new BB-chain-dag with header bb_15
+Info: starting new BB-chain-dag with header bb_16
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_0
+Basic-block-chain-DAG with header = bb_1
+ bb_1
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_1
+Basic-block-chain-DAG with header = bb_2
+ bb_2
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_2
+Basic-block-chain-DAG with header = bb_3
+ bb_3
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_3
+Basic-block-chain-DAG with header = bb_4
+ bb_4
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_4
+Basic-block-chain-DAG with header = bb_5
+ bb_5
+   -> bb_6,  bb_7
+   <- 
+ bb_7
+   -> bb_8
+   <- bb_5
+ bb_6
+   -> bb_8
+   <- bb_5
+ bb_8
+   -> 
+   <- bb_6,  bb_7
+loop-backs 
+exit-points 
+  bb_8
+Basic-block-chain-DAG with header = bb_9
+ bb_9
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_9
+Basic-block-chain-DAG with header = bb_10
+ bb_10
+   -> bb_11
+   <- 
+ bb_11
+   -> 
+   <- bb_10
+loop-backs 
+exit-points 
+  bb_11
+Basic-block-chain-DAG with header = bb_12
+ bb_12
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_12
+Basic-block-chain-DAG with header = bb_13
+ bb_13
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_13
+Basic-block-chain-DAG with header = bb_14
+ bb_14
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_14
+Basic-block-chain-DAG with header = bb_15
+ bb_15
+   -> 
+   <- 
+loop-backs 
+exit-points 
+  bb_15
+Basic-block-chain-DAG with header = bb_16
+ bb_16
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr11 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"is_decoded_done\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr12 since it is not (really) used in any function..
+Info: locating portname in constant GEP [19 x i8] c"code_block_decoded\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr13 since it is not (really) used in any function..
+Info: locating portname in constant GEP [14 x i8] c"nitr_required\00"
+
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: branch expression terminating basic block bb_5 is linear.
+Info: ignoring call to special function __loop_pipelining_on__.
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr7 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"message_written\00"
+
+Info: visiting function daemon
+Info: traversal: visited block bb_0
+Info: starting new BB-chain-dag with header bb_0
+Basic Block Chain DAGS.
+Basic-block-chain-DAG with header = bb_0
+ bb_0
+   -> 
+   <- 
+loop-backs 
+exit-points 
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr3 since it is not (really) used in any function..
+Info: locating portname in constant GEP [15 x i8] c"matrix_written\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr12 since it is not (really) used in any function..
+Info: locating portname in constant GEP [19 x i8] c"code_block_decoded\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr13 since it is not (really) used in any function..
+Info: locating portname in constant GEP [14 x i8] c"nitr_required\00"
+
+Info: ignoring get-element-ptr to progx_xoptx_xo_iNtErNal_xx_xstr14 since it is not (really) used in any function..
+Info: locating portname in constant GEP [16 x i8] c"stop_the_daemon\00"
+
+AaLinkExtMem prog.aa | vcFormat > prog.linked.aa
+Info: elaborating the program .... initializing the call-graph
+Info: mapping object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+	absf
+	checkIsdecoded
+	checkNodeComputeEngine
+	initMem
+	initInputs
+	readMatrix
+	daemon
+	ebbyNo_initializer_in_progx_xoptx_xo
+	progx_xoptx_xo_storage_initializer_
+	global_storage_initializer_
+	initializeExtrinsicInfo
+	initializeMessage
+	initialize_aPosteriori
+	initialize_aPriori
+	readCodeBlock
+	updateMessage
+Info: marking modules reachable from root-modules ... 
+Info: module absf is reachable from a specified root module.
+Info: module checkIsdecoded is reachable from a specified root module.
+Info: module checkNodeComputeEngine is reachable from a specified root module.
+Info: module daemon is reachable from a specified root module.
+Info: module initInputs is reachable from a specified root module.
+Info: module initMem is reachable from a specified root module.
+Info: module readMatrix is reachable from a specified root module.
+Info: module ebbyNo_initializer_in_progx_xoptx_xo is reachable from a specified root module.
+Info: module global_storage_initializer_ is reachable from a specified root module.
+Info: module progx_xoptx_xo_storage_initializer_ is reachable from a specified root module.
+Info: module initializeExtrinsicInfo is reachable from a specified root module.
+Info: module initializeMessage is reachable from a specified root module.
+Info: module initialize_aPosteriori is reachable from a specified root module.
+Info: module initialize_aPriori is reachable from a specified root module.
+Info: module readCodeBlock is reachable from a specified root module.
+Info: module updateMessage is reachable from a specified root module.
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 57 disjoint memory space(s)
+Info: Memory space 0: maxNitr 
+Info: Memory space 1: ebbyNo 
+Info: Memory space 2: mem 
+Info: Memory space 3: pm 
+Info: Memory space 4: code_block 
+Info: Memory space 5: aPriori 
+Info: Memory space 6: message 
+Info: Memory space 7: aPosteriori 
+Info: Memory space 8: ext_info 
+Info: Memory space 9: %initInputs%body:nitr_alloc 
+Info: Memory space 10: %initInputs%body:SNR_alloc 
+Info: Memory space 11: %initMem%body:I_alloc 
+Info: Memory space 12: %initMem%body:val_alloc 
+Info: Memory space 13: %initMem%body:range_alloc 
+Info: Memory space 14: %readCodeBlock%body:start_reading_code_block_alloc 
+Info: Memory space 15: %readCodeBlock%body:I_alloc 
+Info: Memory space 16: %readCodeBlock%body:code_bit_alloc 
+Info: Memory space 17: %initialize_aPriori%body:start_initializating_aPriori_alloc 
+Info: Memory space 18: %initialize_aPriori%body:I_alloc 
+Info: Memory space 19: %initialize_aPriori%body:sigma2_alloc 
+Info: Memory space 20: %initialize_aPriori%body:rate_alloc 
+Info: Memory space 21: %initializeMessage%body:start_initializing_message_alloc 
+Info: Memory space 22: %initializeMessage%body:chk_node_bit_p_alloc 
+Info: Memory space 23: %initializeMessage%body:row_alloc 
+Info: Memory space 24: %initializeMessage%body:col_alloc 
+Info: Memory space 25: %initializeMessage%body:range_alloc 
+Info: Memory space 26: %initializeMessage%body:index1_alloc 
+Info: Memory space 27: %initializeMessage%body:index2_alloc 
+Info: Memory space 28: %initialize_aPosteriori%body:start_initializing_aPosteriori_alloc 
+Info: Memory space 29: %initialize_aPosteriori%body:I_alloc 
+Info: Memory space 30: %initializeExtrinsicInfo%body:start_initializing_ext_info_alloc 
+Info: Memory space 31: %initializeExtrinsicInfo%body:I_alloc 
+Info: Memory space 32: %checkNodeComputeEngine%body:start_compute_engine_alloc 
+Info: Memory space 33: %checkNodeComputeEngine%body:row_alloc 
+Info: Memory space 34: %checkNodeComputeEngine%body:col_alloc 
+Info: Memory space 35: %checkNodeComputeEngine%body:chk_node_bit_p_alloc 
+Info: Memory space 36: %checkNodeComputeEngine%body:range_alloc 
+Info: Memory space 37: %checkNodeComputeEngine%body:I_alloc 
+Info: Memory space 38: %checkNodeComputeEngine%body:val_alloc 
+Info: Memory space 39: %checkNodeComputeEngine%body:flag_alloc 
+Info: Memory space 40: %checkNodeComputeEngine%body:exor_alloc 
+Info: Memory space 41: %checkNodeComputeEngine%body:sign_alloc 
+Info: Memory space 42: %checkNodeComputeEngine%body:index_alloc 
+Info: Memory space 43: 
+Info: Memory space 44: %absf%body:iNsTr_0_alloc 
+Info: Memory space 45: %absf%body:iNsTr_1_alloc 
+Info: Memory space 46: %checkIsdecoded%body:start_check_is_decoded_alloc 
+Info: Memory space 47: %checkIsdecoded%body:is_decoded_alloc 
+Info: Memory space 48: %checkIsdecoded%body:I_alloc 
+Info: Memory space 49: %updateMessage%body:nitr_alloc 
+Info: Memory space 50: %updateMessage%body:is_decoded_alloc 
+Info: Memory space 51: %updateMessage%body:chk_node_bit_p_alloc 
+Info: Memory space 52: %updateMessage%body:row_alloc 
+Info: Memory space 53: %updateMessage%body:col_alloc 
+Info: Memory space 54: %updateMessage%body:range_alloc 
+Info: Memory space 55: %daemon%body:decoding_done_alloc 
+Info: Memory space 56: %daemon%body:nitr_alloc 
+Warning: memory space memory_space_0 is not read from in the program
+Warning: memory space checkNodeComputeEngine/memory_space_43 is not written into in the program
+Info: propagating constants in the program ... 
+AaLinkExtMem Error: pointer dereference to foreign object.. will assume it is not defined: file prog.aa, line 845
+Error: there were errors during elaboration, check the log
+Error: there were errors during elaboration, check the log
+AaOpt prog.linked.aa | vcFormat > prog.linked.opt.aa
+Info: elaborating the program .... initializing the call-graph
+Info: mapping object references..
+Info: checking for cycles in the call-graph ... 
+Info: module order:
+Info: marking modules reachable from root-modules ... 
+Info: propagating types in the program ... 
+Info: coalescing storage into distinct memory spaces ... 
+Info: Marking foreign pointers in modules which are not called from the program
+Info: Coalescing storage from native objects..
+Info: Finished coalescing storage.. identified 0 disjoint memory space(s)
+Info: propagating constants in the program ... 

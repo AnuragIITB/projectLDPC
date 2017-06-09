@@ -1,0 +1,4241 @@
+; ModuleID = 'prog.opt.o'
+target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64"
+target triple = "x86_64-unknown-linux-gnu"
+
+@ncols = common global i16 0, align 2
+@aPriori1 = common global [512 x float] zeroinitializer, align 16
+@.str = private constant [13 x i8] c"aPriori1_out\00"
+@aPriori2 = common global [512 x float] zeroinitializer, align 16
+@.str1 = private constant [13 x i8] c"aPriori2_out\00"
+@.str2 = private constant [10 x i8] c"matrix_in\00"
+@mem11 = common global [512 x i16] zeroinitializer, align 16
+@nrows = common global i16 0, align 2
+@ncol_ind_11 = common global i16 0, align 2
+@mem12 = common global [512 x i16] zeroinitializer, align 16
+@ncol_ind_12 = common global i16 0, align 2
+@mem21 = common global [512 x i16] zeroinitializer, align 16
+@ncol_ind_21 = common global i16 0, align 2
+@mem22 = common global [512 x i16] zeroinitializer, align 16
+@ncol_ind_22 = common global i16 0, align 2
+@.str3 = private constant [11 x i8] c"maxNitr_in\00"
+@maxNitr = common global i16 0, align 2
+@.str4 = private constant [10 x i8] c"ebbyNo_in\00"
+@ebbyNo = common global float 0.000000e+00, align 4
+@.str5 = private constant [8 x i8] c"rate_in\00"
+@rate = common global float 0.000000e+00, align 4
+@.str6 = private constant [14 x i8] c"code_block_in\00"
+@code_block1 = common global [512 x float] zeroinitializer, align 16
+@code_block2 = common global [512 x float] zeroinitializer, align 16
+@message11 = common global [512 x float] zeroinitializer, align 16
+@message12 = common global [512 x float] zeroinitializer, align 16
+@message21 = common global [512 x float] zeroinitializer, align 16
+@message22 = common global [512 x float] zeroinitializer, align 16
+@aPosteriori1 = common global [512 x float] zeroinitializer, align 16
+@aPosteriori2 = common global [512 x float] zeroinitializer, align 16
+@ext_info11 = common global [512 x float] zeroinitializer, align 16
+@ext_info12 = common global [512 x float] zeroinitializer, align 16
+@ext_info21 = common global [512 x float] zeroinitializer, align 16
+@ext_info22 = common global [512 x float] zeroinitializer, align 16
+@trans_info11_12 = common global [512 x float] zeroinitializer, align 16
+@trans_info12_11 = common global [512 x float] zeroinitializer, align 16
+@trans_info21_22 = common global [512 x float] zeroinitializer, align 16
+@trans_info22_21 = common global [512 x float] zeroinitializer, align 16
+@is_decoded_1 = common global i16 0, align 2
+@is_decoded_2 = common global i16 0, align 2
+@.str7 = private constant [11 x i8] c"matrix_out\00"
+@.str8 = private constant [16 x i8] c"code_block1_out\00"
+@.str9 = private constant [16 x i8] c"code_block2_out\00"
+@.str10 = private constant [19 x i8] c"init_message11_out\00"
+@.str11 = private constant [19 x i8] c"init_message12_out\00"
+@.str12 = private constant [19 x i8] c"init_message21_out\00"
+@.str13 = private constant [19 x i8] c"init_message22_out\00"
+@.str14 = private constant [17 x i8] c"aPosteriori1_out\00"
+@.str15 = private constant [17 x i8] c"aPosteriori2_out\00"
+@.str16 = private constant [15 x i8] c"ext_info11_out\00"
+@.str17 = private constant [15 x i8] c"ext_info12_out\00"
+@.str18 = private constant [15 x i8] c"ext_info21_out\00"
+@.str19 = private constant [15 x i8] c"ext_info22_out\00"
+@.str20 = private constant [20 x i8] c"trans_info22_21_out\00"
+@.str21 = private constant [20 x i8] c"trans_info21_22_out\00"
+@.str22 = private constant [20 x i8] c"trans_info11_12_out\00"
+@.str23 = private constant [20 x i8] c"trans_info12_11_out\00"
+@.str24 = private constant [24 x i8] c"reading_code_block_done\00"
+@.str25 = private constant [18 x i8] c"aposteriori2_init\00"
+@.str26 = private constant [22 x i8] c"message11_initialized\00"
+@.str27 = private constant [32 x i8] c"trans_info11_12_calulation_done\00"
+@.str28 = private constant [32 x i8] c"trans_info12_11_calulation_done\00"
+@.str29 = private constant [26 x i8] c"aPosteriori1_phase_1_done\00"
+@.str30 = private constant [18 x i8] c"is_decoded_from_2\00"
+@.str31 = private constant [14 x i8] c"is_decoded_d2\00"
+@.str32 = private constant [22 x i8] c"message12_initialized\00"
+@.str33 = private constant [26 x i8] c"aPosteriori2_phase_1_done\00"
+@.str34 = private constant [14 x i8] c"is_decoded_d3\00"
+@.str35 = private constant [32 x i8] c"trans_info21_22_calulation_done\00"
+@.str36 = private constant [32 x i8] c"trans_info22_21_calulation_done\00"
+@.str37 = private constant [14 x i8] c"is_decoded_d4\00"
+@Nitr_required = common global i16 0, align 2
+
+define void @send_init_apriori1() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %0
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %tmp, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp1 = add i64 %indvar, 1
+  %tmp2 = trunc i64 %tmp1 to i32
+  %scevgep = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar
+  %3 = load float* %scevgep, align 4
+  %4 = getelementptr [13 x i8]* @.str, i64 0, i64 0
+  tail call void @write_float32(i8* %4, float %3) nounwind
+  %tmp = add i64 %indvar, 1
+  %5 = load i16* @ncols, align 2
+  %6 = zext i16 %5 to i32
+  %7 = icmp slt i32 %tmp2, %6
+  br i1 %7, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+declare void @write_float32(i8*, float)
+
+define void @send_init_apriori2() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %0
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %tmp, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp1 = add i64 %indvar, 1
+  %tmp2 = trunc i64 %tmp1 to i32
+  %scevgep = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar
+  %3 = load float* %scevgep, align 4
+  %4 = getelementptr [13 x i8]* @.str1, i64 0, i64 0
+  tail call void @write_float32(i8* %4, float %3) nounwind
+  %tmp = add i64 %indvar, 1
+  %5 = load i16* @ncols, align 2
+  %6 = zext i16 %5 to i32
+  %7 = icmp slt i32 %tmp2, %6
+  br i1 %7, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initMem() nounwind {
+bb.nph20:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph20
+  %indvar57 = phi i64 [ 0, %bb.nph20 ], [ %indvar.next58, %0 ]
+  %scevgep60 = getelementptr [512 x i16]* @mem11, i64 0, i64 %indvar57
+  %1 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %2 = tail call zeroext i16 @read_uint16(i8* %1) nounwind
+  store i16 %2, i16* %scevgep60, align 2
+  %indvar.next58 = add i64 %indvar57, 1
+  %exitcond22 = icmp eq i64 %indvar.next58, 3
+  br i1 %exitcond22, label %._crit_edge21, label %0
+
+._crit_edge21:                                    ; preds = %0
+  %3 = getelementptr [512 x i16]* @mem11, i64 0, i64 0
+  %4 = load i16* %3, align 16
+  store i16 %4, i16* @nrows, align 2
+  %5 = getelementptr [512 x i16]* @mem11, i64 0, i64 1
+  %6 = load i16* %5, align 2
+  store i16 %6, i16* @ncols, align 2
+  %7 = getelementptr [512 x i16]* @mem11, i64 0, i64 2
+  %8 = load i16* %7, align 4
+  store i16 %8, i16* @ncol_ind_11, align 2
+  %9 = sub i16 0, %8
+  %10 = icmp eq i16 %4, %9
+  br i1 %10, label %bb.nph15.preheader, label %bb.nph18
+
+bb.nph18:                                         ; preds = %._crit_edge21
+  %tmp52 = add i16 %4, %8
+  %tmp1 = zext i16 %tmp52 to i64
+  br label %11
+
+; <label>:11                                      ; preds = %11, %bb.nph18
+  %indvar50 = phi i64 [ 0, %bb.nph18 ], [ %indvar.next51, %11 ]
+  %tmp3 = add i64 %indvar50, 3
+  %scevgep56 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp3
+  %12 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %13 = tail call zeroext i16 @read_uint16(i8* %12) nounwind
+  store i16 %13, i16* %scevgep56, align 2
+  %indvar.next51 = add i64 %indvar50, 1
+  %exitcond2 = icmp eq i64 %indvar.next51, %tmp1
+  br i1 %exitcond2, label %bb.nph15.loopexit, label %11
+
+bb.nph15.loopexit:                                ; preds = %11
+  br label %bb.nph15.preheader
+
+bb.nph15.preheader:                               ; preds = %bb.nph15.loopexit, %._crit_edge21
+  br label %bb.nph15
+
+bb.nph15:                                         ; preds = %bb.nph15, %bb.nph15.preheader
+  %indvar46 = phi i64 [ %indvar.next47, %bb.nph15 ], [ 0, %bb.nph15.preheader ]
+  %scevgep49 = getelementptr [512 x i16]* @mem12, i64 0, i64 %indvar46
+  %14 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %15 = tail call zeroext i16 @read_uint16(i8* %14) nounwind
+  store i16 %15, i16* %scevgep49, align 2
+  %indvar.next47 = add i64 %indvar46, 1
+  %exitcond20 = icmp eq i64 %indvar.next47, 3
+  br i1 %exitcond20, label %._crit_edge16, label %bb.nph15
+
+._crit_edge16:                                    ; preds = %bb.nph15
+  %16 = getelementptr [512 x i16]* @mem12, i64 0, i64 2
+  %17 = load i16* %16, align 4
+  store i16 %17, i16* @ncol_ind_12, align 2
+  %18 = getelementptr [512 x i16]* @mem12, i64 0, i64 0
+  %19 = load i16* %18, align 16
+  %20 = sub i16 0, %17
+  %21 = icmp eq i16 %19, %20
+  br i1 %21, label %bb.nph9.preheader, label %bb.nph12
+
+bb.nph12:                                         ; preds = %._crit_edge16
+  %tmp41 = add i16 %19, %17
+  %tmp5 = zext i16 %tmp41 to i64
+  br label %22
+
+; <label>:22                                      ; preds = %22, %bb.nph12
+  %indvar39 = phi i64 [ 0, %bb.nph12 ], [ %indvar.next40, %22 ]
+  %tmp7 = add i64 %indvar39, 3
+  %scevgep45 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp7
+  %23 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %24 = tail call zeroext i16 @read_uint16(i8* %23) nounwind
+  store i16 %24, i16* %scevgep45, align 2
+  %indvar.next40 = add i64 %indvar39, 1
+  %exitcond6 = icmp eq i64 %indvar.next40, %tmp5
+  br i1 %exitcond6, label %bb.nph9.loopexit, label %22
+
+bb.nph9.loopexit:                                 ; preds = %22
+  br label %bb.nph9.preheader
+
+bb.nph9.preheader:                                ; preds = %bb.nph9.loopexit, %._crit_edge16
+  br label %bb.nph9
+
+bb.nph9:                                          ; preds = %bb.nph9, %bb.nph9.preheader
+  %indvar35 = phi i64 [ %indvar.next36, %bb.nph9 ], [ 0, %bb.nph9.preheader ]
+  %scevgep38 = getelementptr [512 x i16]* @mem21, i64 0, i64 %indvar35
+  %25 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %26 = tail call zeroext i16 @read_uint16(i8* %25) nounwind
+  store i16 %26, i16* %scevgep38, align 2
+  %indvar.next36 = add i64 %indvar35, 1
+  %exitcond18 = icmp eq i64 %indvar.next36, 3
+  br i1 %exitcond18, label %._crit_edge10, label %bb.nph9
+
+._crit_edge10:                                    ; preds = %bb.nph9
+  %27 = getelementptr [512 x i16]* @mem21, i64 0, i64 2
+  %28 = load i16* %27, align 4
+  store i16 %28, i16* @ncol_ind_21, align 2
+  %29 = getelementptr [512 x i16]* @mem21, i64 0, i64 0
+  %30 = load i16* %29, align 16
+  %31 = sub i16 0, %28
+  %32 = icmp eq i16 %30, %31
+  br i1 %32, label %bb.nph3.preheader, label %bb.nph6
+
+bb.nph6:                                          ; preds = %._crit_edge10
+  %tmp30 = add i16 %30, %28
+  %tmp9 = zext i16 %tmp30 to i64
+  br label %33
+
+; <label>:33                                      ; preds = %33, %bb.nph6
+  %indvar28 = phi i64 [ 0, %bb.nph6 ], [ %indvar.next29, %33 ]
+  %tmp11 = add i64 %indvar28, 3
+  %scevgep34 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp11
+  %34 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %35 = tail call zeroext i16 @read_uint16(i8* %34) nounwind
+  store i16 %35, i16* %scevgep34, align 2
+  %indvar.next29 = add i64 %indvar28, 1
+  %exitcond10 = icmp eq i64 %indvar.next29, %tmp9
+  br i1 %exitcond10, label %bb.nph3.loopexit, label %33
+
+bb.nph3.loopexit:                                 ; preds = %33
+  br label %bb.nph3.preheader
+
+bb.nph3.preheader:                                ; preds = %bb.nph3.loopexit, %._crit_edge10
+  br label %bb.nph3
+
+bb.nph3:                                          ; preds = %bb.nph3, %bb.nph3.preheader
+  %indvar24 = phi i64 [ %indvar.next25, %bb.nph3 ], [ 0, %bb.nph3.preheader ]
+  %scevgep27 = getelementptr [512 x i16]* @mem22, i64 0, i64 %indvar24
+  %36 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %37 = tail call zeroext i16 @read_uint16(i8* %36) nounwind
+  store i16 %37, i16* %scevgep27, align 2
+  %indvar.next25 = add i64 %indvar24, 1
+  %exitcond = icmp eq i64 %indvar.next25, 3
+  br i1 %exitcond, label %._crit_edge4, label %bb.nph3
+
+._crit_edge4:                                     ; preds = %bb.nph3
+  %38 = getelementptr [512 x i16]* @mem22, i64 0, i64 2
+  %39 = load i16* %38, align 4
+  store i16 %39, i16* @ncol_ind_22, align 2
+  %40 = getelementptr [512 x i16]* @mem22, i64 0, i64 0
+  %41 = load i16* %40, align 16
+  %42 = sub i16 0, %39
+  %43 = icmp eq i16 %41, %42
+  br i1 %43, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %._crit_edge4
+  %tmp = add i16 %41, %39
+  %tmp13 = zext i16 %tmp to i64
+  br label %44
+
+; <label>:44                                      ; preds = %44, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %44 ]
+  %tmp15 = add i64 %indvar, 3
+  %scevgep = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp15
+  %45 = getelementptr [10 x i8]* @.str2, i64 0, i64 0
+  %46 = tail call zeroext i16 @read_uint16(i8* %45) nounwind
+  store i16 %46, i16* %scevgep, align 2
+  %indvar.next = add i64 %indvar, 1
+  %exitcond14 = icmp eq i64 %indvar.next, %tmp13
+  br i1 %exitcond14, label %._crit_edge.loopexit, label %44
+
+._crit_edge.loopexit:                             ; preds = %44
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %._crit_edge4
+  ret void
+}
+
+declare zeroext i16 @read_uint16(i8*)
+
+define void @initInputs() nounwind {
+  %1 = getelementptr [11 x i8]* @.str3, i64 0, i64 0
+  %2 = tail call zeroext i16 @read_uint16(i8* %1) nounwind
+  store i16 %2, i16* @maxNitr, align 2
+  %3 = getelementptr [10 x i8]* @.str4, i64 0, i64 0
+  %4 = tail call float @read_float32(i8* %3) nounwind
+  store float %4, float* @ebbyNo, align 4
+  tail call void @initMem()
+  %5 = getelementptr [8 x i8]* @.str5, i64 0, i64 0
+  %6 = tail call float @read_float32(i8* %5) nounwind
+  store float %6, float* @rate, align 4
+  ret void
+}
+
+declare float @read_float32(i8*)
+
+define void @readCodeBlock() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4.preheader
+
+bb.nph4.preheader:                                ; preds = %0
+  br label %bb.nph4
+
+.preheader:                                       ; preds = %bb.nph4
+  %.lcssa = phi i16 [ %10, %bb.nph4 ]
+  %3 = icmp eq i16 %.lcssa, 0
+  br i1 %3, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %.preheader
+  br label %bb.nph
+
+bb.nph4:                                          ; preds = %bb.nph4, %bb.nph4.preheader
+  %4 = phi i16 [ %9, %bb.nph4 ], [ 0, %bb.nph4.preheader ]
+  %tmp1 = add i16 %4, 1
+  %5 = getelementptr [14 x i8]* @.str6, i64 0, i64 0
+  %6 = tail call float @read_float32(i8* %5) nounwind
+  %7 = zext i16 %4 to i64
+  %8 = getelementptr inbounds [512 x float]* @code_block1, i64 0, i64 %7
+  store float %6, float* %8, align 4
+  %9 = add i16 %4, 1
+  %10 = load i16* @ncols, align 2
+  %11 = icmp ult i16 %tmp1, %10
+  br i1 %11, label %bb.nph4, label %.preheader
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %12 = phi i16 [ %17, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp = add i16 %12, 1
+  %13 = getelementptr [14 x i8]* @.str6, i64 0, i64 0
+  %14 = tail call float @read_float32(i8* %13) nounwind
+  %15 = zext i16 %12 to i64
+  %16 = getelementptr inbounds [512 x float]* @code_block2, i64 0, i64 %15
+  store float %14, float* %16, align 4
+  %17 = add i16 %12, 1
+  %18 = load i16* @ncols, align 2
+  %19 = icmp ult i16 %tmp, %18
+  br i1 %19, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %.preheader, %0
+  ret void
+}
+
+define void @initialize_aPriori2() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %send_init_apriori2.exit, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %3 = load float* @ebbyNo, align 4
+  %4 = load float* @rate, align 4
+  %5 = fmul float %4, %3
+  %tmp3 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op8 = add i64 %6, 1
+  %tmp6 = select i1 %tmp3, i64 %.op8, i64 1
+  br label %7
+
+; <label>:7                                       ; preds = %7, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %7 ]
+  %scevgep7 = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @code_block2, i64 0, i64 %indvar
+  %8 = load float* %scevgep, align 4
+  %9 = fmul float %8, -4.000000e+00
+  %10 = fmul float %5, %9
+  store float %10, float* %scevgep7, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond5 = icmp eq i64 %indvar.next, %tmp6
+  br i1 %exitcond5, label %._crit_edge, label %7
+
+._crit_edge:                                      ; preds = %7
+  br i1 %2, label %send_init_apriori2.exit, label %bb.nph.i.preheader
+
+bb.nph.i.preheader:                               ; preds = %._crit_edge
+  br label %bb.nph.i
+
+bb.nph.i:                                         ; preds = %bb.nph.i, %bb.nph.i.preheader
+  %indvar.i = phi i64 [ %tmp, %bb.nph.i ], [ 0, %bb.nph.i.preheader ]
+  %scevgep.i = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar.i
+  %tmp2 = add i64 %indvar.i, 1
+  %tmp2.i = trunc i64 %tmp2 to i32
+  %tmp = add i64 %indvar.i, 1
+  %11 = load float* %scevgep.i, align 4
+  %12 = getelementptr [13 x i8]* @.str1, i64 0, i64 0
+  tail call void @write_float32(i8* %12, float %11) nounwind
+  %13 = load i16* @ncols, align 2
+  %14 = zext i16 %13 to i32
+  %15 = icmp slt i32 %tmp2.i, %14
+  br i1 %15, label %bb.nph.i, label %send_init_apriori2.exit.loopexit
+
+send_init_apriori2.exit.loopexit:                 ; preds = %bb.nph.i
+  br label %send_init_apriori2.exit
+
+send_init_apriori2.exit:                          ; preds = %send_init_apriori2.exit.loopexit, %._crit_edge, %0
+  ret void
+}
+
+define void @initialize_aPriori1() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %send_init_apriori1.exit, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %3 = load float* @ebbyNo, align 4
+  %4 = load float* @rate, align 4
+  %5 = fmul float %4, %3
+  %tmp3 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op8 = add i64 %6, 1
+  %tmp6 = select i1 %tmp3, i64 %.op8, i64 1
+  br label %7
+
+; <label>:7                                       ; preds = %7, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %7 ]
+  %scevgep7 = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @code_block1, i64 0, i64 %indvar
+  %8 = load float* %scevgep, align 4
+  %9 = fmul float %8, -4.000000e+00
+  %10 = fmul float %5, %9
+  store float %10, float* %scevgep7, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond5 = icmp eq i64 %indvar.next, %tmp6
+  br i1 %exitcond5, label %._crit_edge, label %7
+
+._crit_edge:                                      ; preds = %7
+  br i1 %2, label %send_init_apriori1.exit, label %bb.nph.i.preheader
+
+bb.nph.i.preheader:                               ; preds = %._crit_edge
+  br label %bb.nph.i
+
+bb.nph.i:                                         ; preds = %bb.nph.i, %bb.nph.i.preheader
+  %indvar.i = phi i64 [ %tmp, %bb.nph.i ], [ 0, %bb.nph.i.preheader ]
+  %scevgep.i = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar.i
+  %tmp2 = add i64 %indvar.i, 1
+  %tmp2.i = trunc i64 %tmp2 to i32
+  %tmp = add i64 %indvar.i, 1
+  %11 = load float* %scevgep.i, align 4
+  %12 = getelementptr [13 x i8]* @.str, i64 0, i64 0
+  tail call void @write_float32(i8* %12, float %11) nounwind
+  %13 = load i16* @ncols, align 2
+  %14 = zext i16 %13 to i32
+  %15 = icmp slt i32 %tmp2.i, %14
+  br i1 %15, label %bb.nph.i, label %send_init_apriori1.exit.loopexit
+
+send_init_apriori1.exit.loopexit:                 ; preds = %bb.nph.i
+  br label %send_init_apriori1.exit
+
+send_init_apriori1.exit:                          ; preds = %send_init_apriori1.exit.loopexit, %._crit_edge, %0
+  ret void
+}
+
+define void @initializeMessage11() nounwind {
+  %1 = load i16* @ncol_ind_11, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @message11, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = zext i16 %6 to i64
+  %8 = getelementptr inbounds [512 x float]* @aPriori1, i64 0, i64 %7
+  %9 = load float* %8, align 4
+  store float %9, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeMessage12() nounwind {
+  %1 = load i16* @ncol_ind_12, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @message12, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = zext i16 %6 to i64
+  %8 = getelementptr inbounds [512 x float]* @aPriori2, i64 0, i64 %7
+  %9 = load float* %8, align 4
+  store float %9, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeMessage21() nounwind {
+  %1 = load i16* @ncol_ind_21, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @message21, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = zext i16 %6 to i64
+  %8 = getelementptr inbounds [512 x float]* @aPriori1, i64 0, i64 %7
+  %9 = load float* %8, align 4
+  store float %9, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeMessage22() nounwind {
+  %1 = load i16* @ncol_ind_22, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @message22, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = zext i16 %6 to i64
+  %8 = getelementptr inbounds [512 x float]* @aPriori2, i64 0, i64 %7
+  %9 = load float* %8, align 4
+  store float %9, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initialize_aPosteriori1() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op6 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op6, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep5 = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar
+  %5 = load float* %scevgep, align 4
+  store float %5, float* %scevgep5, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initialize_aPosteriori2() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op6 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op6, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep5 = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar
+  %5 = load float* %scevgep, align 4
+  store float %5, float* %scevgep5, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeExtrinsicInfo11() nounwind {
+  %1 = load i16* @ncol_ind_11, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeExtrinsicInfo12() nounwind {
+  %1 = load i16* @ncol_ind_12, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeExtrinsicInfo21() nounwind {
+  %1 = load i16* @ncol_ind_21, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeExtrinsicInfo22() nounwind {
+  %1 = load i16* @ncol_ind_22, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeTransInfo11_12() nounwind {
+  %1 = load i16* @ncol_ind_11, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeTransInfo12_11() nounwind {
+  %1 = load i16* @ncol_ind_12, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeTransInfo21_22() nounwind {
+  %1 = load i16* @ncol_ind_21, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @initializeTransInfo22_21() nounwind {
+  %1 = load i16* @ncol_ind_22, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op5 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op5, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %scevgep = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar
+  store float 0.000000e+00, float* %scevgep, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @checkNodeComputeEngine11() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge12, label %bb.nph11
+
+bb.nph11:                                         ; preds = %0
+  %3 = load i16* @ncol_ind_11, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg2 = add i16 %3, 1
+  %tmp17 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op34 = add i64 %6, 1
+  %tmp20 = select i1 %tmp17, i64 %.op34, i64 1
+  %tmp = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp, 4
+  %tmp7 = add i64 %tmp, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph11
+  %indvar = phi i64 [ 0, %bb.nph11 ], [ %indvar.next, %.loopexit ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep29 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp5
+  %tmp8 = add i64 %tmp7, %indvar
+  %scevgep26 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp8
+  %scevgep = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar
+  %tmp22 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp22, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep26, align 2
+  %11 = sub i16 %.neg2, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep26, align 2
+  %14 = load i16* %scevgep29, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %bb.nph9, label %70
+
+bb.nph9:                                          ; preds = %16
+  %tmp15 = add i16 %17, -1
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %68, %bb.nph9
+  %19 = phi i16 [ 0, %bb.nph9 ], [ %69, %68 ]
+  %tmp16 = add i16 %tmp15, %19
+  br label %20
+
+; <label>:20                                      ; preds = %38, %bb.nph
+  %21 = phi i16 [ 0, %bb.nph ], [ %39, %38 ]
+  %val.25 = phi float [ 0.000000e+00, %bb.nph ], [ %val.1, %38 ]
+  %flag.14 = phi i8 [ 0, %bb.nph ], [ %flag.0, %38 ]
+  %exor.23 = phi i8 [ 0, %bb.nph ], [ %exor.1, %38 ]
+  %tmp13 = add i16 %tmp15, %21
+  %22 = zext i16 %tmp13 to i64
+  %23 = getelementptr inbounds [512 x float]* @message11, i64 0, i64 %22
+  %24 = load float* %23, align 4
+  %25 = fpext float %24 to double
+  %26 = fcmp olt double %25, 0.000000e+00
+  br i1 %26, label %27, label %29
+
+; <label>:27                                      ; preds = %20
+  %28 = fsub float -0.000000e+00, %24
+  br label %29
+
+; <label>:29                                      ; preds = %27, %20
+  %temp1.0 = phi float [ %28, %27 ], [ %24, %20 ]
+  %30 = icmp eq i16 %21, %19
+  br i1 %30, label %38, label %31
+
+; <label>:31                                      ; preds = %29
+  %32 = fcmp ult double %25, 0.000000e+00
+  %33 = zext i1 %32 to i8
+  %exor.0 = xor i8 %33, %exor.23
+  %34 = icmp eq i8 %flag.14, 0
+  br i1 %34, label %38, label %35
+
+; <label>:35                                      ; preds = %31
+  %36 = fcmp olt float %temp1.0, %val.25
+  br i1 %36, label %37, label %38
+
+; <label>:37                                      ; preds = %35
+  br label %38
+
+; <label>:38                                      ; preds = %37, %35, %31, %29
+  %exor.1 = phi i8 [ %exor.23, %29 ], [ %exor.0, %31 ], [ %exor.0, %37 ], [ %exor.0, %35 ]
+  %flag.0 = phi i8 [ %flag.14, %29 ], [ 1, %31 ], [ 1, %37 ], [ 1, %35 ]
+  %val.1 = phi float [ %val.25, %29 ], [ %temp1.0, %31 ], [ %temp1.0, %37 ], [ %val.25, %35 ]
+  %39 = add i16 %21, 1
+  %exitcond1 = icmp eq i16 %39, %range.0
+  br i1 %exitcond1, label %._crit_edge, label %20
+
+._crit_edge:                                      ; preds = %38
+  %val.1.lcssa = phi float [ %val.1, %38 ]
+  %exor.1.lcssa = phi i8 [ %exor.1, %38 ]
+  %40 = icmp eq i8 %exor.1.lcssa, 0
+  %sign.0 = select i1 %40, float 1.000000e+00, float -1.000000e+00
+  %41 = fmul float %val.1.lcssa, %sign.0
+  %42 = zext i16 %tmp16 to i64
+  %43 = getelementptr inbounds [512 x float]* @ext_info11, i64 0, i64 %42
+  store float %41, float* %43, align 4
+  %44 = icmp eq i16 %19, 0
+  br i1 %44, label %45, label %68
+
+; <label>:45                                      ; preds = %._crit_edge
+  %46 = fcmp ult float %41, 0.000000e+00
+  %47 = getelementptr inbounds [512 x float]* @message11, i64 0, i64 %42
+  %48 = load float* %47, align 4
+  br i1 %46, label %52, label %49
+
+; <label>:49                                      ; preds = %45
+  %50 = fcmp ult float %48, 0.000000e+00
+  br i1 %50, label %51, label %55
+
+; <label>:51                                      ; preds = %49
+  br label %55
+
+; <label>:52                                      ; preds = %45
+  %53 = fcmp olt float %48, 0.000000e+00
+  br i1 %53, label %55, label %54
+
+; <label>:54                                      ; preds = %52
+  br label %55
+
+; <label>:55                                      ; preds = %54, %52, %51, %49
+  %sign1.0 = phi float [ -1.000000e+00, %51 ], [ -1.000000e+00, %54 ], [ 1.000000e+00, %49 ], [ 1.000000e+00, %52 ]
+  %56 = fpext float %48 to double
+  %57 = fcmp olt double %56, 0.000000e+00
+  br i1 %57, label %58, label %60
+
+; <label>:58                                      ; preds = %55
+  %59 = fsub float -0.000000e+00, %48
+  br label %60
+
+; <label>:60                                      ; preds = %58, %55
+  %mod_self_info.0 = phi float [ %59, %58 ], [ %48, %55 ]
+  %61 = fpext float %41 to double
+  %62 = fcmp olt double %61, 0.000000e+00
+  br i1 %62, label %63, label %65
+
+; <label>:63                                      ; preds = %60
+  %64 = fsub float -0.000000e+00, %41
+  br label %65
+
+; <label>:65                                      ; preds = %63, %60
+  %mod_ext_info.0 = phi float [ %64, %63 ], [ %41, %60 ]
+  %66 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %66, float %mod_ext_info.0, float %mod_self_info.0
+  %67 = fmul float %sign1.0, %magnitude.0
+  store float %67, float* %scevgep, align 4
+  br label %68
+
+; <label>:68                                      ; preds = %65, %._crit_edge
+  %69 = add i16 %19, 1
+  %exitcond = icmp eq i16 %69, %range.0
+  br i1 %exitcond, label %.loopexit.loopexit, label %bb.nph
+
+; <label>:70                                      ; preds = %16
+  %71 = icmp eq i16 %range.0, 1
+  br i1 %71, label %72, label %.loopexit
+
+; <label>:72                                      ; preds = %70
+  %73 = zext i16 %17 to i64
+  %74 = add i64 %73, -1
+  %75 = getelementptr inbounds [512 x float]* @message11, i64 0, i64 %74
+  %76 = load float* %75, align 4
+  store float %76, float* %scevgep, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %68
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %72, %70
+  %indvar.next = add i64 %indvar, 1
+  %exitcond3 = icmp eq i64 %indvar.next, %tmp20
+  br i1 %exitcond3, label %._crit_edge12.loopexit, label %7
+
+._crit_edge12.loopexit:                           ; preds = %.loopexit
+  br label %._crit_edge12
+
+._crit_edge12:                                    ; preds = %._crit_edge12.loopexit, %0
+  ret void
+}
+
+define void @checkNodeComputeEngine12() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge12, label %bb.nph11
+
+bb.nph11:                                         ; preds = %0
+  %3 = load i16* @ncol_ind_12, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg2 = add i16 %3, 1
+  %tmp17 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op34 = add i64 %6, 1
+  %tmp20 = select i1 %tmp17, i64 %.op34, i64 1
+  %tmp = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp, 4
+  %tmp7 = add i64 %tmp, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph11
+  %indvar = phi i64 [ 0, %bb.nph11 ], [ %indvar.next, %.loopexit ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep29 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp5
+  %tmp8 = add i64 %tmp7, %indvar
+  %scevgep26 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp8
+  %scevgep = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar
+  %tmp22 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp22, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep26, align 2
+  %11 = sub i16 %.neg2, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep26, align 2
+  %14 = load i16* %scevgep29, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %bb.nph9, label %70
+
+bb.nph9:                                          ; preds = %16
+  %tmp15 = add i16 %17, -1
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %68, %bb.nph9
+  %19 = phi i16 [ 0, %bb.nph9 ], [ %69, %68 ]
+  %tmp16 = add i16 %tmp15, %19
+  br label %20
+
+; <label>:20                                      ; preds = %38, %bb.nph
+  %21 = phi i16 [ 0, %bb.nph ], [ %39, %38 ]
+  %val.25 = phi float [ 0.000000e+00, %bb.nph ], [ %val.1, %38 ]
+  %flag.14 = phi i8 [ 0, %bb.nph ], [ %flag.0, %38 ]
+  %exor.23 = phi i8 [ 0, %bb.nph ], [ %exor.1, %38 ]
+  %tmp13 = add i16 %tmp15, %21
+  %22 = zext i16 %tmp13 to i64
+  %23 = getelementptr inbounds [512 x float]* @message12, i64 0, i64 %22
+  %24 = load float* %23, align 4
+  %25 = fpext float %24 to double
+  %26 = fcmp olt double %25, 0.000000e+00
+  br i1 %26, label %27, label %29
+
+; <label>:27                                      ; preds = %20
+  %28 = fsub float -0.000000e+00, %24
+  br label %29
+
+; <label>:29                                      ; preds = %27, %20
+  %temp1.0 = phi float [ %28, %27 ], [ %24, %20 ]
+  %30 = icmp eq i16 %21, %19
+  br i1 %30, label %38, label %31
+
+; <label>:31                                      ; preds = %29
+  %32 = fcmp ult double %25, 0.000000e+00
+  %33 = zext i1 %32 to i8
+  %exor.0 = xor i8 %33, %exor.23
+  %34 = icmp eq i8 %flag.14, 0
+  br i1 %34, label %38, label %35
+
+; <label>:35                                      ; preds = %31
+  %36 = fcmp olt float %temp1.0, %val.25
+  br i1 %36, label %37, label %38
+
+; <label>:37                                      ; preds = %35
+  br label %38
+
+; <label>:38                                      ; preds = %37, %35, %31, %29
+  %exor.1 = phi i8 [ %exor.23, %29 ], [ %exor.0, %31 ], [ %exor.0, %37 ], [ %exor.0, %35 ]
+  %flag.0 = phi i8 [ %flag.14, %29 ], [ 1, %31 ], [ 1, %37 ], [ 1, %35 ]
+  %val.1 = phi float [ %val.25, %29 ], [ %temp1.0, %31 ], [ %temp1.0, %37 ], [ %val.25, %35 ]
+  %39 = add i16 %21, 1
+  %exitcond1 = icmp eq i16 %39, %range.0
+  br i1 %exitcond1, label %._crit_edge, label %20
+
+._crit_edge:                                      ; preds = %38
+  %val.1.lcssa = phi float [ %val.1, %38 ]
+  %exor.1.lcssa = phi i8 [ %exor.1, %38 ]
+  %40 = icmp eq i8 %exor.1.lcssa, 0
+  %sign.0 = select i1 %40, float 1.000000e+00, float -1.000000e+00
+  %41 = fmul float %val.1.lcssa, %sign.0
+  %42 = zext i16 %tmp16 to i64
+  %43 = getelementptr inbounds [512 x float]* @ext_info12, i64 0, i64 %42
+  store float %41, float* %43, align 4
+  %44 = icmp eq i16 %19, 0
+  br i1 %44, label %45, label %68
+
+; <label>:45                                      ; preds = %._crit_edge
+  %46 = fcmp ult float %41, 0.000000e+00
+  %47 = getelementptr inbounds [512 x float]* @message12, i64 0, i64 %42
+  %48 = load float* %47, align 4
+  br i1 %46, label %52, label %49
+
+; <label>:49                                      ; preds = %45
+  %50 = fcmp ult float %48, 0.000000e+00
+  br i1 %50, label %51, label %55
+
+; <label>:51                                      ; preds = %49
+  br label %55
+
+; <label>:52                                      ; preds = %45
+  %53 = fcmp olt float %48, 0.000000e+00
+  br i1 %53, label %55, label %54
+
+; <label>:54                                      ; preds = %52
+  br label %55
+
+; <label>:55                                      ; preds = %54, %52, %51, %49
+  %sign1.0 = phi float [ -1.000000e+00, %51 ], [ -1.000000e+00, %54 ], [ 1.000000e+00, %49 ], [ 1.000000e+00, %52 ]
+  %56 = fpext float %48 to double
+  %57 = fcmp olt double %56, 0.000000e+00
+  br i1 %57, label %58, label %60
+
+; <label>:58                                      ; preds = %55
+  %59 = fsub float -0.000000e+00, %48
+  br label %60
+
+; <label>:60                                      ; preds = %58, %55
+  %mod_self_info.0 = phi float [ %59, %58 ], [ %48, %55 ]
+  %61 = fpext float %41 to double
+  %62 = fcmp olt double %61, 0.000000e+00
+  br i1 %62, label %63, label %65
+
+; <label>:63                                      ; preds = %60
+  %64 = fsub float -0.000000e+00, %41
+  br label %65
+
+; <label>:65                                      ; preds = %63, %60
+  %mod_ext_info.0 = phi float [ %64, %63 ], [ %41, %60 ]
+  %66 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %66, float %mod_ext_info.0, float %mod_self_info.0
+  %67 = fmul float %sign1.0, %magnitude.0
+  store float %67, float* %scevgep, align 4
+  br label %68
+
+; <label>:68                                      ; preds = %65, %._crit_edge
+  %69 = add i16 %19, 1
+  %exitcond = icmp eq i16 %69, %range.0
+  br i1 %exitcond, label %.loopexit.loopexit, label %bb.nph
+
+; <label>:70                                      ; preds = %16
+  %71 = icmp eq i16 %range.0, 1
+  br i1 %71, label %72, label %.loopexit
+
+; <label>:72                                      ; preds = %70
+  %73 = zext i16 %17 to i64
+  %74 = add i64 %73, -1
+  %75 = getelementptr inbounds [512 x float]* @message12, i64 0, i64 %74
+  %76 = load float* %75, align 4
+  store float %76, float* %scevgep, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %68
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %72, %70
+  %indvar.next = add i64 %indvar, 1
+  %exitcond3 = icmp eq i64 %indvar.next, %tmp20
+  br i1 %exitcond3, label %._crit_edge12.loopexit, label %7
+
+._crit_edge12.loopexit:                           ; preds = %.loopexit
+  br label %._crit_edge12
+
+._crit_edge12:                                    ; preds = %._crit_edge12.loopexit, %0
+  ret void
+}
+
+define void @checkNodeComputeEngine21() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge12, label %bb.nph11
+
+bb.nph11:                                         ; preds = %0
+  %3 = load i16* @ncol_ind_21, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg2 = add i16 %3, 1
+  %tmp17 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op34 = add i64 %6, 1
+  %tmp20 = select i1 %tmp17, i64 %.op34, i64 1
+  %tmp = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp, 4
+  %tmp7 = add i64 %tmp, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph11
+  %indvar = phi i64 [ 0, %bb.nph11 ], [ %indvar.next, %.loopexit ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep29 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp5
+  %tmp8 = add i64 %tmp7, %indvar
+  %scevgep26 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp8
+  %scevgep = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar
+  %tmp22 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp22, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep26, align 2
+  %11 = sub i16 %.neg2, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep26, align 2
+  %14 = load i16* %scevgep29, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %bb.nph9, label %70
+
+bb.nph9:                                          ; preds = %16
+  %tmp15 = add i16 %17, -1
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %68, %bb.nph9
+  %19 = phi i16 [ 0, %bb.nph9 ], [ %69, %68 ]
+  %tmp16 = add i16 %tmp15, %19
+  br label %20
+
+; <label>:20                                      ; preds = %38, %bb.nph
+  %21 = phi i16 [ 0, %bb.nph ], [ %39, %38 ]
+  %val.25 = phi float [ 0.000000e+00, %bb.nph ], [ %val.1, %38 ]
+  %flag.14 = phi i8 [ 0, %bb.nph ], [ %flag.0, %38 ]
+  %exor.23 = phi i8 [ 0, %bb.nph ], [ %exor.1, %38 ]
+  %tmp13 = add i16 %tmp15, %21
+  %22 = zext i16 %tmp13 to i64
+  %23 = getelementptr inbounds [512 x float]* @message21, i64 0, i64 %22
+  %24 = load float* %23, align 4
+  %25 = fpext float %24 to double
+  %26 = fcmp olt double %25, 0.000000e+00
+  br i1 %26, label %27, label %29
+
+; <label>:27                                      ; preds = %20
+  %28 = fsub float -0.000000e+00, %24
+  br label %29
+
+; <label>:29                                      ; preds = %27, %20
+  %temp1.0 = phi float [ %28, %27 ], [ %24, %20 ]
+  %30 = icmp eq i16 %21, %19
+  br i1 %30, label %38, label %31
+
+; <label>:31                                      ; preds = %29
+  %32 = fcmp ult double %25, 0.000000e+00
+  %33 = zext i1 %32 to i8
+  %exor.0 = xor i8 %33, %exor.23
+  %34 = icmp eq i8 %flag.14, 0
+  br i1 %34, label %38, label %35
+
+; <label>:35                                      ; preds = %31
+  %36 = fcmp olt float %temp1.0, %val.25
+  br i1 %36, label %37, label %38
+
+; <label>:37                                      ; preds = %35
+  br label %38
+
+; <label>:38                                      ; preds = %37, %35, %31, %29
+  %exor.1 = phi i8 [ %exor.23, %29 ], [ %exor.0, %31 ], [ %exor.0, %37 ], [ %exor.0, %35 ]
+  %flag.0 = phi i8 [ %flag.14, %29 ], [ 1, %31 ], [ 1, %37 ], [ 1, %35 ]
+  %val.1 = phi float [ %val.25, %29 ], [ %temp1.0, %31 ], [ %temp1.0, %37 ], [ %val.25, %35 ]
+  %39 = add i16 %21, 1
+  %exitcond1 = icmp eq i16 %39, %range.0
+  br i1 %exitcond1, label %._crit_edge, label %20
+
+._crit_edge:                                      ; preds = %38
+  %val.1.lcssa = phi float [ %val.1, %38 ]
+  %exor.1.lcssa = phi i8 [ %exor.1, %38 ]
+  %40 = icmp eq i8 %exor.1.lcssa, 0
+  %sign.0 = select i1 %40, float 1.000000e+00, float -1.000000e+00
+  %41 = fmul float %val.1.lcssa, %sign.0
+  %42 = zext i16 %tmp16 to i64
+  %43 = getelementptr inbounds [512 x float]* @ext_info21, i64 0, i64 %42
+  store float %41, float* %43, align 4
+  %44 = icmp eq i16 %19, 0
+  br i1 %44, label %45, label %68
+
+; <label>:45                                      ; preds = %._crit_edge
+  %46 = fcmp ult float %41, 0.000000e+00
+  %47 = getelementptr inbounds [512 x float]* @message21, i64 0, i64 %42
+  %48 = load float* %47, align 4
+  br i1 %46, label %52, label %49
+
+; <label>:49                                      ; preds = %45
+  %50 = fcmp ult float %48, 0.000000e+00
+  br i1 %50, label %51, label %55
+
+; <label>:51                                      ; preds = %49
+  br label %55
+
+; <label>:52                                      ; preds = %45
+  %53 = fcmp olt float %48, 0.000000e+00
+  br i1 %53, label %55, label %54
+
+; <label>:54                                      ; preds = %52
+  br label %55
+
+; <label>:55                                      ; preds = %54, %52, %51, %49
+  %sign1.0 = phi float [ -1.000000e+00, %51 ], [ -1.000000e+00, %54 ], [ 1.000000e+00, %49 ], [ 1.000000e+00, %52 ]
+  %56 = fpext float %48 to double
+  %57 = fcmp olt double %56, 0.000000e+00
+  br i1 %57, label %58, label %60
+
+; <label>:58                                      ; preds = %55
+  %59 = fsub float -0.000000e+00, %48
+  br label %60
+
+; <label>:60                                      ; preds = %58, %55
+  %mod_self_info.0 = phi float [ %59, %58 ], [ %48, %55 ]
+  %61 = fpext float %41 to double
+  %62 = fcmp olt double %61, 0.000000e+00
+  br i1 %62, label %63, label %65
+
+; <label>:63                                      ; preds = %60
+  %64 = fsub float -0.000000e+00, %41
+  br label %65
+
+; <label>:65                                      ; preds = %63, %60
+  %mod_ext_info.0 = phi float [ %64, %63 ], [ %41, %60 ]
+  %66 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %66, float %mod_ext_info.0, float %mod_self_info.0
+  %67 = fmul float %sign1.0, %magnitude.0
+  store float %67, float* %scevgep, align 4
+  br label %68
+
+; <label>:68                                      ; preds = %65, %._crit_edge
+  %69 = add i16 %19, 1
+  %exitcond = icmp eq i16 %69, %range.0
+  br i1 %exitcond, label %.loopexit.loopexit, label %bb.nph
+
+; <label>:70                                      ; preds = %16
+  %71 = icmp eq i16 %range.0, 1
+  br i1 %71, label %72, label %.loopexit
+
+; <label>:72                                      ; preds = %70
+  %73 = zext i16 %17 to i64
+  %74 = add i64 %73, -1
+  %75 = getelementptr inbounds [512 x float]* @message21, i64 0, i64 %74
+  %76 = load float* %75, align 4
+  store float %76, float* %scevgep, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %68
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %72, %70
+  %indvar.next = add i64 %indvar, 1
+  %exitcond3 = icmp eq i64 %indvar.next, %tmp20
+  br i1 %exitcond3, label %._crit_edge12.loopexit, label %7
+
+._crit_edge12.loopexit:                           ; preds = %.loopexit
+  br label %._crit_edge12
+
+._crit_edge12:                                    ; preds = %._crit_edge12.loopexit, %0
+  ret void
+}
+
+define void @checkNodeComputeEngine22() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge12, label %bb.nph11
+
+bb.nph11:                                         ; preds = %0
+  %3 = load i16* @ncol_ind_22, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg2 = add i16 %3, 1
+  %tmp17 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op34 = add i64 %6, 1
+  %tmp20 = select i1 %tmp17, i64 %.op34, i64 1
+  %tmp = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp, 4
+  %tmp7 = add i64 %tmp, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph11
+  %indvar = phi i64 [ 0, %bb.nph11 ], [ %indvar.next, %.loopexit ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep29 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp5
+  %tmp8 = add i64 %tmp7, %indvar
+  %scevgep26 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp8
+  %scevgep = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar
+  %tmp22 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp22, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep26, align 2
+  %11 = sub i16 %.neg2, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep26, align 2
+  %14 = load i16* %scevgep29, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %bb.nph9, label %70
+
+bb.nph9:                                          ; preds = %16
+  %tmp15 = add i16 %17, -1
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %68, %bb.nph9
+  %19 = phi i16 [ 0, %bb.nph9 ], [ %69, %68 ]
+  %tmp16 = add i16 %tmp15, %19
+  br label %20
+
+; <label>:20                                      ; preds = %38, %bb.nph
+  %21 = phi i16 [ 0, %bb.nph ], [ %39, %38 ]
+  %val.25 = phi float [ 0.000000e+00, %bb.nph ], [ %val.1, %38 ]
+  %flag.14 = phi i16 [ 0, %bb.nph ], [ %flag.0, %38 ]
+  %exor.23 = phi i16 [ 0, %bb.nph ], [ %exor.1, %38 ]
+  %tmp13 = add i16 %tmp15, %21
+  %22 = zext i16 %tmp13 to i64
+  %23 = getelementptr inbounds [512 x float]* @message22, i64 0, i64 %22
+  %24 = load float* %23, align 4
+  %25 = fpext float %24 to double
+  %26 = fcmp olt double %25, 0.000000e+00
+  br i1 %26, label %27, label %29
+
+; <label>:27                                      ; preds = %20
+  %28 = fsub float -0.000000e+00, %24
+  br label %29
+
+; <label>:29                                      ; preds = %27, %20
+  %temp1.0 = phi float [ %28, %27 ], [ %24, %20 ]
+  %30 = icmp eq i16 %21, %19
+  br i1 %30, label %38, label %31
+
+; <label>:31                                      ; preds = %29
+  %32 = fcmp ult double %25, 0.000000e+00
+  %33 = zext i1 %32 to i16
+  %exor.0 = xor i16 %33, %exor.23
+  %34 = icmp eq i16 %flag.14, 0
+  br i1 %34, label %38, label %35
+
+; <label>:35                                      ; preds = %31
+  %36 = fcmp olt float %temp1.0, %val.25
+  br i1 %36, label %37, label %38
+
+; <label>:37                                      ; preds = %35
+  br label %38
+
+; <label>:38                                      ; preds = %37, %35, %31, %29
+  %exor.1 = phi i16 [ %exor.23, %29 ], [ %exor.0, %31 ], [ %exor.0, %37 ], [ %exor.0, %35 ]
+  %flag.0 = phi i16 [ %flag.14, %29 ], [ 1, %31 ], [ 1, %37 ], [ 1, %35 ]
+  %val.1 = phi float [ %val.25, %29 ], [ %temp1.0, %31 ], [ %temp1.0, %37 ], [ %val.25, %35 ]
+  %39 = add i16 %21, 1
+  %exitcond1 = icmp eq i16 %39, %range.0
+  br i1 %exitcond1, label %._crit_edge, label %20
+
+._crit_edge:                                      ; preds = %38
+  %val.1.lcssa = phi float [ %val.1, %38 ]
+  %exor.1.lcssa = phi i16 [ %exor.1, %38 ]
+  %40 = icmp eq i16 %exor.1.lcssa, 0
+  %sign.0 = select i1 %40, float 1.000000e+00, float -1.000000e+00
+  %41 = fmul float %val.1.lcssa, %sign.0
+  %42 = zext i16 %tmp16 to i64
+  %43 = getelementptr inbounds [512 x float]* @ext_info22, i64 0, i64 %42
+  store float %41, float* %43, align 4
+  %44 = icmp eq i16 %19, 0
+  br i1 %44, label %45, label %68
+
+; <label>:45                                      ; preds = %._crit_edge
+  %46 = fcmp ult float %41, 0.000000e+00
+  %47 = getelementptr inbounds [512 x float]* @message22, i64 0, i64 %42
+  %48 = load float* %47, align 4
+  br i1 %46, label %52, label %49
+
+; <label>:49                                      ; preds = %45
+  %50 = fcmp ult float %48, 0.000000e+00
+  br i1 %50, label %51, label %55
+
+; <label>:51                                      ; preds = %49
+  br label %55
+
+; <label>:52                                      ; preds = %45
+  %53 = fcmp olt float %48, 0.000000e+00
+  br i1 %53, label %55, label %54
+
+; <label>:54                                      ; preds = %52
+  br label %55
+
+; <label>:55                                      ; preds = %54, %52, %51, %49
+  %sign1.0 = phi float [ -1.000000e+00, %51 ], [ -1.000000e+00, %54 ], [ 1.000000e+00, %49 ], [ 1.000000e+00, %52 ]
+  %56 = fpext float %48 to double
+  %57 = fcmp olt double %56, 0.000000e+00
+  br i1 %57, label %58, label %60
+
+; <label>:58                                      ; preds = %55
+  %59 = fsub float -0.000000e+00, %48
+  br label %60
+
+; <label>:60                                      ; preds = %58, %55
+  %mod_self_info.0 = phi float [ %59, %58 ], [ %48, %55 ]
+  %61 = fpext float %41 to double
+  %62 = fcmp olt double %61, 0.000000e+00
+  br i1 %62, label %63, label %65
+
+; <label>:63                                      ; preds = %60
+  %64 = fsub float -0.000000e+00, %41
+  br label %65
+
+; <label>:65                                      ; preds = %63, %60
+  %mod_ext_info.0 = phi float [ %64, %63 ], [ %41, %60 ]
+  %66 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %66, float %mod_ext_info.0, float %mod_self_info.0
+  %67 = fmul float %sign1.0, %magnitude.0
+  store float %67, float* %scevgep, align 4
+  br label %68
+
+; <label>:68                                      ; preds = %65, %._crit_edge
+  %69 = add i16 %19, 1
+  %exitcond = icmp eq i16 %69, %range.0
+  br i1 %exitcond, label %.loopexit.loopexit, label %bb.nph
+
+; <label>:70                                      ; preds = %16
+  %71 = icmp eq i16 %range.0, 1
+  br i1 %71, label %72, label %.loopexit
+
+; <label>:72                                      ; preds = %70
+  %73 = zext i16 %17 to i64
+  %74 = add i64 %73, -1
+  %75 = getelementptr inbounds [512 x float]* @message22, i64 0, i64 %74
+  %76 = load float* %75, align 4
+  store float %76, float* %scevgep, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %68
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %72, %70
+  %indvar.next = add i64 %indvar, 1
+  %exitcond3 = icmp eq i64 %indvar.next, %tmp20
+  br i1 %exitcond3, label %._crit_edge12.loopexit, label %7
+
+._crit_edge12.loopexit:                           ; preds = %.loopexit
+  br label %._crit_edge12
+
+._crit_edge12:                                    ; preds = %._crit_edge12.loopexit, %0
+  ret void
+}
+
+define void @transverseCorrection11() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_11, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp6 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op23 = add i64 %6, 1
+  %tmp9 = select i1 %tmp6, i64 %.op23, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp10 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %.loopexit ]
+  %tmp7 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp7
+  %tmp15 = add i64 %tmp10, %indvar
+  %scevgep15 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp15
+  %scevgep = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar
+  %tmp11 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp11, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep15, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep15, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %19, label %45
+
+; <label>:19                                      ; preds = %16
+  %20 = load float* %scevgep, align 4
+  %21 = fcmp une float %20, 0.000000e+00
+  br i1 %21, label %bb.nph, label %.loopexit
+
+bb.nph:                                           ; preds = %19
+  %22 = fcmp olt float %20, 0.000000e+00
+  %23 = fpext float %20 to double
+  %24 = fcmp olt double %23, 0.000000e+00
+  %25 = fsub float -0.000000e+00, %20
+  %26 = fcmp ult float %20, 0.000000e+00
+  %tmp = add i16 %17, -1
+  br label %27
+
+; <label>:27                                      ; preds = %41, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %44, %41 ]
+  %tmp5 = add i16 %tmp, %col.02
+  %28 = zext i16 %tmp5 to i64
+  %29 = getelementptr inbounds [512 x float]* @ext_info11, i64 0, i64 %28
+  %30 = load float* %29, align 4
+  %31 = fcmp ult float %30, 0.000000e+00
+  br i1 %31, label %34, label %32
+
+; <label>:32                                      ; preds = %27
+  br i1 %26, label %33, label %36
+
+; <label>:33                                      ; preds = %32
+  br label %36
+
+; <label>:34                                      ; preds = %27
+  br i1 %22, label %36, label %35
+
+; <label>:35                                      ; preds = %34
+  br label %36
+
+; <label>:36                                      ; preds = %35, %34, %33, %32
+  %sign.0 = phi float [ -1.000000e+00, %33 ], [ -1.000000e+00, %35 ], [ 1.000000e+00, %32 ], [ 1.000000e+00, %34 ]
+  %mod_self_info.0 = select i1 %24, float %25, float %20
+  %37 = fpext float %30 to double
+  %38 = fcmp olt double %37, 0.000000e+00
+  br i1 %38, label %39, label %41
+
+; <label>:39                                      ; preds = %36
+  %40 = fsub float -0.000000e+00, %30
+  br label %41
+
+; <label>:41                                      ; preds = %39, %36
+  %mod_ext_info.0 = phi float [ %40, %39 ], [ %30, %36 ]
+  %42 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %42, float %mod_ext_info.0, float %mod_self_info.0
+  %43 = fmul float %sign.0, %magnitude.0
+  store float %43, float* %29, align 4
+  %44 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %44, %range.0
+  br i1 %exitcond1, label %.loopexit.loopexit, label %27
+
+; <label>:45                                      ; preds = %16
+  %46 = zext i16 %17 to i64
+  %47 = add i64 %46, -1
+  %48 = getelementptr inbounds [512 x float]* @ext_info11, i64 0, i64 %47
+  store float 4.000000e+00, float* %48, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %41
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %45, %19
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp9
+  br i1 %exitcond, label %._crit_edge.loopexit, label %7
+
+._crit_edge.loopexit:                             ; preds = %.loopexit
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @transverseCorrection12() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_12, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp6 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op23 = add i64 %6, 1
+  %tmp9 = select i1 %tmp6, i64 %.op23, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp10 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %.loopexit ]
+  %tmp7 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp7
+  %tmp15 = add i64 %tmp10, %indvar
+  %scevgep15 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp15
+  %scevgep = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar
+  %tmp11 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp11, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep15, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep15, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %19, label %45
+
+; <label>:19                                      ; preds = %16
+  %20 = load float* %scevgep, align 4
+  %21 = fcmp une float %20, 0.000000e+00
+  br i1 %21, label %bb.nph, label %.loopexit
+
+bb.nph:                                           ; preds = %19
+  %22 = fcmp olt float %20, 0.000000e+00
+  %23 = fpext float %20 to double
+  %24 = fcmp olt double %23, 0.000000e+00
+  %25 = fsub float -0.000000e+00, %20
+  %26 = fcmp ult float %20, 0.000000e+00
+  %tmp = add i16 %17, -1
+  br label %27
+
+; <label>:27                                      ; preds = %41, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %44, %41 ]
+  %tmp5 = add i16 %tmp, %col.02
+  %28 = zext i16 %tmp5 to i64
+  %29 = getelementptr inbounds [512 x float]* @ext_info12, i64 0, i64 %28
+  %30 = load float* %29, align 4
+  %31 = fcmp ult float %30, 0.000000e+00
+  br i1 %31, label %34, label %32
+
+; <label>:32                                      ; preds = %27
+  br i1 %26, label %33, label %36
+
+; <label>:33                                      ; preds = %32
+  br label %36
+
+; <label>:34                                      ; preds = %27
+  br i1 %22, label %36, label %35
+
+; <label>:35                                      ; preds = %34
+  br label %36
+
+; <label>:36                                      ; preds = %35, %34, %33, %32
+  %sign.0 = phi float [ -1.000000e+00, %33 ], [ -1.000000e+00, %35 ], [ 1.000000e+00, %32 ], [ 1.000000e+00, %34 ]
+  %mod_self_info.0 = select i1 %24, float %25, float %20
+  %37 = fpext float %30 to double
+  %38 = fcmp olt double %37, 0.000000e+00
+  br i1 %38, label %39, label %41
+
+; <label>:39                                      ; preds = %36
+  %40 = fsub float -0.000000e+00, %30
+  br label %41
+
+; <label>:41                                      ; preds = %39, %36
+  %mod_ext_info.0 = phi float [ %40, %39 ], [ %30, %36 ]
+  %42 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %42, float %mod_ext_info.0, float %mod_self_info.0
+  %43 = fmul float %sign.0, %magnitude.0
+  store float %43, float* %29, align 4
+  %44 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %44, %range.0
+  br i1 %exitcond1, label %.loopexit.loopexit, label %27
+
+; <label>:45                                      ; preds = %16
+  %46 = zext i16 %17 to i64
+  %47 = add i64 %46, -1
+  %48 = getelementptr inbounds [512 x float]* @ext_info12, i64 0, i64 %47
+  store float 4.000000e+00, float* %48, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %41
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %45, %19
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp9
+  br i1 %exitcond, label %._crit_edge.loopexit, label %7
+
+._crit_edge.loopexit:                             ; preds = %.loopexit
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @transverseCorrection21() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_21, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp6 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op23 = add i64 %6, 1
+  %tmp9 = select i1 %tmp6, i64 %.op23, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp10 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %.loopexit ]
+  %tmp7 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp7
+  %tmp15 = add i64 %tmp10, %indvar
+  %scevgep15 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp15
+  %scevgep = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar
+  %tmp11 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp11, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep15, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep15, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %19, label %45
+
+; <label>:19                                      ; preds = %16
+  %20 = load float* %scevgep, align 4
+  %21 = fcmp une float %20, 0.000000e+00
+  br i1 %21, label %bb.nph, label %.loopexit
+
+bb.nph:                                           ; preds = %19
+  %22 = fcmp olt float %20, 0.000000e+00
+  %23 = fpext float %20 to double
+  %24 = fcmp olt double %23, 0.000000e+00
+  %25 = fsub float -0.000000e+00, %20
+  %26 = fcmp ult float %20, 0.000000e+00
+  %tmp = add i16 %17, -1
+  br label %27
+
+; <label>:27                                      ; preds = %41, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %44, %41 ]
+  %tmp5 = add i16 %tmp, %col.02
+  %28 = zext i16 %tmp5 to i64
+  %29 = getelementptr inbounds [512 x float]* @ext_info21, i64 0, i64 %28
+  %30 = load float* %29, align 4
+  %31 = fcmp ult float %30, 0.000000e+00
+  br i1 %31, label %34, label %32
+
+; <label>:32                                      ; preds = %27
+  br i1 %26, label %33, label %36
+
+; <label>:33                                      ; preds = %32
+  br label %36
+
+; <label>:34                                      ; preds = %27
+  br i1 %22, label %36, label %35
+
+; <label>:35                                      ; preds = %34
+  br label %36
+
+; <label>:36                                      ; preds = %35, %34, %33, %32
+  %sign.0 = phi float [ -1.000000e+00, %33 ], [ -1.000000e+00, %35 ], [ 1.000000e+00, %32 ], [ 1.000000e+00, %34 ]
+  %mod_self_info.0 = select i1 %24, float %25, float %20
+  %37 = fpext float %30 to double
+  %38 = fcmp olt double %37, 0.000000e+00
+  br i1 %38, label %39, label %41
+
+; <label>:39                                      ; preds = %36
+  %40 = fsub float -0.000000e+00, %30
+  br label %41
+
+; <label>:41                                      ; preds = %39, %36
+  %mod_ext_info.0 = phi float [ %40, %39 ], [ %30, %36 ]
+  %42 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %42, float %mod_ext_info.0, float %mod_self_info.0
+  %43 = fmul float %sign.0, %magnitude.0
+  store float %43, float* %29, align 4
+  %44 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %44, %range.0
+  br i1 %exitcond1, label %.loopexit.loopexit, label %27
+
+; <label>:45                                      ; preds = %16
+  %46 = zext i16 %17 to i64
+  %47 = add i64 %46, -1
+  %48 = getelementptr inbounds [512 x float]* @ext_info21, i64 0, i64 %47
+  store float 4.000000e+00, float* %48, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %41
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %45, %19
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp9
+  br i1 %exitcond, label %._crit_edge.loopexit, label %7
+
+._crit_edge.loopexit:                             ; preds = %.loopexit
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @transverseCorrection22() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_22, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp6 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op23 = add i64 %6, 1
+  %tmp9 = select i1 %tmp6, i64 %.op23, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp10 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %.loopexit, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %.loopexit ]
+  %tmp7 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp7
+  %tmp15 = add i64 %tmp10, %indvar
+  %scevgep15 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp15
+  %scevgep = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar
+  %tmp11 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp11, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep15, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep15, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp ugt i16 %range.0, 1
+  br i1 %18, label %19, label %45
+
+; <label>:19                                      ; preds = %16
+  %20 = load float* %scevgep, align 4
+  %21 = fcmp une float %20, 0.000000e+00
+  br i1 %21, label %bb.nph, label %.loopexit
+
+bb.nph:                                           ; preds = %19
+  %22 = fcmp olt float %20, 0.000000e+00
+  %23 = fpext float %20 to double
+  %24 = fcmp olt double %23, 0.000000e+00
+  %25 = fsub float -0.000000e+00, %20
+  %26 = fcmp ult float %20, 0.000000e+00
+  %tmp = add i16 %17, -1
+  br label %27
+
+; <label>:27                                      ; preds = %41, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %44, %41 ]
+  %tmp5 = add i16 %tmp, %col.02
+  %28 = zext i16 %tmp5 to i64
+  %29 = getelementptr inbounds [512 x float]* @ext_info22, i64 0, i64 %28
+  %30 = load float* %29, align 4
+  %31 = fcmp ult float %30, 0.000000e+00
+  br i1 %31, label %34, label %32
+
+; <label>:32                                      ; preds = %27
+  br i1 %26, label %33, label %36
+
+; <label>:33                                      ; preds = %32
+  br label %36
+
+; <label>:34                                      ; preds = %27
+  br i1 %22, label %36, label %35
+
+; <label>:35                                      ; preds = %34
+  br label %36
+
+; <label>:36                                      ; preds = %35, %34, %33, %32
+  %sign.0 = phi float [ -1.000000e+00, %33 ], [ -1.000000e+00, %35 ], [ 1.000000e+00, %32 ], [ 1.000000e+00, %34 ]
+  %mod_self_info.0 = select i1 %24, float %25, float %20
+  %37 = fpext float %30 to double
+  %38 = fcmp olt double %37, 0.000000e+00
+  br i1 %38, label %39, label %41
+
+; <label>:39                                      ; preds = %36
+  %40 = fsub float -0.000000e+00, %30
+  br label %41
+
+; <label>:41                                      ; preds = %39, %36
+  %mod_ext_info.0 = phi float [ %40, %39 ], [ %30, %36 ]
+  %42 = fcmp ogt float %mod_self_info.0, %mod_ext_info.0
+  %magnitude.0 = select i1 %42, float %mod_ext_info.0, float %mod_self_info.0
+  %43 = fmul float %sign.0, %magnitude.0
+  store float %43, float* %29, align 4
+  %44 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %44, %range.0
+  br i1 %exitcond1, label %.loopexit.loopexit, label %27
+
+; <label>:45                                      ; preds = %16
+  %46 = zext i16 %17 to i64
+  %47 = add i64 %46, -1
+  %48 = getelementptr inbounds [512 x float]* @ext_info22, i64 0, i64 %47
+  store float 4.000000e+00, float* %48, align 4
+  br label %.loopexit
+
+.loopexit.loopexit:                               ; preds = %41
+  br label %.loopexit
+
+.loopexit:                                        ; preds = %.loopexit.loopexit, %45, %19
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp9
+  br i1 %exitcond, label %._crit_edge.loopexit, label %7
+
+._crit_edge.loopexit:                             ; preds = %.loopexit
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @update_aPosteriori11() nounwind {
+  %1 = load i16* @ncol_ind_11, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = load float* %scevgep, align 4
+  %8 = zext i16 %6 to i64
+  %9 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %8
+  %10 = load float* %9, align 4
+  %11 = fadd float %10, %7
+  store float %11, float* %9, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @update_aPosteriori12() nounwind {
+  %1 = load i16* @ncol_ind_12, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = load float* %scevgep, align 4
+  %8 = zext i16 %6 to i64
+  %9 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %8
+  %10 = load float* %9, align 4
+  %11 = fadd float %10, %7
+  store float %11, float* %9, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @update_aPosteriori21() nounwind {
+  %1 = load i16* @ncol_ind_21, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = load float* %scevgep, align 4
+  %8 = zext i16 %6 to i64
+  %9 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %8
+  %10 = load float* %9, align 4
+  %11 = fadd float %10, %7
+  store float %11, float* %9, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @update_aPosteriori22() nounwind {
+  %1 = load i16* @ncol_ind_22, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op7 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op7, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %4, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %4 ]
+  %tmp2 = add i64 %indvar, 3
+  %scevgep6 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp2
+  %scevgep = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar
+  %5 = load i16* %scevgep6, align 2
+  %6 = add i16 %5, -1
+  %7 = load float* %scevgep, align 4
+  %8 = zext i16 %6 to i64
+  %9 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %8
+  %10 = load float* %9, align 4
+  %11 = fadd float %10, %7
+  store float %11, float* %9, align 4
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %4
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @checkIsdecoded1() nounwind {
+  store i16 1, i16* @is_decoded_1, align 2
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op6 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op6, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %22, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %22 ]
+  %scevgep5 = getelementptr [512 x float]* @code_block1, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar
+  %5 = load float* %scevgep, align 4
+  %6 = fpext float %5 to double
+  %7 = fcmp ogt double %6, 0.000000e+00
+  br i1 %7, label %8, label %14
+
+; <label>:8                                       ; preds = %4
+  %9 = load float* %scevgep5, align 4
+  %10 = fpext float %9 to double
+  %11 = fcmp ogt double %10, 0.000000e+00
+  br i1 %11, label %12, label %13
+
+; <label>:12                                      ; preds = %8
+  store i16 0, i16* @is_decoded_1, align 2
+  br label %13
+
+; <label>:13                                      ; preds = %12, %8
+  store float -1.000000e+00, float* %scevgep5, align 4
+  br label %22
+
+; <label>:14                                      ; preds = %4
+  %15 = fcmp olt double %6, 0.000000e+00
+  br i1 %15, label %16, label %22
+
+; <label>:16                                      ; preds = %14
+  %17 = load float* %scevgep5, align 4
+  %18 = fpext float %17 to double
+  %19 = fcmp olt double %18, 0.000000e+00
+  br i1 %19, label %20, label %21
+
+; <label>:20                                      ; preds = %16
+  store i16 0, i16* @is_decoded_1, align 2
+  br label %21
+
+; <label>:21                                      ; preds = %20, %16
+  store float 1.000000e+00, float* %scevgep5, align 4
+  br label %22
+
+; <label>:22                                      ; preds = %21, %14, %13
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %22
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @checkIsdecoded2() nounwind {
+  store i16 1, i16* @is_decoded_2, align 2
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %0
+  %tmp = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %3 = zext i16 %.op to i64
+  %.op6 = add i64 %3, 1
+  %tmp4 = select i1 %tmp, i64 %.op6, i64 1
+  br label %4
+
+; <label>:4                                       ; preds = %22, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %22 ]
+  %scevgep5 = getelementptr [512 x float]* @code_block2, i64 0, i64 %indvar
+  %scevgep = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar
+  %5 = load float* %scevgep, align 4
+  %6 = fpext float %5 to double
+  %7 = fcmp ogt double %6, 0.000000e+00
+  br i1 %7, label %8, label %14
+
+; <label>:8                                       ; preds = %4
+  %9 = load float* %scevgep5, align 4
+  %10 = fpext float %9 to double
+  %11 = fcmp ogt double %10, 0.000000e+00
+  br i1 %11, label %12, label %13
+
+; <label>:12                                      ; preds = %8
+  store i16 0, i16* @is_decoded_2, align 2
+  br label %13
+
+; <label>:13                                      ; preds = %12, %8
+  store float -1.000000e+00, float* %scevgep5, align 4
+  br label %22
+
+; <label>:14                                      ; preds = %4
+  %15 = fcmp olt double %6, 0.000000e+00
+  br i1 %15, label %16, label %22
+
+; <label>:16                                      ; preds = %14
+  %17 = load float* %scevgep5, align 4
+  %18 = fpext float %17 to double
+  %19 = fcmp olt double %18, 0.000000e+00
+  br i1 %19, label %20, label %21
+
+; <label>:20                                      ; preds = %16
+  store i16 0, i16* @is_decoded_2, align 2
+  br label %21
+
+; <label>:21                                      ; preds = %20, %16
+  store float 1.000000e+00, float* %scevgep5, align 4
+  br label %22
+
+; <label>:22                                      ; preds = %21, %14, %13
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, %tmp4
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %4
+
+._crit_edge.loopexit:                             ; preds = %22
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %0
+  ret void
+}
+
+define void @updateMessage11() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge5, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_11, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp7 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op19 = add i64 %6, 1
+  %tmp10 = select i1 %tmp7, i64 %.op19, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp8 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %._crit_edge, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %._crit_edge ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp5
+  %tmp9 = add i64 %tmp8, %indvar
+  %scevgep = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp9
+  %tmp12 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp12, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp eq i16 %range.0, 0
+  br i1 %18, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %16
+  %tmp = add i16 %17, -1
+  br label %19
+
+; <label>:19                                      ; preds = %19, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %32, %19 ]
+  %tmp6 = add i16 %tmp, %col.02
+  %20 = zext i16 %tmp6 to i64
+  %21 = add i64 %20, 3
+  %22 = getelementptr inbounds [512 x i16]* @mem11, i64 0, i64 %21
+  %23 = load i16* %22, align 2
+  %24 = add i16 %23, -1
+  %25 = zext i16 %24 to i64
+  %26 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %25
+  %27 = load float* %26, align 4
+  %28 = getelementptr inbounds [512 x float]* @ext_info11, i64 0, i64 %20
+  %29 = load float* %28, align 4
+  %30 = fsub float %27, %29
+  %31 = getelementptr inbounds [512 x float]* @message11, i64 0, i64 %20
+  store float %30, float* %31, align 4
+  %32 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %32, %range.0
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %19
+
+._crit_edge.loopexit:                             ; preds = %19
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %16
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp10
+  br i1 %exitcond, label %._crit_edge5.loopexit, label %7
+
+._crit_edge5.loopexit:                            ; preds = %._crit_edge
+  br label %._crit_edge5
+
+._crit_edge5:                                     ; preds = %._crit_edge5.loopexit, %0
+  ret void
+}
+
+define void @updateMessage12() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge5, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_12, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp7 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op19 = add i64 %6, 1
+  %tmp10 = select i1 %tmp7, i64 %.op19, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp8 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %._crit_edge, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %._crit_edge ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp5
+  %tmp9 = add i64 %tmp8, %indvar
+  %scevgep = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp9
+  %tmp12 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp12, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp eq i16 %range.0, 0
+  br i1 %18, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %16
+  %tmp = add i16 %17, -1
+  br label %19
+
+; <label>:19                                      ; preds = %19, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %32, %19 ]
+  %tmp6 = add i16 %tmp, %col.02
+  %20 = zext i16 %tmp6 to i64
+  %21 = add i64 %20, 3
+  %22 = getelementptr inbounds [512 x i16]* @mem12, i64 0, i64 %21
+  %23 = load i16* %22, align 2
+  %24 = add i16 %23, -1
+  %25 = zext i16 %24 to i64
+  %26 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %25
+  %27 = load float* %26, align 4
+  %28 = getelementptr inbounds [512 x float]* @ext_info12, i64 0, i64 %20
+  %29 = load float* %28, align 4
+  %30 = fsub float %27, %29
+  %31 = getelementptr inbounds [512 x float]* @message12, i64 0, i64 %20
+  store float %30, float* %31, align 4
+  %32 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %32, %range.0
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %19
+
+._crit_edge.loopexit:                             ; preds = %19
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %16
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp10
+  br i1 %exitcond, label %._crit_edge5.loopexit, label %7
+
+._crit_edge5.loopexit:                            ; preds = %._crit_edge
+  br label %._crit_edge5
+
+._crit_edge5:                                     ; preds = %._crit_edge5.loopexit, %0
+  ret void
+}
+
+define void @updateMessage21() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge5, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_21, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp7 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op19 = add i64 %6, 1
+  %tmp10 = select i1 %tmp7, i64 %.op19, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp8 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %._crit_edge, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %._crit_edge ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp5
+  %tmp9 = add i64 %tmp8, %indvar
+  %scevgep = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp9
+  %tmp12 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp12, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp eq i16 %range.0, 0
+  br i1 %18, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %16
+  %tmp = add i16 %17, -1
+  br label %19
+
+; <label>:19                                      ; preds = %19, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %32, %19 ]
+  %tmp6 = add i16 %tmp, %col.02
+  %20 = zext i16 %tmp6 to i64
+  %21 = add i64 %20, 3
+  %22 = getelementptr inbounds [512 x i16]* @mem21, i64 0, i64 %21
+  %23 = load i16* %22, align 2
+  %24 = add i16 %23, -1
+  %25 = zext i16 %24 to i64
+  %26 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %25
+  %27 = load float* %26, align 4
+  %28 = getelementptr inbounds [512 x float]* @ext_info21, i64 0, i64 %20
+  %29 = load float* %28, align 4
+  %30 = fsub float %27, %29
+  %31 = getelementptr inbounds [512 x float]* @message21, i64 0, i64 %20
+  store float %30, float* %31, align 4
+  %32 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %32, %range.0
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %19
+
+._crit_edge.loopexit:                             ; preds = %19
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %16
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp10
+  br i1 %exitcond, label %._crit_edge5.loopexit, label %7
+
+._crit_edge5.loopexit:                            ; preds = %._crit_edge
+  br label %._crit_edge5
+
+._crit_edge5:                                     ; preds = %._crit_edge5.loopexit, %0
+  ret void
+}
+
+define void @updateMessage22() nounwind {
+  %1 = load i16* @nrows, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge5, label %bb.nph4
+
+bb.nph4:                                          ; preds = %0
+  %3 = load i16* @ncol_ind_22, align 2
+  %4 = zext i16 %1 to i32
+  %5 = add nsw i32 %4, -1
+  %.neg1 = add i16 %3, 1
+  %tmp7 = icmp ugt i16 %1, 1
+  %.op = add i16 %1, -1
+  %6 = zext i16 %.op to i64
+  %.op19 = add i64 %6, 1
+  %tmp10 = select i1 %tmp7, i64 %.op19, i64 1
+  %tmp3 = zext i16 %3 to i64
+  %tmp4 = add i64 %tmp3, 4
+  %tmp8 = add i64 %tmp3, 3
+  br label %7
+
+; <label>:7                                       ; preds = %._crit_edge, %bb.nph4
+  %indvar = phi i64 [ 0, %bb.nph4 ], [ %indvar.next, %._crit_edge ]
+  %tmp5 = add i64 %tmp4, %indvar
+  %scevgep18 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp5
+  %tmp9 = add i64 %tmp8, %indvar
+  %scevgep = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp9
+  %tmp12 = trunc i64 %indvar to i32
+  %8 = icmp eq i32 %tmp12, %5
+  br i1 %8, label %9, label %12
+
+; <label>:9                                       ; preds = %7
+  %10 = load i16* %scevgep, align 2
+  %11 = sub i16 %.neg1, %10
+  br label %16
+
+; <label>:12                                      ; preds = %7
+  %13 = load i16* %scevgep, align 2
+  %14 = load i16* %scevgep18, align 2
+  %15 = sub i16 %14, %13
+  br label %16
+
+; <label>:16                                      ; preds = %12, %9
+  %17 = phi i16 [ %10, %9 ], [ %13, %12 ]
+  %range.0 = phi i16 [ %11, %9 ], [ %15, %12 ]
+  %18 = icmp eq i16 %range.0, 0
+  br i1 %18, label %._crit_edge, label %bb.nph
+
+bb.nph:                                           ; preds = %16
+  %tmp = add i16 %17, -1
+  br label %19
+
+; <label>:19                                      ; preds = %19, %bb.nph
+  %col.02 = phi i16 [ 0, %bb.nph ], [ %32, %19 ]
+  %tmp6 = add i16 %tmp, %col.02
+  %20 = zext i16 %tmp6 to i64
+  %21 = add i64 %20, 3
+  %22 = getelementptr inbounds [512 x i16]* @mem22, i64 0, i64 %21
+  %23 = load i16* %22, align 2
+  %24 = add i16 %23, -1
+  %25 = zext i16 %24 to i64
+  %26 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %25
+  %27 = load float* %26, align 4
+  %28 = getelementptr inbounds [512 x float]* @ext_info22, i64 0, i64 %20
+  %29 = load float* %28, align 4
+  %30 = fsub float %27, %29
+  %31 = getelementptr inbounds [512 x float]* @message22, i64 0, i64 %20
+  store float %30, float* %31, align 4
+  %32 = add i16 %col.02, 1
+  %exitcond1 = icmp eq i16 %32, %range.0
+  br i1 %exitcond1, label %._crit_edge.loopexit, label %19
+
+._crit_edge.loopexit:                             ; preds = %19
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %16
+  %indvar.next = add i64 %indvar, 1
+  %exitcond = icmp eq i64 %indvar.next, %tmp10
+  br i1 %exitcond, label %._crit_edge5.loopexit, label %7
+
+._crit_edge5.loopexit:                            ; preds = %._crit_edge
+  br label %._crit_edge5
+
+._crit_edge5:                                     ; preds = %._crit_edge5.loopexit, %0
+  ret void
+}
+
+define void @send_inputs() nounwind {
+bb.nph20:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph20
+  %indvar38 = phi i64 [ 0, %bb.nph20 ], [ %indvar.next39, %0 ]
+  %scevgep41 = getelementptr [512 x i16]* @mem11, i64 0, i64 %indvar38
+  %1 = load i16* %scevgep41, align 2
+  %2 = getelementptr [11 x i8]* @.str7, i64 0, i64 0
+  tail call void @write_uint16(i8* %2, i16 zeroext %1) nounwind
+  %indvar.next39 = add i64 %indvar38, 1
+  %exitcond12 = icmp eq i64 %indvar.next39, 9
+  br i1 %exitcond12, label %bb.nph18.preheader, label %0
+
+bb.nph18.preheader:                               ; preds = %0
+  br label %bb.nph18
+
+bb.nph18:                                         ; preds = %bb.nph18, %bb.nph18.preheader
+  %indvar34 = phi i64 [ %indvar.next35, %bb.nph18 ], [ 0, %bb.nph18.preheader ]
+  %scevgep37 = getelementptr [512 x i16]* @mem12, i64 0, i64 %indvar34
+  %3 = load i16* %scevgep37, align 2
+  %4 = getelementptr [11 x i8]* @.str7, i64 0, i64 0
+  tail call void @write_uint16(i8* %4, i16 zeroext %3) nounwind
+  %indvar.next35 = add i64 %indvar34, 1
+  %exitcond10 = icmp eq i64 %indvar.next35, 7
+  br i1 %exitcond10, label %bb.nph15.preheader, label %bb.nph18
+
+bb.nph15.preheader:                               ; preds = %bb.nph18
+  br label %bb.nph15
+
+bb.nph15:                                         ; preds = %bb.nph15, %bb.nph15.preheader
+  %indvar30 = phi i64 [ %indvar.next31, %bb.nph15 ], [ 0, %bb.nph15.preheader ]
+  %scevgep33 = getelementptr [512 x i16]* @mem21, i64 0, i64 %indvar30
+  %5 = load i16* %scevgep33, align 2
+  %6 = getelementptr [11 x i8]* @.str7, i64 0, i64 0
+  tail call void @write_uint16(i8* %6, i16 zeroext %5) nounwind
+  %indvar.next31 = add i64 %indvar30, 1
+  %exitcond = icmp eq i64 %indvar.next31, 8
+  br i1 %exitcond, label %bb.nph12.preheader, label %bb.nph15
+
+bb.nph12.preheader:                               ; preds = %bb.nph15
+  br label %bb.nph12
+
+.preheader7:                                      ; preds = %bb.nph12
+  %7 = load i16* @ncols, align 2
+  %8 = icmp eq i16 %7, 0
+  br i1 %8, label %._crit_edge, label %bb.nph9.preheader
+
+bb.nph9.preheader:                                ; preds = %.preheader7
+  br label %bb.nph9
+
+bb.nph12:                                         ; preds = %bb.nph12, %bb.nph12.preheader
+  %indvar27 = phi i64 [ %indvar.next28, %bb.nph12 ], [ 0, %bb.nph12.preheader ]
+  %scevgep29 = getelementptr [512 x i16]* @mem22, i64 0, i64 %indvar27
+  %9 = load i16* %scevgep29, align 2
+  %10 = getelementptr [11 x i8]* @.str7, i64 0, i64 0
+  tail call void @write_uint16(i8* %10, i16 zeroext %9) nounwind
+  %indvar.next28 = add i64 %indvar27, 1
+  %exitcond7 = icmp eq i64 %indvar.next28, 8
+  br i1 %exitcond7, label %.preheader7, label %bb.nph12
+
+.preheader:                                       ; preds = %bb.nph9
+  %.lcssa = phi i16 [ %14, %bb.nph9 ]
+  %11 = icmp eq i16 %.lcssa, 0
+  br i1 %11, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %.preheader
+  br label %bb.nph
+
+bb.nph9:                                          ; preds = %bb.nph9, %bb.nph9.preheader
+  %indvar22 = phi i64 [ %tmp25, %bb.nph9 ], [ 0, %bb.nph9.preheader ]
+  %tmp4 = add i64 %indvar22, 1
+  %tmp26 = trunc i64 %tmp4 to i32
+  %scevgep24 = getelementptr [512 x float]* @code_block1, i64 0, i64 %indvar22
+  %12 = load float* %scevgep24, align 4
+  %13 = getelementptr [16 x i8]* @.str8, i64 0, i64 0
+  tail call void @write_float32(i8* %13, float %12) nounwind
+  %tmp25 = add i64 %indvar22, 1
+  %14 = load i16* @ncols, align 2
+  %15 = zext i16 %14 to i32
+  %16 = icmp slt i32 %tmp26, %15
+  br i1 %16, label %bb.nph9, label %.preheader
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %tmp, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp1 = add i64 %indvar, 1
+  %tmp21 = trunc i64 %tmp1 to i32
+  %scevgep = getelementptr [512 x float]* @code_block2, i64 0, i64 %indvar
+  %17 = load float* %scevgep, align 4
+  %18 = getelementptr [16 x i8]* @.str9, i64 0, i64 0
+  tail call void @write_float32(i8* %18, float %17) nounwind
+  %tmp = add i64 %indvar, 1
+  %19 = load i16* @ncols, align 2
+  %20 = zext i16 %19 to i32
+  %21 = icmp slt i32 %tmp21, %20
+  br i1 %21, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %.preheader, %.preheader7
+  ret void
+}
+
+declare void @write_uint16(i8*, i16 zeroext)
+
+define void @send_message() nounwind {
+bb.nph12:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph12
+  %indvar21 = phi i64 [ 0, %bb.nph12 ], [ %indvar.next22, %0 ]
+  %scevgep24 = getelementptr [512 x float]* @message11, i64 0, i64 %indvar21
+  %1 = load float* %scevgep24, align 4
+  %2 = getelementptr [19 x i8]* @.str10, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next22 = add i64 %indvar21, 1
+  %exitcond6 = icmp eq i64 %indvar.next22, 4
+  br i1 %exitcond6, label %bb.nph10.preheader, label %0
+
+bb.nph10.preheader:                               ; preds = %0
+  br label %bb.nph10
+
+bb.nph10:                                         ; preds = %bb.nph10, %bb.nph10.preheader
+  %indvar17 = phi i64 [ %indvar.next18, %bb.nph10 ], [ 0, %bb.nph10.preheader ]
+  %scevgep20 = getelementptr [512 x float]* @message12, i64 0, i64 %indvar17
+  %3 = load float* %scevgep20, align 4
+  %4 = getelementptr [19 x i8]* @.str11, i64 0, i64 0
+  tail call void @write_float32(i8* %4, float %3) nounwind
+  %indvar.next18 = add i64 %indvar17, 1
+  %exitcond4 = icmp eq i64 %indvar.next18, 2
+  br i1 %exitcond4, label %bb.nph7.preheader, label %bb.nph10
+
+bb.nph7.preheader:                                ; preds = %bb.nph10
+  br label %bb.nph7
+
+bb.nph7:                                          ; preds = %bb.nph7, %bb.nph7.preheader
+  %indvar13 = phi i64 [ %indvar.next14, %bb.nph7 ], [ 0, %bb.nph7.preheader ]
+  %scevgep16 = getelementptr [512 x float]* @message21, i64 0, i64 %indvar13
+  %5 = load float* %scevgep16, align 4
+  %6 = getelementptr [19 x i8]* @.str12, i64 0, i64 0
+  tail call void @write_float32(i8* %6, float %5) nounwind
+  %indvar.next14 = add i64 %indvar13, 1
+  %exitcond = icmp eq i64 %indvar.next14, 3
+  br i1 %exitcond, label %bb.nph.preheader, label %bb.nph7
+
+bb.nph.preheader:                                 ; preds = %bb.nph7
+  br label %bb.nph
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %indvar.next, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %scevgep = getelementptr [512 x float]* @message22, i64 0, i64 %indvar
+  %7 = load float* %scevgep, align 4
+  %8 = getelementptr [19 x i8]* @.str13, i64 0, i64 0
+  tail call void @write_float32(i8* %8, float %7) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 3
+  br i1 %exitcond1, label %._crit_edge, label %bb.nph
+
+._crit_edge:                                      ; preds = %bb.nph
+  ret void
+}
+
+define void @sendOther() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4.preheader
+
+bb.nph4.preheader:                                ; preds = %0
+  br label %bb.nph4
+
+.preheader:                                       ; preds = %bb.nph4
+  %.lcssa = phi i16 [ %6, %bb.nph4 ]
+  %3 = icmp eq i16 %.lcssa, 0
+  br i1 %3, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %.preheader
+  br label %bb.nph
+
+bb.nph4:                                          ; preds = %bb.nph4, %bb.nph4.preheader
+  %indvar6 = phi i64 [ %tmp9, %bb.nph4 ], [ 0, %bb.nph4.preheader ]
+  %tmp4 = add i64 %indvar6, 1
+  %tmp10 = trunc i64 %tmp4 to i32
+  %scevgep8 = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar6
+  %4 = load float* %scevgep8, align 4
+  %5 = getelementptr [13 x i8]* @.str, i64 0, i64 0
+  tail call void @write_float32(i8* %5, float %4) nounwind
+  %tmp9 = add i64 %indvar6, 1
+  %6 = load i16* @ncols, align 2
+  %7 = zext i16 %6 to i32
+  %8 = icmp slt i32 %tmp10, %7
+  br i1 %8, label %bb.nph4, label %.preheader
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %tmp, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp1 = add i64 %indvar, 1
+  %tmp5 = trunc i64 %tmp1 to i32
+  %scevgep = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar
+  %9 = load float* %scevgep, align 4
+  %10 = getelementptr [13 x i8]* @.str1, i64 0, i64 0
+  tail call void @write_float32(i8* %10, float %9) nounwind
+  %tmp = add i64 %indvar, 1
+  %11 = load i16* @ncols, align 2
+  %12 = zext i16 %11 to i32
+  %13 = icmp slt i32 %tmp5, %12
+  br i1 %13, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %.preheader, %0
+  ret void
+}
+
+define void @send_aPosteriori() nounwind {
+  %1 = load i16* @ncols, align 2
+  %2 = icmp eq i16 %1, 0
+  br i1 %2, label %._crit_edge, label %bb.nph4.preheader
+
+bb.nph4.preheader:                                ; preds = %0
+  br label %bb.nph4
+
+.preheader:                                       ; preds = %bb.nph4
+  %.lcssa = phi i16 [ %6, %bb.nph4 ]
+  %3 = icmp eq i16 %.lcssa, 0
+  br i1 %3, label %._crit_edge, label %bb.nph.preheader
+
+bb.nph.preheader:                                 ; preds = %.preheader
+  br label %bb.nph
+
+bb.nph4:                                          ; preds = %bb.nph4, %bb.nph4.preheader
+  %indvar6 = phi i64 [ %tmp9, %bb.nph4 ], [ 0, %bb.nph4.preheader ]
+  %tmp4 = add i64 %indvar6, 1
+  %tmp10 = trunc i64 %tmp4 to i32
+  %scevgep8 = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar6
+  %4 = load float* %scevgep8, align 4
+  %5 = getelementptr [17 x i8]* @.str14, i64 0, i64 0
+  tail call void @write_float32(i8* %5, float %4) nounwind
+  %tmp9 = add i64 %indvar6, 1
+  %6 = load i16* @ncols, align 2
+  %7 = zext i16 %6 to i32
+  %8 = icmp slt i32 %tmp10, %7
+  br i1 %8, label %bb.nph4, label %.preheader
+
+bb.nph:                                           ; preds = %bb.nph, %bb.nph.preheader
+  %indvar = phi i64 [ %tmp, %bb.nph ], [ 0, %bb.nph.preheader ]
+  %tmp1 = add i64 %indvar, 1
+  %tmp5 = trunc i64 %tmp1 to i32
+  %scevgep = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar
+  %9 = load float* %scevgep, align 4
+  %10 = getelementptr [17 x i8]* @.str15, i64 0, i64 0
+  tail call void @write_float32(i8* %10, float %9) nounwind
+  %tmp = add i64 %indvar, 1
+  %11 = load i16* @ncols, align 2
+  %12 = zext i16 %11 to i32
+  %13 = icmp slt i32 %tmp5, %12
+  br i1 %13, label %bb.nph, label %._crit_edge.loopexit
+
+._crit_edge.loopexit:                             ; preds = %bb.nph
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %._crit_edge.loopexit, %.preheader, %0
+  ret void
+}
+
+define void @send_transverseCorrection11() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [15 x i8]* @.str16, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 4
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_transverseCorrection12() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [15 x i8]* @.str17, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 2
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_transverseCorrection21() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [15 x i8]* @.str18, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 3
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_transverseCorrection22() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [15 x i8]* @.str19, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 3
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_tens_info22_21() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [20 x i8]* @.str20, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 2
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_tens_info21_22() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [20 x i8]* @.str21, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 2
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_tens_info11_12() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [20 x i8]* @.str22, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 2
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @send_tens_info12_11() nounwind {
+bb.nph:
+  br label %0
+
+; <label>:0                                       ; preds = %0, %bb.nph
+  %indvar = phi i64 [ 0, %bb.nph ], [ %indvar.next, %0 ]
+  %scevgep = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar
+  %1 = load float* %scevgep, align 4
+  %2 = getelementptr [20 x i8]* @.str23, i64 0, i64 0
+  tail call void @write_float32(i8* %2, float %1) nounwind
+  %indvar.next = add i64 %indvar, 1
+  %exitcond1 = icmp eq i64 %indvar.next, 2
+  br i1 %exitcond1, label %._crit_edge, label %0
+
+._crit_edge:                                      ; preds = %0
+  ret void
+}
+
+define void @top_daemon_1() noreturn nounwind {
+  br label %1
+
+; <label>:1                                       ; preds = %checkIsdecoded1.exit, %0
+  %2 = getelementptr [11 x i8]* @.str3, i64 0, i64 0
+  %3 = tail call zeroext i16 @read_uint16(i8* %2) nounwind
+  store i16 %3, i16* @maxNitr, align 2
+  %4 = getelementptr [10 x i8]* @.str4, i64 0, i64 0
+  %5 = tail call float @read_float32(i8* %4) nounwind
+  store float %5, float* @ebbyNo, align 4
+  tail call void @initMem() nounwind
+  %6 = getelementptr [8 x i8]* @.str5, i64 0, i64 0
+  %7 = tail call float @read_float32(i8* %6) nounwind
+  store float %7, float* @rate, align 4
+  %8 = load i16* @ncols, align 2
+  %9 = icmp eq i16 %8, 0
+  br i1 %9, label %readCodeBlock.exit, label %bb.nph4.i.preheader
+
+bb.nph4.i.preheader:                              ; preds = %1
+  br label %bb.nph4.i
+
+.preheader.i:                                     ; preds = %bb.nph4.i
+  %.lcssa = phi i16 [ %17, %bb.nph4.i ]
+  %10 = icmp eq i16 %.lcssa, 0
+  br i1 %10, label %readCodeBlock.exit, label %bb.nph.i.preheader
+
+bb.nph.i.preheader:                               ; preds = %.preheader.i
+  br label %bb.nph.i
+
+bb.nph4.i:                                        ; preds = %bb.nph4.i, %bb.nph4.i.preheader
+  %11 = phi i16 [ %12, %bb.nph4.i ], [ 0, %bb.nph4.i.preheader ]
+  %tmp = add i16 %11, 1
+  %12 = add i16 %11, 1
+  %13 = getelementptr [14 x i8]* @.str6, i64 0, i64 0
+  %14 = tail call float @read_float32(i8* %13) nounwind
+  %15 = zext i16 %11 to i64
+  %16 = getelementptr inbounds [512 x float]* @code_block1, i64 0, i64 %15
+  store float %14, float* %16, align 4
+  %17 = load i16* @ncols, align 2
+  %18 = icmp ult i16 %tmp, %17
+  br i1 %18, label %bb.nph4.i, label %.preheader.i
+
+bb.nph.i:                                         ; preds = %bb.nph.i, %bb.nph.i.preheader
+  %19 = phi i16 [ %20, %bb.nph.i ], [ 0, %bb.nph.i.preheader ]
+  %tmp67 = add i16 %19, 1
+  %20 = add i16 %19, 1
+  %21 = getelementptr [14 x i8]* @.str6, i64 0, i64 0
+  %22 = tail call float @read_float32(i8* %21) nounwind
+  %23 = zext i16 %19 to i64
+  %24 = getelementptr inbounds [512 x float]* @code_block2, i64 0, i64 %23
+  store float %22, float* %24, align 4
+  %25 = load i16* @ncols, align 2
+  %26 = icmp ult i16 %tmp67, %25
+  br i1 %26, label %bb.nph.i, label %readCodeBlock.exit.loopexit
+
+readCodeBlock.exit.loopexit:                      ; preds = %bb.nph.i
+  br label %readCodeBlock.exit
+
+readCodeBlock.exit:                               ; preds = %readCodeBlock.exit.loopexit, %.preheader.i, %1
+  tail call void @send_inputs()
+  %27 = getelementptr [24 x i8]* @.str24, i64 0, i64 0
+  tail call void @write_uint8(i8* %27, i8 zeroext 1) nounwind
+  %28 = getelementptr [18 x i8]* @.str25, i64 0, i64 0
+  %29 = tail call zeroext i8 @read_uint8(i8* %28) nounwind
+  %30 = load i16* @ncols, align 2
+  %31 = icmp eq i16 %30, 0
+  br i1 %31, label %initialize_aPriori1.exit, label %bb.nph.i1
+
+bb.nph.i1:                                        ; preds = %readCodeBlock.exit
+  %32 = load float* @ebbyNo, align 4
+  %33 = load float* @rate, align 4
+  %34 = fmul float %33, %32
+  %tmp3.i = icmp ugt i16 %30, 1
+  %.op.i = add i16 %30, -1
+  %35 = zext i16 %.op.i to i64
+  %.op8.i = add i64 %35, 1
+  %tmp6.i = select i1 %tmp3.i, i64 %.op8.i, i64 1
+  br label %36
+
+; <label>:36                                      ; preds = %36, %bb.nph.i1
+  %indvar.i = phi i64 [ 0, %bb.nph.i1 ], [ %indvar.next.i, %36 ]
+  %scevgep.i = getelementptr [512 x float]* @code_block1, i64 0, i64 %indvar.i
+  %scevgep7.i = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar.i
+  %37 = load float* %scevgep.i, align 4
+  %38 = fmul float %37, -4.000000e+00
+  %39 = fmul float %34, %38
+  store float %39, float* %scevgep7.i, align 4
+  %indvar.next.i = add i64 %indvar.i, 1
+  %exitcond11 = icmp eq i64 %indvar.next.i, %tmp6.i
+  br i1 %exitcond11, label %._crit_edge.i, label %36
+
+._crit_edge.i:                                    ; preds = %36
+  br i1 %31, label %initialize_aPriori1.exit, label %bb.nph.i.i.preheader
+
+bb.nph.i.i.preheader:                             ; preds = %._crit_edge.i
+  br label %bb.nph.i.i
+
+bb.nph.i.i:                                       ; preds = %bb.nph.i.i, %bb.nph.i.i.preheader
+  %indvar.i.i = phi i64 [ %tmp68, %bb.nph.i.i ], [ 0, %bb.nph.i.i.preheader ]
+  %scevgep.i.i = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar.i.i
+  %tmp9 = add i64 %indvar.i.i, 1
+  %tmp2.i.i = trunc i64 %tmp9 to i32
+  %tmp68 = add i64 %indvar.i.i, 1
+  %40 = load float* %scevgep.i.i, align 4
+  %41 = getelementptr [13 x i8]* @.str, i64 0, i64 0
+  tail call void @write_float32(i8* %41, float %40) nounwind
+  %42 = load i16* @ncols, align 2
+  %43 = zext i16 %42 to i32
+  %44 = icmp slt i32 %tmp2.i.i, %43
+  br i1 %44, label %bb.nph.i.i, label %initialize_aPriori1.exit.loopexit
+
+initialize_aPriori1.exit.loopexit:                ; preds = %bb.nph.i.i
+  br label %initialize_aPriori1.exit
+
+initialize_aPriori1.exit:                         ; preds = %initialize_aPriori1.exit.loopexit, %._crit_edge.i, %readCodeBlock.exit
+  %45 = load i16* @ncol_ind_11, align 2
+  %46 = icmp eq i16 %45, 0
+  br i1 %46, label %initializeMessage11.exit, label %bb.nph.i4
+
+bb.nph.i4:                                        ; preds = %initialize_aPriori1.exit
+  %tmp.i2 = icmp ugt i16 %45, 1
+  %.op.i3 = add i16 %45, -1
+  %47 = zext i16 %.op.i3 to i64
+  %.op7.i = add i64 %47, 1
+  %tmp4.i = select i1 %tmp.i2, i64 %.op7.i, i64 1
+  br label %48
+
+; <label>:48                                      ; preds = %48, %bb.nph.i4
+  %indvar.i5 = phi i64 [ 0, %bb.nph.i4 ], [ %indvar.next.i7, %48 ]
+  %scevgep.i6 = getelementptr [512 x float]* @message11, i64 0, i64 %indvar.i5
+  %tmp8 = add i64 %indvar.i5, 3
+  %scevgep6.i = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp8
+  %49 = load i16* %scevgep6.i, align 2
+  %50 = add i16 %49, -1
+  %51 = zext i16 %50 to i64
+  %52 = getelementptr inbounds [512 x float]* @aPriori1, i64 0, i64 %51
+  %53 = load float* %52, align 4
+  store float %53, float* %scevgep.i6, align 4
+  %indvar.next.i7 = add i64 %indvar.i5, 1
+  %exitcond7 = icmp eq i64 %indvar.next.i7, %tmp4.i
+  br i1 %exitcond7, label %initializeMessage11.exit.loopexit, label %48
+
+initializeMessage11.exit.loopexit:                ; preds = %48
+  br label %initializeMessage11.exit
+
+initializeMessage11.exit:                         ; preds = %initializeMessage11.exit.loopexit, %initialize_aPriori1.exit
+  %54 = getelementptr [22 x i8]* @.str26, i64 0, i64 0
+  tail call void @write_uint8(i8* %54, i8 zeroext 1) nounwind
+  %55 = load i16* @ncols, align 2
+  %56 = icmp eq i16 %55, 0
+  br i1 %56, label %initialize_aPosteriori1.exit, label %bb.nph.i13
+
+bb.nph.i13:                                       ; preds = %initializeMessage11.exit
+  %tmp.i10 = icmp ugt i16 %55, 1
+  %.op.i11 = add i16 %55, -1
+  %57 = zext i16 %.op.i11 to i64
+  %.op6.i = add i64 %57, 1
+  %tmp4.i12 = select i1 %tmp.i10, i64 %.op6.i, i64 1
+  br label %58
+
+; <label>:58                                      ; preds = %58, %bb.nph.i13
+  %indvar.i14 = phi i64 [ 0, %bb.nph.i13 ], [ %indvar.next.i16, %58 ]
+  %scevgep.i15 = getelementptr [512 x float]* @aPriori1, i64 0, i64 %indvar.i14
+  %scevgep5.i = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar.i14
+  %59 = load float* %scevgep.i15, align 4
+  store float %59, float* %scevgep5.i, align 4
+  %indvar.next.i16 = add i64 %indvar.i14, 1
+  %exitcond6 = icmp eq i64 %indvar.next.i16, %tmp4.i12
+  br i1 %exitcond6, label %initialize_aPosteriori1.exit.loopexit, label %58
+
+initialize_aPosteriori1.exit.loopexit:            ; preds = %58
+  br label %initialize_aPosteriori1.exit
+
+initialize_aPosteriori1.exit:                     ; preds = %initialize_aPosteriori1.exit.loopexit, %initializeMessage11.exit
+  %60 = load i16* @ncol_ind_11, align 2
+  %61 = icmp eq i16 %60, 0
+  br i1 %61, label %initializeTransInfo11_12.exit, label %bb.nph.i22
+
+bb.nph.i22:                                       ; preds = %initialize_aPosteriori1.exit
+  %tmp.i19 = icmp ugt i16 %60, 1
+  %.op.i20 = add i16 %60, -1
+  %62 = zext i16 %.op.i20 to i64
+  %.op5.i = add i64 %62, 1
+  %tmp4.i21 = select i1 %tmp.i19, i64 %.op5.i, i64 1
+  br label %63
+
+; <label>:63                                      ; preds = %63, %bb.nph.i22
+  %indvar.i23 = phi i64 [ 0, %bb.nph.i22 ], [ %indvar.next.i25, %63 ]
+  %scevgep.i24 = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar.i23
+  store float 0.000000e+00, float* %scevgep.i24, align 4
+  %indvar.next.i25 = add i64 %indvar.i23, 1
+  %exitcond4 = icmp eq i64 %indvar.next.i25, %tmp4.i21
+  br i1 %exitcond4, label %bb.nph.i32.loopexit, label %63
+
+bb.nph.i32.loopexit:                              ; preds = %63
+  br label %bb.nph.i32
+
+bb.nph.i32:                                       ; preds = %bb.nph.i32, %bb.nph.i32.loopexit
+  %indvar.i33 = phi i64 [ %indvar.next.i35, %bb.nph.i32 ], [ 0, %bb.nph.i32.loopexit ]
+  %scevgep.i34 = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar.i33
+  store float 0.000000e+00, float* %scevgep.i34, align 4
+  %indvar.next.i35 = add i64 %indvar.i33, 1
+  %exitcond5 = icmp eq i64 %indvar.next.i35, %tmp4.i21
+  br i1 %exitcond5, label %initializeTransInfo11_12.exit.loopexit, label %bb.nph.i32
+
+initializeTransInfo11_12.exit.loopexit:           ; preds = %bb.nph.i32
+  br label %initializeTransInfo11_12.exit
+
+initializeTransInfo11_12.exit:                    ; preds = %initializeTransInfo11_12.exit.loopexit, %initialize_aPosteriori1.exit
+  tail call void @checkNodeComputeEngine11()
+  %64 = getelementptr [32 x i8]* @.str27, i64 0, i64 0
+  tail call void @write_uint8(i8* %64, i8 zeroext 1) nounwind
+  %65 = getelementptr [32 x i8]* @.str28, i64 0, i64 0
+  %66 = tail call zeroext i8 @read_uint8(i8* %65) nounwind
+  tail call void @transverseCorrection11()
+  br label %67
+
+; <label>:67                                      ; preds = %67, %initializeTransInfo11_12.exit
+  %indvar.i39 = phi i64 [ 0, %initializeTransInfo11_12.exit ], [ %indvar.next.i41, %67 ]
+  %scevgep.i40 = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar.i39
+  %68 = load float* %scevgep.i40, align 4
+  %69 = getelementptr [15 x i8]* @.str16, i64 0, i64 0
+  tail call void @write_float32(i8* %69, float %68) nounwind
+  %indvar.next.i41 = add i64 %indvar.i39, 1
+  %exitcond = icmp eq i64 %indvar.next.i41, 4
+  br i1 %exitcond, label %send_transverseCorrection11.exit, label %67
+
+send_transverseCorrection11.exit:                 ; preds = %67
+  %70 = getelementptr [26 x i8]* @.str29, i64 0, i64 0
+  %71 = tail call zeroext i8 @read_uint8(i8* %70) nounwind
+  %72 = load i16* @ncol_ind_11, align 2
+  %73 = icmp eq i16 %72, 0
+  br i1 %73, label %update_aPosteriori11.exit, label %bb.nph.i48
+
+bb.nph.i48:                                       ; preds = %send_transverseCorrection11.exit
+  %tmp.i44 = icmp ugt i16 %72, 1
+  %.op.i45 = add i16 %72, -1
+  %74 = zext i16 %.op.i45 to i64
+  %.op7.i46 = add i64 %74, 1
+  %tmp4.i47 = select i1 %tmp.i44, i64 %.op7.i46, i64 1
+  br label %75
+
+; <label>:75                                      ; preds = %75, %bb.nph.i48
+  %indvar.i49 = phi i64 [ 0, %bb.nph.i48 ], [ %indvar.next.i53, %75 ]
+  %scevgep.i50 = getelementptr [512 x float]* @ext_info11, i64 0, i64 %indvar.i49
+  %tmp3 = add i64 %indvar.i49, 3
+  %scevgep6.i52 = getelementptr [512 x i16]* @mem11, i64 0, i64 %tmp3
+  %76 = load i16* %scevgep6.i52, align 2
+  %77 = add i16 %76, -1
+  %78 = load float* %scevgep.i50, align 4
+  %79 = zext i16 %77 to i64
+  %80 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %79
+  %81 = load float* %80, align 4
+  %82 = fadd float %81, %78
+  store float %82, float* %80, align 4
+  %indvar.next.i53 = add i64 %indvar.i49, 1
+  %exitcond2 = icmp eq i64 %indvar.next.i53, %tmp4.i47
+  br i1 %exitcond2, label %update_aPosteriori11.exit.loopexit, label %75
+
+update_aPosteriori11.exit.loopexit:               ; preds = %75
+  br label %update_aPosteriori11.exit
+
+update_aPosteriori11.exit:                        ; preds = %update_aPosteriori11.exit.loopexit, %send_transverseCorrection11.exit
+  store i16 1, i16* @is_decoded_1, align 2
+  %83 = load i16* @ncols, align 2
+  %84 = icmp eq i16 %83, 0
+  br i1 %84, label %checkIsdecoded1.exit, label %bb.nph.i60
+
+bb.nph.i60:                                       ; preds = %update_aPosteriori11.exit
+  %tmp.i56 = icmp ugt i16 %83, 1
+  %.op.i57 = add i16 %83, -1
+  %85 = zext i16 %.op.i57 to i64
+  %.op6.i58 = add i64 %85, 1
+  %tmp4.i59 = select i1 %tmp.i56, i64 %.op6.i58, i64 1
+  br label %86
+
+; <label>:86                                      ; preds = %104, %bb.nph.i60
+  %indvar.i61 = phi i64 [ 0, %bb.nph.i60 ], [ %indvar.next.i64, %104 ]
+  %scevgep.i62 = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar.i61
+  %scevgep5.i63 = getelementptr [512 x float]* @code_block1, i64 0, i64 %indvar.i61
+  %87 = load float* %scevgep.i62, align 4
+  %88 = fpext float %87 to double
+  %89 = fcmp ogt double %88, 0.000000e+00
+  br i1 %89, label %90, label %96
+
+; <label>:90                                      ; preds = %86
+  %91 = load float* %scevgep5.i63, align 4
+  %92 = fpext float %91 to double
+  %93 = fcmp ogt double %92, 0.000000e+00
+  br i1 %93, label %94, label %95
+
+; <label>:94                                      ; preds = %90
+  store i16 0, i16* @is_decoded_1, align 2
+  br label %95
+
+; <label>:95                                      ; preds = %94, %90
+  store float -1.000000e+00, float* %scevgep5.i63, align 4
+  br label %104
+
+; <label>:96                                      ; preds = %86
+  %97 = fcmp olt double %88, 0.000000e+00
+  br i1 %97, label %98, label %104
+
+; <label>:98                                      ; preds = %96
+  %99 = load float* %scevgep5.i63, align 4
+  %100 = fpext float %99 to double
+  %101 = fcmp olt double %100, 0.000000e+00
+  br i1 %101, label %102, label %103
+
+; <label>:102                                     ; preds = %98
+  store i16 0, i16* @is_decoded_1, align 2
+  br label %103
+
+; <label>:103                                     ; preds = %102, %98
+  store float 1.000000e+00, float* %scevgep5.i63, align 4
+  br label %104
+
+; <label>:104                                     ; preds = %103, %96, %95
+  %indvar.next.i64 = add i64 %indvar.i61, 1
+  %exitcond1 = icmp eq i64 %indvar.next.i64, %tmp4.i59
+  br i1 %exitcond1, label %checkIsdecoded1.exit.loopexit, label %86
+
+checkIsdecoded1.exit.loopexit:                    ; preds = %104
+  br label %checkIsdecoded1.exit
+
+checkIsdecoded1.exit:                             ; preds = %checkIsdecoded1.exit.loopexit, %update_aPosteriori11.exit
+  %105 = getelementptr [18 x i8]* @.str30, i64 0, i64 0
+  %106 = tail call zeroext i16 @read_uint16(i8* %105) nounwind
+  %107 = load i16* @is_decoded_1, align 2
+  %108 = icmp ne i16 %106, 0
+  %not. = icmp ne i16 %107, 0
+  %109 = and i1 %108, %not.
+  %110 = zext i1 %109 to i16
+  %111 = getelementptr [14 x i8]* @.str31, i64 0, i64 0
+  tail call void @write_uint16(i8* %111, i16 zeroext %110) nounwind
+  br label %1
+}
+
+declare void @write_uint8(i8*, i8 zeroext)
+
+declare zeroext i8 @read_uint8(i8*)
+
+define void @top_daemon_2() noreturn nounwind {
+  br label %1
+
+; <label>:1                                       ; preds = %checkIsdecoded2.exit, %0
+  %2 = getelementptr [24 x i8]* @.str24, i64 0, i64 0
+  %3 = tail call zeroext i8 @read_uint8(i8* %2) nounwind
+  %4 = load i16* @ncols, align 2
+  %5 = icmp eq i16 %4, 0
+  br i1 %5, label %initialize_aPriori2.exit, label %bb.nph.i
+
+bb.nph.i:                                         ; preds = %1
+  %6 = load float* @ebbyNo, align 4
+  %7 = load float* @rate, align 4
+  %8 = fmul float %7, %6
+  %tmp3.i = icmp ugt i16 %4, 1
+  %.op.i = add i16 %4, -1
+  %9 = zext i16 %.op.i to i64
+  %.op8.i = add i64 %9, 1
+  %tmp6.i = select i1 %tmp3.i, i64 %.op8.i, i64 1
+  br label %10
+
+; <label>:10                                      ; preds = %10, %bb.nph.i
+  %indvar.i = phi i64 [ 0, %bb.nph.i ], [ %indvar.next.i, %10 ]
+  %scevgep.i = getelementptr [512 x float]* @code_block2, i64 0, i64 %indvar.i
+  %scevgep7.i = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar.i
+  %11 = load float* %scevgep.i, align 4
+  %12 = fmul float %11, -4.000000e+00
+  %13 = fmul float %8, %12
+  store float %13, float* %scevgep7.i, align 4
+  %indvar.next.i = add i64 %indvar.i, 1
+  %exitcond11 = icmp eq i64 %indvar.next.i, %tmp6.i
+  br i1 %exitcond11, label %._crit_edge.i, label %10
+
+._crit_edge.i:                                    ; preds = %10
+  br i1 %5, label %initialize_aPriori2.exit, label %bb.nph.i.i.preheader
+
+bb.nph.i.i.preheader:                             ; preds = %._crit_edge.i
+  br label %bb.nph.i.i
+
+bb.nph.i.i:                                       ; preds = %bb.nph.i.i, %bb.nph.i.i.preheader
+  %indvar.i.i = phi i64 [ %tmp, %bb.nph.i.i ], [ 0, %bb.nph.i.i.preheader ]
+  %scevgep.i.i = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar.i.i
+  %tmp9 = add i64 %indvar.i.i, 1
+  %tmp2.i.i = trunc i64 %tmp9 to i32
+  %tmp = add i64 %indvar.i.i, 1
+  %14 = load float* %scevgep.i.i, align 4
+  %15 = getelementptr [13 x i8]* @.str1, i64 0, i64 0
+  tail call void @write_float32(i8* %15, float %14) nounwind
+  %16 = load i16* @ncols, align 2
+  %17 = zext i16 %16 to i32
+  %18 = icmp slt i32 %tmp2.i.i, %17
+  br i1 %18, label %bb.nph.i.i, label %initialize_aPriori2.exit.loopexit
+
+initialize_aPriori2.exit.loopexit:                ; preds = %bb.nph.i.i
+  br label %initialize_aPriori2.exit
+
+initialize_aPriori2.exit:                         ; preds = %initialize_aPriori2.exit.loopexit, %._crit_edge.i, %1
+  %19 = getelementptr [18 x i8]* @.str25, i64 0, i64 0
+  tail call void @write_uint8(i8* %19, i8 zeroext 1) nounwind
+  %20 = load i16* @ncol_ind_12, align 2
+  %21 = icmp eq i16 %20, 0
+  br i1 %21, label %initializeMessage12.exit, label %bb.nph.i3
+
+bb.nph.i3:                                        ; preds = %initialize_aPriori2.exit
+  %tmp.i1 = icmp ugt i16 %20, 1
+  %.op.i2 = add i16 %20, -1
+  %22 = zext i16 %.op.i2 to i64
+  %.op7.i = add i64 %22, 1
+  %tmp4.i = select i1 %tmp.i1, i64 %.op7.i, i64 1
+  br label %23
+
+; <label>:23                                      ; preds = %23, %bb.nph.i3
+  %indvar.i4 = phi i64 [ 0, %bb.nph.i3 ], [ %indvar.next.i6, %23 ]
+  %scevgep.i5 = getelementptr [512 x float]* @message12, i64 0, i64 %indvar.i4
+  %tmp8 = add i64 %indvar.i4, 3
+  %scevgep6.i = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp8
+  %24 = load i16* %scevgep6.i, align 2
+  %25 = add i16 %24, -1
+  %26 = zext i16 %25 to i64
+  %27 = getelementptr inbounds [512 x float]* @aPriori2, i64 0, i64 %26
+  %28 = load float* %27, align 4
+  store float %28, float* %scevgep.i5, align 4
+  %indvar.next.i6 = add i64 %indvar.i4, 1
+  %exitcond7 = icmp eq i64 %indvar.next.i6, %tmp4.i
+  br i1 %exitcond7, label %initializeMessage12.exit.loopexit, label %23
+
+initializeMessage12.exit.loopexit:                ; preds = %23
+  br label %initializeMessage12.exit
+
+initializeMessage12.exit:                         ; preds = %initializeMessage12.exit.loopexit, %initialize_aPriori2.exit
+  %29 = getelementptr [22 x i8]* @.str32, i64 0, i64 0
+  tail call void @write_uint8(i8* %29, i8 zeroext 1) nounwind
+  %30 = load i16* @ncols, align 2
+  %31 = icmp eq i16 %30, 0
+  br i1 %31, label %initialize_aPosteriori2.exit, label %bb.nph.i40
+
+bb.nph.i40:                                       ; preds = %initializeMessage12.exit
+  %tmp.i36 = icmp ugt i16 %30, 1
+  %.op.i37 = add i16 %30, -1
+  %32 = zext i16 %.op.i37 to i64
+  %.op6.i38 = add i64 %32, 1
+  %tmp4.i39 = select i1 %tmp.i36, i64 %.op6.i38, i64 1
+  br label %33
+
+; <label>:33                                      ; preds = %33, %bb.nph.i40
+  %indvar.i41 = phi i64 [ 0, %bb.nph.i40 ], [ %indvar.next.i44, %33 ]
+  %scevgep.i42 = getelementptr [512 x float]* @aPriori2, i64 0, i64 %indvar.i41
+  %scevgep5.i43 = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar.i41
+  %34 = load float* %scevgep.i42, align 4
+  store float %34, float* %scevgep5.i43, align 4
+  %indvar.next.i44 = add i64 %indvar.i41, 1
+  %exitcond6 = icmp eq i64 %indvar.next.i44, %tmp4.i39
+  br i1 %exitcond6, label %initialize_aPosteriori2.exit.loopexit, label %33
+
+initialize_aPosteriori2.exit.loopexit:            ; preds = %33
+  br label %initialize_aPosteriori2.exit
+
+initialize_aPosteriori2.exit:                     ; preds = %initialize_aPosteriori2.exit.loopexit, %initializeMessage12.exit
+  %35 = load i16* @ncol_ind_12, align 2
+  %36 = icmp eq i16 %35, 0
+  br i1 %36, label %initializeTransInfo12_11.exit, label %bb.nph.i50
+
+bb.nph.i50:                                       ; preds = %initialize_aPosteriori2.exit
+  %tmp.i47 = icmp ugt i16 %35, 1
+  %.op.i48 = add i16 %35, -1
+  %37 = zext i16 %.op.i48 to i64
+  %.op5.i = add i64 %37, 1
+  %tmp4.i49 = select i1 %tmp.i47, i64 %.op5.i, i64 1
+  br label %38
+
+; <label>:38                                      ; preds = %38, %bb.nph.i50
+  %indvar.i51 = phi i64 [ 0, %bb.nph.i50 ], [ %indvar.next.i53, %38 ]
+  %scevgep.i52 = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar.i51
+  store float 0.000000e+00, float* %scevgep.i52, align 4
+  %indvar.next.i53 = add i64 %indvar.i51, 1
+  %exitcond4 = icmp eq i64 %indvar.next.i53, %tmp4.i49
+  br i1 %exitcond4, label %bb.nph.i60.loopexit, label %38
+
+bb.nph.i60.loopexit:                              ; preds = %38
+  br label %bb.nph.i60
+
+bb.nph.i60:                                       ; preds = %bb.nph.i60, %bb.nph.i60.loopexit
+  %indvar.i61 = phi i64 [ %indvar.next.i63, %bb.nph.i60 ], [ 0, %bb.nph.i60.loopexit ]
+  %scevgep.i62 = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar.i61
+  store float 0.000000e+00, float* %scevgep.i62, align 4
+  %indvar.next.i63 = add i64 %indvar.i61, 1
+  %exitcond5 = icmp eq i64 %indvar.next.i63, %tmp4.i49
+  br i1 %exitcond5, label %initializeTransInfo12_11.exit.loopexit, label %bb.nph.i60
+
+initializeTransInfo12_11.exit.loopexit:           ; preds = %bb.nph.i60
+  br label %initializeTransInfo12_11.exit
+
+initializeTransInfo12_11.exit:                    ; preds = %initializeTransInfo12_11.exit.loopexit, %initialize_aPosteriori2.exit
+  tail call void @checkNodeComputeEngine12()
+  %39 = getelementptr [32 x i8]* @.str28, i64 0, i64 0
+  tail call void @write_uint8(i8* %39, i8 zeroext 1) nounwind
+  %40 = getelementptr [32 x i8]* @.str27, i64 0, i64 0
+  %41 = tail call zeroext i8 @read_uint8(i8* %40) nounwind
+  tail call void @transverseCorrection12()
+  br label %42
+
+; <label>:42                                      ; preds = %42, %initializeTransInfo12_11.exit
+  %indvar.i31 = phi i64 [ 0, %initializeTransInfo12_11.exit ], [ %indvar.next.i33, %42 ]
+  %scevgep.i32 = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar.i31
+  %43 = load float* %scevgep.i32, align 4
+  %44 = getelementptr [15 x i8]* @.str17, i64 0, i64 0
+  tail call void @write_float32(i8* %44, float %43) nounwind
+  %indvar.next.i33 = add i64 %indvar.i31, 1
+  %exitcond = icmp eq i64 %indvar.next.i33, 2
+  br i1 %exitcond, label %send_transverseCorrection12.exit, label %42
+
+send_transverseCorrection12.exit:                 ; preds = %42
+  %45 = getelementptr [26 x i8]* @.str33, i64 0, i64 0
+  %46 = tail call zeroext i8 @read_uint8(i8* %45) nounwind
+  %47 = load i16* @ncol_ind_12, align 2
+  %48 = icmp eq i16 %47, 0
+  br i1 %48, label %update_aPosteriori12.exit, label %bb.nph.i22
+
+bb.nph.i22:                                       ; preds = %send_transverseCorrection12.exit
+  %tmp.i18 = icmp ugt i16 %47, 1
+  %.op.i19 = add i16 %47, -1
+  %49 = zext i16 %.op.i19 to i64
+  %.op7.i20 = add i64 %49, 1
+  %tmp4.i21 = select i1 %tmp.i18, i64 %.op7.i20, i64 1
+  br label %50
+
+; <label>:50                                      ; preds = %50, %bb.nph.i22
+  %indvar.i23 = phi i64 [ 0, %bb.nph.i22 ], [ %indvar.next.i27, %50 ]
+  %scevgep.i24 = getelementptr [512 x float]* @ext_info12, i64 0, i64 %indvar.i23
+  %tmp3 = add i64 %indvar.i23, 3
+  %scevgep6.i26 = getelementptr [512 x i16]* @mem12, i64 0, i64 %tmp3
+  %51 = load i16* %scevgep6.i26, align 2
+  %52 = add i16 %51, -1
+  %53 = load float* %scevgep.i24, align 4
+  %54 = zext i16 %52 to i64
+  %55 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %54
+  %56 = load float* %55, align 4
+  %57 = fadd float %56, %53
+  store float %57, float* %55, align 4
+  %indvar.next.i27 = add i64 %indvar.i23, 1
+  %exitcond2 = icmp eq i64 %indvar.next.i27, %tmp4.i21
+  br i1 %exitcond2, label %update_aPosteriori12.exit.loopexit, label %50
+
+update_aPosteriori12.exit.loopexit:               ; preds = %50
+  br label %update_aPosteriori12.exit
+
+update_aPosteriori12.exit:                        ; preds = %update_aPosteriori12.exit.loopexit, %send_transverseCorrection12.exit
+  store i16 1, i16* @is_decoded_2, align 2
+  %58 = load i16* @ncols, align 2
+  %59 = icmp eq i16 %58, 0
+  br i1 %59, label %checkIsdecoded2.exit, label %bb.nph.i12
+
+bb.nph.i12:                                       ; preds = %update_aPosteriori12.exit
+  %tmp.i9 = icmp ugt i16 %58, 1
+  %.op.i10 = add i16 %58, -1
+  %60 = zext i16 %.op.i10 to i64
+  %.op6.i = add i64 %60, 1
+  %tmp4.i11 = select i1 %tmp.i9, i64 %.op6.i, i64 1
+  br label %61
+
+; <label>:61                                      ; preds = %82, %bb.nph.i12
+  %62 = phi i16 [ 1, %bb.nph.i12 ], [ %83, %82 ]
+  %indvar.i13 = phi i64 [ 0, %bb.nph.i12 ], [ %indvar.next.i15, %82 ]
+  %scevgep.i14 = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar.i13
+  %scevgep5.i = getelementptr [512 x float]* @code_block2, i64 0, i64 %indvar.i13
+  %63 = load float* %scevgep.i14, align 4
+  %64 = fpext float %63 to double
+  %65 = fcmp ogt double %64, 0.000000e+00
+  br i1 %65, label %66, label %73
+
+; <label>:66                                      ; preds = %61
+  %67 = load float* %scevgep5.i, align 4
+  %68 = fpext float %67 to double
+  %69 = fcmp ogt double %68, 0.000000e+00
+  br i1 %69, label %70, label %71
+
+; <label>:70                                      ; preds = %66
+  store i16 0, i16* @is_decoded_2, align 2
+  br label %71
+
+; <label>:71                                      ; preds = %70, %66
+  %72 = phi i16 [ 0, %70 ], [ %62, %66 ]
+  store float -1.000000e+00, float* %scevgep5.i, align 4
+  br label %82
+
+; <label>:73                                      ; preds = %61
+  %74 = fcmp olt double %64, 0.000000e+00
+  br i1 %74, label %75, label %82
+
+; <label>:75                                      ; preds = %73
+  %76 = load float* %scevgep5.i, align 4
+  %77 = fpext float %76 to double
+  %78 = fcmp olt double %77, 0.000000e+00
+  br i1 %78, label %79, label %80
+
+; <label>:79                                      ; preds = %75
+  store i16 0, i16* @is_decoded_2, align 2
+  br label %80
+
+; <label>:80                                      ; preds = %79, %75
+  %81 = phi i16 [ 0, %79 ], [ %62, %75 ]
+  store float 1.000000e+00, float* %scevgep5.i, align 4
+  br label %82
+
+; <label>:82                                      ; preds = %80, %73, %71
+  %83 = phi i16 [ %81, %80 ], [ %62, %73 ], [ %72, %71 ]
+  %indvar.next.i15 = add i64 %indvar.i13, 1
+  %exitcond1 = icmp eq i64 %indvar.next.i15, %tmp4.i11
+  br i1 %exitcond1, label %checkIsdecoded2.exit.loopexit, label %61
+
+checkIsdecoded2.exit.loopexit:                    ; preds = %82
+  %.lcssa = phi i16 [ %83, %82 ]
+  br label %checkIsdecoded2.exit
+
+checkIsdecoded2.exit:                             ; preds = %checkIsdecoded2.exit.loopexit, %update_aPosteriori12.exit
+  %84 = phi i16 [ 1, %update_aPosteriori12.exit ], [ %.lcssa, %checkIsdecoded2.exit.loopexit ]
+  %85 = getelementptr [18 x i8]* @.str30, i64 0, i64 0
+  tail call void @write_uint16(i8* %85, i16 zeroext %84) nounwind
+  %86 = getelementptr [14 x i8]* @.str31, i64 0, i64 0
+  %87 = tail call zeroext i16 @read_uint16(i8* %86) nounwind
+  %88 = getelementptr [14 x i8]* @.str34, i64 0, i64 0
+  tail call void @write_uint16(i8* %88, i16 zeroext %87) nounwind
+  br label %1
+}
+
+define void @daemon_3() noreturn nounwind {
+  br label %1
+
+; <label>:1                                       ; preds = %update_aPosteriori21.exit, %0
+  %2 = getelementptr [22 x i8]* @.str26, i64 0, i64 0
+  %3 = tail call zeroext i8 @read_uint8(i8* %2) nounwind
+  %4 = load i16* @ncol_ind_21, align 2
+  %5 = icmp eq i16 %4, 0
+  br i1 %5, label %initializeTransInfo21_22.exit, label %bb.nph.i
+
+bb.nph.i:                                         ; preds = %1
+  %tmp.i = icmp ugt i16 %4, 1
+  %.op.i = add i16 %4, -1
+  %6 = zext i16 %.op.i to i64
+  %.op7.i = add i64 %6, 1
+  %tmp4.i = select i1 %tmp.i, i64 %.op7.i, i64 1
+  br label %7
+
+; <label>:7                                       ; preds = %7, %bb.nph.i
+  %indvar.i = phi i64 [ 0, %bb.nph.i ], [ %indvar.next.i, %7 ]
+  %scevgep.i = getelementptr [512 x float]* @message21, i64 0, i64 %indvar.i
+  %tmp4 = add i64 %indvar.i, 3
+  %scevgep6.i = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp4
+  %8 = load i16* %scevgep6.i, align 2
+  %9 = add i16 %8, -1
+  %10 = zext i16 %9 to i64
+  %11 = getelementptr inbounds [512 x float]* @aPriori1, i64 0, i64 %10
+  %12 = load float* %11, align 4
+  store float %12, float* %scevgep.i, align 4
+  %indvar.next.i = add i64 %indvar.i, 1
+  %exitcond3 = icmp eq i64 %indvar.next.i, %tmp4.i
+  br i1 %exitcond3, label %bb.nph.i20.loopexit, label %7
+
+bb.nph.i20.loopexit:                              ; preds = %7
+  br label %bb.nph.i20
+
+bb.nph.i20:                                       ; preds = %bb.nph.i20, %bb.nph.i20.loopexit
+  %indvar.i21 = phi i64 [ %indvar.next.i23, %bb.nph.i20 ], [ 0, %bb.nph.i20.loopexit ]
+  %scevgep.i22 = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar.i21
+  store float 0.000000e+00, float* %scevgep.i22, align 4
+  %indvar.next.i23 = add i64 %indvar.i21, 1
+  %exitcond = icmp eq i64 %indvar.next.i23, %tmp4.i
+  br i1 %exitcond, label %bb.nph.i29.loopexit, label %bb.nph.i20
+
+bb.nph.i29.loopexit:                              ; preds = %bb.nph.i20
+  br label %bb.nph.i29
+
+bb.nph.i29:                                       ; preds = %bb.nph.i29, %bb.nph.i29.loopexit
+  %indvar.i30 = phi i64 [ %indvar.next.i32, %bb.nph.i29 ], [ 0, %bb.nph.i29.loopexit ]
+  %scevgep.i31 = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar.i30
+  store float 0.000000e+00, float* %scevgep.i31, align 4
+  %indvar.next.i32 = add i64 %indvar.i30, 1
+  %exitcond5 = icmp eq i64 %indvar.next.i32, %tmp4.i
+  br i1 %exitcond5, label %initializeTransInfo21_22.exit.loopexit, label %bb.nph.i29
+
+initializeTransInfo21_22.exit.loopexit:           ; preds = %bb.nph.i29
+  br label %initializeTransInfo21_22.exit
+
+initializeTransInfo21_22.exit:                    ; preds = %initializeTransInfo21_22.exit.loopexit, %1
+  tail call void @checkNodeComputeEngine21()
+  %13 = getelementptr [32 x i8]* @.str35, i64 0, i64 0
+  tail call void @write_uint8(i8* %13, i8 zeroext 1) nounwind
+  %14 = getelementptr [32 x i8]* @.str36, i64 0, i64 0
+  %15 = tail call zeroext i8 @read_uint8(i8* %14) nounwind
+  tail call void @transverseCorrection21()
+  br label %16
+
+; <label>:16                                      ; preds = %16, %initializeTransInfo21_22.exit
+  %indvar.i13 = phi i64 [ 0, %initializeTransInfo21_22.exit ], [ %indvar.next.i15, %16 ]
+  %scevgep.i14 = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar.i13
+  %17 = load float* %scevgep.i14, align 4
+  %18 = getelementptr [15 x i8]* @.str18, i64 0, i64 0
+  tail call void @write_float32(i8* %18, float %17) nounwind
+  %indvar.next.i15 = add i64 %indvar.i13, 1
+  %exitcond6 = icmp eq i64 %indvar.next.i15, 3
+  br i1 %exitcond6, label %send_transverseCorrection21.exit, label %16
+
+send_transverseCorrection21.exit:                 ; preds = %16
+  %19 = load i16* @ncol_ind_21, align 2
+  %20 = icmp eq i16 %19, 0
+  br i1 %20, label %update_aPosteriori21.exit, label %bb.nph.i5
+
+bb.nph.i5:                                        ; preds = %send_transverseCorrection21.exit
+  %tmp.i1 = icmp ugt i16 %19, 1
+  %.op.i2 = add i16 %19, -1
+  %21 = zext i16 %.op.i2 to i64
+  %.op7.i3 = add i64 %21, 1
+  %tmp4.i4 = select i1 %tmp.i1, i64 %.op7.i3, i64 1
+  br label %22
+
+; <label>:22                                      ; preds = %22, %bb.nph.i5
+  %indvar.i6 = phi i64 [ 0, %bb.nph.i5 ], [ %indvar.next.i10, %22 ]
+  %scevgep.i7 = getelementptr [512 x float]* @ext_info21, i64 0, i64 %indvar.i6
+  %tmp2 = add i64 %indvar.i6, 3
+  %scevgep6.i9 = getelementptr [512 x i16]* @mem21, i64 0, i64 %tmp2
+  %23 = load i16* %scevgep6.i9, align 2
+  %24 = add i16 %23, -1
+  %25 = load float* %scevgep.i7, align 4
+  %26 = zext i16 %24 to i64
+  %27 = getelementptr inbounds [512 x float]* @aPosteriori1, i64 0, i64 %26
+  %28 = load float* %27, align 4
+  %29 = fadd float %28, %25
+  store float %29, float* %27, align 4
+  %indvar.next.i10 = add i64 %indvar.i6, 1
+  %exitcond1 = icmp eq i64 %indvar.next.i10, %tmp4.i4
+  br i1 %exitcond1, label %update_aPosteriori21.exit.loopexit, label %22
+
+update_aPosteriori21.exit.loopexit:               ; preds = %22
+  br label %update_aPosteriori21.exit
+
+update_aPosteriori21.exit:                        ; preds = %update_aPosteriori21.exit.loopexit, %send_transverseCorrection21.exit
+  %30 = getelementptr [26 x i8]* @.str29, i64 0, i64 0
+  tail call void @write_uint8(i8* %30, i8 zeroext 1) nounwind
+  %31 = getelementptr [14 x i8]* @.str34, i64 0, i64 0
+  %32 = tail call zeroext i16 @read_uint16(i8* %31) nounwind
+  %33 = getelementptr [14 x i8]* @.str37, i64 0, i64 0
+  tail call void @write_uint16(i8* %33, i16 zeroext %32) nounwind
+  br label %1
+}
+
+define void @daemon_4() noreturn nounwind {
+  br label %send_aPosteriori.exit
+
+send_aPosteriori.exit.loopexit:                   ; preds = %bb.nph.i5
+  br label %send_aPosteriori.exit.backedge
+
+send_aPosteriori.exit:                            ; preds = %send_aPosteriori.exit.backedge, %0
+  %1 = getelementptr [22 x i8]* @.str32, i64 0, i64 0
+  %2 = tail call zeroext i8 @read_uint8(i8* %1) nounwind
+  %3 = load i16* @ncol_ind_22, align 2
+  %4 = icmp eq i16 %3, 0
+  br i1 %4, label %initializeTransInfo22_21.exit, label %bb.nph.i
+
+bb.nph.i:                                         ; preds = %send_aPosteriori.exit
+  %tmp.i = icmp ugt i16 %3, 1
+  %.op.i = add i16 %3, -1
+  %5 = zext i16 %.op.i to i64
+  %.op7.i = add i64 %5, 1
+  %tmp4.i = select i1 %tmp.i, i64 %.op7.i, i64 1
+  br label %6
+
+; <label>:6                                       ; preds = %6, %bb.nph.i
+  %indvar.i = phi i64 [ 0, %bb.nph.i ], [ %indvar.next.i, %6 ]
+  %scevgep.i = getelementptr [512 x float]* @message22, i64 0, i64 %indvar.i
+  %tmp8 = add i64 %indvar.i, 3
+  %scevgep6.i = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp8
+  %7 = load i16* %scevgep6.i, align 2
+  %8 = add i16 %7, -1
+  %9 = zext i16 %8 to i64
+  %10 = getelementptr inbounds [512 x float]* @aPriori2, i64 0, i64 %9
+  %11 = load float* %10, align 4
+  store float %11, float* %scevgep.i, align 4
+  %indvar.next.i = add i64 %indvar.i, 1
+  %exitcond7 = icmp eq i64 %indvar.next.i, %tmp4.i
+  br i1 %exitcond7, label %bb.nph.i9.loopexit, label %6
+
+bb.nph.i9.loopexit:                               ; preds = %6
+  br label %bb.nph.i9
+
+bb.nph.i9:                                        ; preds = %bb.nph.i9, %bb.nph.i9.loopexit
+  %indvar.i10 = phi i64 [ %indvar.next.i12, %bb.nph.i9 ], [ 0, %bb.nph.i9.loopexit ]
+  %scevgep.i11 = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar.i10
+  store float 0.000000e+00, float* %scevgep.i11, align 4
+  %indvar.next.i12 = add i64 %indvar.i10, 1
+  %exitcond = icmp eq i64 %indvar.next.i12, %tmp4.i
+  br i1 %exitcond, label %bb.nph.i18.loopexit, label %bb.nph.i9
+
+bb.nph.i18.loopexit:                              ; preds = %bb.nph.i9
+  br label %bb.nph.i18
+
+bb.nph.i18:                                       ; preds = %bb.nph.i18, %bb.nph.i18.loopexit
+  %indvar.i19 = phi i64 [ %indvar.next.i21, %bb.nph.i18 ], [ 0, %bb.nph.i18.loopexit ]
+  %scevgep.i20 = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar.i19
+  store float 0.000000e+00, float* %scevgep.i20, align 4
+  %indvar.next.i21 = add i64 %indvar.i19, 1
+  %exitcond9 = icmp eq i64 %indvar.next.i21, %tmp4.i
+  br i1 %exitcond9, label %initializeTransInfo22_21.exit.loopexit, label %bb.nph.i18
+
+initializeTransInfo22_21.exit.loopexit:           ; preds = %bb.nph.i18
+  br label %initializeTransInfo22_21.exit
+
+initializeTransInfo22_21.exit:                    ; preds = %initializeTransInfo22_21.exit.loopexit, %send_aPosteriori.exit
+  tail call void @checkNodeComputeEngine22()
+  %12 = getelementptr [32 x i8]* @.str36, i64 0, i64 0
+  tail call void @write_uint8(i8* %12, i8 zeroext 1) nounwind
+  %13 = getelementptr [32 x i8]* @.str35, i64 0, i64 0
+  %14 = tail call zeroext i8 @read_uint8(i8* %13) nounwind
+  tail call void @transverseCorrection22()
+  br label %15
+
+; <label>:15                                      ; preds = %15, %initializeTransInfo22_21.exit
+  %indvar.i29 = phi i64 [ 0, %initializeTransInfo22_21.exit ], [ %indvar.next.i31, %15 ]
+  %scevgep.i30 = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar.i29
+  %16 = load float* %scevgep.i30, align 4
+  %17 = getelementptr [15 x i8]* @.str19, i64 0, i64 0
+  tail call void @write_float32(i8* %17, float %16) nounwind
+  %indvar.next.i31 = add i64 %indvar.i29, 1
+  %exitcond10 = icmp eq i64 %indvar.next.i31, 3
+  br i1 %exitcond10, label %send_transverseCorrection22.exit, label %15
+
+send_transverseCorrection22.exit:                 ; preds = %15
+  %18 = load i16* @ncol_ind_22, align 2
+  %19 = icmp eq i16 %18, 0
+  br i1 %19, label %update_aPosteriori22.exit, label %bb.nph.i37
+
+bb.nph.i37:                                       ; preds = %send_transverseCorrection22.exit
+  %tmp.i33 = icmp ugt i16 %18, 1
+  %.op.i34 = add i16 %18, -1
+  %20 = zext i16 %.op.i34 to i64
+  %.op7.i35 = add i64 %20, 1
+  %tmp4.i36 = select i1 %tmp.i33, i64 %.op7.i35, i64 1
+  br label %21
+
+; <label>:21                                      ; preds = %21, %bb.nph.i37
+  %indvar.i38 = phi i64 [ 0, %bb.nph.i37 ], [ %indvar.next.i42, %21 ]
+  %scevgep.i39 = getelementptr [512 x float]* @ext_info22, i64 0, i64 %indvar.i38
+  %tmp6 = add i64 %indvar.i38, 3
+  %scevgep6.i41 = getelementptr [512 x i16]* @mem22, i64 0, i64 %tmp6
+  %22 = load i16* %scevgep6.i41, align 2
+  %23 = add i16 %22, -1
+  %24 = load float* %scevgep.i39, align 4
+  %25 = zext i16 %23 to i64
+  %26 = getelementptr inbounds [512 x float]* @aPosteriori2, i64 0, i64 %25
+  %27 = load float* %26, align 4
+  %28 = fadd float %27, %24
+  store float %28, float* %26, align 4
+  %indvar.next.i42 = add i64 %indvar.i38, 1
+  %exitcond5 = icmp eq i64 %indvar.next.i42, %tmp4.i36
+  br i1 %exitcond5, label %update_aPosteriori22.exit.loopexit, label %21
+
+update_aPosteriori22.exit.loopexit:               ; preds = %21
+  br label %update_aPosteriori22.exit
+
+update_aPosteriori22.exit:                        ; preds = %update_aPosteriori22.exit.loopexit, %send_transverseCorrection22.exit
+  %29 = getelementptr [26 x i8]* @.str33, i64 0, i64 0
+  tail call void @write_uint8(i8* %29, i8 zeroext 1) nounwind
+  %30 = getelementptr [14 x i8]* @.str37, i64 0, i64 0
+  %31 = tail call zeroext i16 @read_uint16(i8* %30) nounwind
+  br label %32
+
+; <label>:32                                      ; preds = %32, %update_aPosteriori22.exit
+  %indvar21.i = phi i64 [ 0, %update_aPosteriori22.exit ], [ %indvar.next22.i, %32 ]
+  %scevgep24.i = getelementptr [512 x float]* @message11, i64 0, i64 %indvar21.i
+  %33 = load float* %scevgep24.i, align 4
+  %34 = getelementptr [19 x i8]* @.str10, i64 0, i64 0
+  tail call void @write_float32(i8* %34, float %33) nounwind
+  %indvar.next22.i = add i64 %indvar21.i, 1
+  %exitcond11 = icmp eq i64 %indvar.next22.i, 4
+  br i1 %exitcond11, label %bb.nph10.i.loopexit, label %32
+
+bb.nph10.i.loopexit:                              ; preds = %32
+  br label %bb.nph10.i
+
+bb.nph10.i:                                       ; preds = %bb.nph10.i, %bb.nph10.i.loopexit
+  %indvar17.i = phi i64 [ %indvar.next18.i, %bb.nph10.i ], [ 0, %bb.nph10.i.loopexit ]
+  %scevgep20.i = getelementptr [512 x float]* @message12, i64 0, i64 %indvar17.i
+  %35 = load float* %scevgep20.i, align 4
+  %36 = getelementptr [19 x i8]* @.str11, i64 0, i64 0
+  tail call void @write_float32(i8* %36, float %35) nounwind
+  %indvar.next18.i = add i64 %indvar17.i, 1
+  %exitcond12 = icmp eq i64 %indvar.next18.i, 2
+  br i1 %exitcond12, label %bb.nph7.i.loopexit, label %bb.nph10.i
+
+bb.nph7.i.loopexit:                               ; preds = %bb.nph10.i
+  br label %bb.nph7.i
+
+bb.nph7.i:                                        ; preds = %bb.nph7.i, %bb.nph7.i.loopexit
+  %indvar13.i = phi i64 [ %indvar.next14.i, %bb.nph7.i ], [ 0, %bb.nph7.i.loopexit ]
+  %scevgep16.i = getelementptr [512 x float]* @message21, i64 0, i64 %indvar13.i
+  %37 = load float* %scevgep16.i, align 4
+  %38 = getelementptr [19 x i8]* @.str12, i64 0, i64 0
+  tail call void @write_float32(i8* %38, float %37) nounwind
+  %indvar.next14.i = add i64 %indvar13.i, 1
+  %exitcond13 = icmp eq i64 %indvar.next14.i, 3
+  br i1 %exitcond13, label %bb.nph.i53.loopexit, label %bb.nph7.i
+
+bb.nph.i53.loopexit:                              ; preds = %bb.nph7.i
+  br label %bb.nph.i53
+
+bb.nph.i53:                                       ; preds = %bb.nph.i53, %bb.nph.i53.loopexit
+  %indvar.i49 = phi i64 [ %indvar.next.i51, %bb.nph.i53 ], [ 0, %bb.nph.i53.loopexit ]
+  %scevgep.i50 = getelementptr [512 x float]* @message22, i64 0, i64 %indvar.i49
+  %39 = load float* %scevgep.i50, align 4
+  %40 = getelementptr [19 x i8]* @.str13, i64 0, i64 0
+  tail call void @write_float32(i8* %40, float %39) nounwind
+  %indvar.next.i51 = add i64 %indvar.i49, 1
+  %exitcond14 = icmp eq i64 %indvar.next.i51, 3
+  br i1 %exitcond14, label %send_message.exit.loopexit, label %bb.nph.i53
+
+send_message.exit.loopexit:                       ; preds = %bb.nph.i53
+  br label %send_message.exit
+
+send_message.exit:                                ; preds = %send_message.exit, %send_message.exit.loopexit
+  %indvar.i55 = phi i64 [ %indvar.next.i57, %send_message.exit ], [ 0, %send_message.exit.loopexit ]
+  %scevgep.i56 = getelementptr [512 x float]* @trans_info11_12, i64 0, i64 %indvar.i55
+  %41 = load float* %scevgep.i56, align 4
+  %42 = getelementptr [20 x i8]* @.str22, i64 0, i64 0
+  tail call void @write_float32(i8* %42, float %41) nounwind
+  %indvar.next.i57 = add i64 %indvar.i55, 1
+  %exitcond15 = icmp eq i64 %indvar.next.i57, 2
+  br i1 %exitcond15, label %send_tens_info11_12.exit.loopexit, label %send_message.exit
+
+send_tens_info11_12.exit.loopexit:                ; preds = %send_message.exit
+  br label %send_tens_info11_12.exit
+
+send_tens_info11_12.exit:                         ; preds = %send_tens_info11_12.exit, %send_tens_info11_12.exit.loopexit
+  %indvar.i60 = phi i64 [ %indvar.next.i62, %send_tens_info11_12.exit ], [ 0, %send_tens_info11_12.exit.loopexit ]
+  %scevgep.i61 = getelementptr [512 x float]* @trans_info12_11, i64 0, i64 %indvar.i60
+  %43 = load float* %scevgep.i61, align 4
+  %44 = getelementptr [20 x i8]* @.str23, i64 0, i64 0
+  tail call void @write_float32(i8* %44, float %43) nounwind
+  %indvar.next.i62 = add i64 %indvar.i60, 1
+  %exitcond16 = icmp eq i64 %indvar.next.i62, 2
+  br i1 %exitcond16, label %send_tens_info12_11.exit.loopexit, label %send_tens_info11_12.exit
+
+send_tens_info12_11.exit.loopexit:                ; preds = %send_tens_info11_12.exit
+  br label %send_tens_info12_11.exit
+
+send_tens_info12_11.exit:                         ; preds = %send_tens_info12_11.exit, %send_tens_info12_11.exit.loopexit
+  %indvar.i45 = phi i64 [ %indvar.next.i47, %send_tens_info12_11.exit ], [ 0, %send_tens_info12_11.exit.loopexit ]
+  %scevgep.i46 = getelementptr [512 x float]* @trans_info21_22, i64 0, i64 %indvar.i45
+  %45 = load float* %scevgep.i46, align 4
+  %46 = getelementptr [20 x i8]* @.str21, i64 0, i64 0
+  tail call void @write_float32(i8* %46, float %45) nounwind
+  %indvar.next.i47 = add i64 %indvar.i45, 1
+  %exitcond17 = icmp eq i64 %indvar.next.i47, 2
+  br i1 %exitcond17, label %send_tens_info21_22.exit.loopexit, label %send_tens_info12_11.exit
+
+send_tens_info21_22.exit.loopexit:                ; preds = %send_tens_info12_11.exit
+  br label %send_tens_info21_22.exit
+
+send_tens_info21_22.exit:                         ; preds = %send_tens_info21_22.exit, %send_tens_info21_22.exit.loopexit
+  %indvar.i24 = phi i64 [ %indvar.next.i26, %send_tens_info21_22.exit ], [ 0, %send_tens_info21_22.exit.loopexit ]
+  %scevgep.i25 = getelementptr [512 x float]* @trans_info22_21, i64 0, i64 %indvar.i24
+  %47 = load float* %scevgep.i25, align 4
+  %48 = getelementptr [20 x i8]* @.str20, i64 0, i64 0
+  tail call void @write_float32(i8* %48, float %47) nounwind
+  %indvar.next.i26 = add i64 %indvar.i24, 1
+  %exitcond18 = icmp eq i64 %indvar.next.i26, 2
+  br i1 %exitcond18, label %send_tens_info22_21.exit, label %send_tens_info21_22.exit
+
+send_tens_info22_21.exit:                         ; preds = %send_tens_info21_22.exit
+  %49 = load i16* @ncols, align 2
+  %50 = icmp eq i16 %49, 0
+  br i1 %50, label %send_aPosteriori.exit.backedge, label %bb.nph4.i.preheader
+
+send_aPosteriori.exit.backedge:                   ; preds = %.preheader.i, %send_tens_info22_21.exit, %send_aPosteriori.exit.loopexit
+  br label %send_aPosteriori.exit
+
+bb.nph4.i.preheader:                              ; preds = %send_tens_info22_21.exit
+  br label %bb.nph4.i
+
+.preheader.i:                                     ; preds = %bb.nph4.i
+  %.lcssa = phi i16 [ %54, %bb.nph4.i ]
+  %51 = icmp eq i16 %.lcssa, 0
+  br i1 %51, label %send_aPosteriori.exit.backedge, label %bb.nph.i5.preheader
+
+bb.nph.i5.preheader:                              ; preds = %.preheader.i
+  br label %bb.nph.i5
+
+bb.nph4.i:                                        ; preds = %bb.nph4.i, %bb.nph4.i.preheader
+  %indvar6.i = phi i64 [ %tmp66, %bb.nph4.i ], [ 0, %bb.nph4.i.preheader ]
+  %scevgep8.i = getelementptr [512 x float]* @aPosteriori1, i64 0, i64 %indvar6.i
+  %tmp3 = add i64 %indvar6.i, 1
+  %tmp10.i = trunc i64 %tmp3 to i32
+  %tmp66 = add i64 %indvar6.i, 1
+  %52 = load float* %scevgep8.i, align 4
+  %53 = getelementptr [17 x i8]* @.str14, i64 0, i64 0
+  tail call void @write_float32(i8* %53, float %52) nounwind
+  %54 = load i16* @ncols, align 2
+  %55 = zext i16 %54 to i32
+  %56 = icmp slt i32 %tmp10.i, %55
+  br i1 %56, label %bb.nph4.i, label %.preheader.i
+
+bb.nph.i5:                                        ; preds = %bb.nph.i5, %bb.nph.i5.preheader
+  %indvar.i1 = phi i64 [ %tmp, %bb.nph.i5 ], [ 0, %bb.nph.i5.preheader ]
+  %scevgep.i2 = getelementptr [512 x float]* @aPosteriori2, i64 0, i64 %indvar.i1
+  %tmp1 = add i64 %indvar.i1, 1
+  %tmp5.i4 = trunc i64 %tmp1 to i32
+  %tmp = add i64 %indvar.i1, 1
+  %57 = load float* %scevgep.i2, align 4
+  %58 = getelementptr [17 x i8]* @.str15, i64 0, i64 0
+  tail call void @write_float32(i8* %58, float %57) nounwind
+  %59 = load i16* @ncols, align 2
+  %60 = zext i16 %59 to i32
+  %61 = icmp slt i32 %tmp5.i4, %60
+  br i1 %61, label %bb.nph.i5, label %send_aPosteriori.exit.loopexit
+}

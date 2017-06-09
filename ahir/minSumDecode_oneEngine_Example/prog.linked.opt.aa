@@ -1,0 +1,1401 @@
+$storage  Nitr_required : $uint<16> // memory space index = 0  base address = 0  word size = 16
+// can point into 
+$storage  aPosteriori : $array[512] $of $float<8,23> // memory space index = 1  base address = 0  word size = 32
+// can point into 
+$storage  aPriori : $array[512] $of $float<8,23> // memory space index = 2  base address = 0  word size = 32
+// can point into 
+$storage  code_block : $array[512] $of $float<8,23> // memory space index = 3  base address = 0  word size = 32
+// can point into 
+$pipe  code_block_decoded : $float<8,23>  $depth 1 
+// can point into 
+$pipe  code_block_in : $float<8,23>  $depth 2 
+// can point into 
+$storage  ebbyNo : $float<8,23> // memory space index = 4  base address = 0  word size = 32
+// can point into 
+$pipe  ebbyNo_in : $float<8,23>  $depth 2 
+// can point into 
+$storage  ext_info : $array[512] $of $float<8,23> // memory space index = 5  base address = 0  word size = 32
+// can point into 
+$storage  is_decoded : $uint<16> // memory space index = 6  base address = 0  word size = 16
+// can point into 
+$pipe  matrix_in : $uint<16>  $depth 2 
+// can point into 
+$storage  maxNitr : $uint<16> // memory space index = 7  base address = 0  word size = 16
+// can point into 
+$pipe  maxNitr_in : $uint<16>  $depth 2 
+// can point into 
+$storage  mem : $array[512] $of $uint<16> // memory space index = 8  base address = 0  word size = 16
+// can point into 
+$storage  message : $array[512] $of $float<8,23> // memory space index = 9  base address = 0  word size = 32
+// can point into 
+$storage  ncol_ind : $uint<16> // memory space index = 10  base address = 0  word size = 16
+// can point into 
+$storage  ncols : $uint<16> // memory space index = 11  base address = 0  word size = 16
+// can point into 
+$pipe  nitr_required : $uint<16>  $depth 1 
+// can point into 
+$storage  nrows : $uint<16> // memory space index = 12  base address = 0  word size = 16
+// can point into 
+$storage  rate : $float<8,23> // memory space index = 13  base address = 0  word size = 32
+// can point into 
+$pipe  rate_in : $float<8,23>  $depth 2 
+// can point into 
+$module [checkIsdecoded]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000001  )
+    iNsTr_1 := ncols
+    iNsTr_2 := (iNsTr_1 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_2 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_1 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_1 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_5 := ($cast ($uint<64>) xx_xop )
+    xx_xop6 := (iNsTr_5 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop6  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_10_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_10_bb_2 // type of target is $uint<64>
+    $endmerge
+    scevgep5 := @(code_block[indvar])
+    scevgep := @(aPosteriori[indvar])
+    iNsTr_7 := ->(scevgep)
+    iNsTr_8 := ($cast ($float<11,52>) iNsTr_7 )
+    iNsTr_9 := (iNsTr_8 > ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_9 $then 
+    $place[bb_2_bb_3]
+    $else 
+    $place[bb_2_bb_6]
+    $endif
+    $merge bb_2_bb_3 
+    $endmerge
+    iNsTr_11 := ->(scevgep5)
+    iNsTr_12 := ($cast ($float<11,52>) iNsTr_11 )
+    iNsTr_13 := (iNsTr_12 > ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_13 $then 
+    $place[bb_3_bb_4]
+    $else 
+    $place[bb_3_bb_5]
+    $endif
+    $merge bb_3_bb_4 
+    $endmerge
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000000  )
+    $place[bb_4_bb_5]
+    $merge bb_3_bb_5 bb_4_bb_5 
+    $endmerge
+    ->(scevgep5) := ($bitcast ($float<8,23>) _f-1.000000e+00 )
+    $place[bb_5_bb_10]
+    $merge bb_2_bb_6 
+    $endmerge
+    iNsTr_15 := (iNsTr_8 < ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_15 $then 
+    $place[bb_6_bb_7]
+    $else 
+    $place[bb_6_bb_10]
+    $endif
+    $merge bb_6_bb_7 
+    $endmerge
+    iNsTr_21 := ->(scevgep5)
+    iNsTr_22 := ($cast ($float<11,52>) iNsTr_21 )
+    iNsTr_23 := (iNsTr_22 < ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_23 $then 
+    $place[bb_7_bb_8]
+    $else 
+    $place[bb_7_bb_9]
+    $endif
+    $merge bb_7_bb_8 
+    $endmerge
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000000  )
+    $place[bb_8_bb_9]
+    $merge bb_7_bb_9 bb_8_bb_9 
+    $endmerge
+    ->(scevgep5) := ($bitcast ($float<8,23>) _f1.000000e+00 )
+    $place[bb_9_bb_10]
+    $merge bb_5_bb_10 bb_6_bb_10 bb_9_bb_10 
+    $endmerge
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_10_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_10_bb_2]
+    $endif
+    $merge bb_10_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [checkNodeComputeEngine]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := nrows
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge12]
+    $else 
+    $place[bb_0_bbx_xnph11x_xpreheader]
+    $endif
+    $merge bb_0_bbx_xnph11x_xpreheader 
+    $endmerge
+    $place[bbx_xnph11x_xpreheader_bbx_xnph11]
+    $merge bbx_xnph11x_xpreheader_bbx_xnph11 xx_x_crit_edge9_bbx_xnph11 
+    $phi iNsTr_5 := 			  ($cast ($uint<16>) iNsTr_6 ) $on xx_x_crit_edge9_bbx_xnph11			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bbx_xnph11x_xpreheader_bbx_xnph11 // type of target is $uint<16>
+    $endmerge
+    tmp17 := (iNsTr_5 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    iNsTr_6 := (iNsTr_5 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    iNsTr_8 := ncol_ind
+    iNsTr_9 := ($cast ($uint<32>) iNsTr_5 )
+    iNsTr_10 := nrows
+    iNsTr_11 := ($cast ($uint<32>) iNsTr_10 )
+    iNsTr_12 := (iNsTr_11 + ($bitcast ($uint<32>) _b11111111111111111111111111111111  ))
+    iNsTr_13 := (iNsTr_9 == iNsTr_12)
+    iNsTr_14 := ($cast ($uint<64>) iNsTr_8 )
+    iNsTr_15 := ($cast ($uint<64>) iNsTr_5 )
+    iNsTr_16 := (iNsTr_15 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    iNsTr_17 := (iNsTr_16 + iNsTr_14)
+    $if iNsTr_13 $then 
+    $place[bbx_xnph11_bb_3]
+    $else 
+    $place[bbx_xnph11_bb_4]
+    $endif
+    $merge bbx_xnph11_bb_4 
+    $endmerge
+    iNsTr_23 := (iNsTr_15 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000100  ))
+    iNsTr_24 := (iNsTr_23 + iNsTr_14)
+    iNsTr_25 := @(mem[iNsTr_17])
+    iNsTr_26 := @(mem[iNsTr_24])
+    iNsTr_27 := ->(iNsTr_25)
+    iNsTr_28 := ->(iNsTr_26)
+    iNsTr_29 := (iNsTr_28 - iNsTr_27)
+    $place[bb_4_bb_5]
+    $merge bbx_xnph11_bb_3 
+    $endmerge
+    iNsTr_19 := @(mem[iNsTr_17])
+    iNsTr_20 := ->(iNsTr_19)
+    xx_xneg1 := (iNsTr_8 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    iNsTr_21 := (xx_xneg1 - iNsTr_20)
+    $place[bb_3_bb_5]
+    $merge bb_3_bb_5 bb_4_bb_5 
+    $phi rangex_x0 := 			  ($cast ($uint<16>) iNsTr_21 ) $on bb_3_bb_5			  ($cast ($uint<16>) iNsTr_29 ) $on bb_4_bb_5 // type of target is $uint<16>
+    $endmerge
+    iNsTr_31 := (rangex_x0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_31 $then 
+    $place[bb_5_xx_x_crit_edge9]
+    $else 
+    $place[bb_5_bbx_xnph8]
+    $endif
+    $merge bb_5_bbx_xnph8 
+    $endmerge
+    iNsTr_35 := ($cast ($uint<64>) iNsTr_5 )
+    iNsTr_36 := (iNsTr_35 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    iNsTr_37 := (iNsTr_36 + iNsTr_14)
+    iNsTr_38 := @(mem[iNsTr_37])
+    iNsTr_39 := ->(iNsTr_38)
+    tmp15 := (iNsTr_39 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    $place[bbx_xnph8_bbx_xnph]
+    $merge bbx_xnph8_bbx_xnph xx_x_crit_edge_bbx_xnph 
+    $phi iNsTr_42 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bbx_xnph8_bbx_xnph			  ($cast ($uint<16>) iNsTr_66 ) $on xx_x_crit_edge_bbx_xnph // type of target is $uint<16>
+    $endmerge
+    tmp16 := (tmp15 + iNsTr_42)
+    $place[bbx_xnph_bb_8]
+    $merge bb_14_bb_8 bbx_xnph_bb_8 
+    $phi exorx_x25 := 			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000000  ) ) $on bbx_xnph_bb_8			  ($cast ($uint<8>) exorx_x1 ) $on bb_14_bb_8 // type of target is $uint<8>
+    $phi iNsTr_44 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bbx_xnph_bb_8			  ($cast ($uint<16>) iNsTr_55 ) $on bb_14_bb_8 // type of target is $uint<16>
+    $phi valx_x23 := 			  ($cast ($float<8,23>) ($bitcast ($float<8,23>) _h0  ) ) $on bbx_xnph_bb_8			  ($cast ($float<8,23>) valx_x1 ) $on bb_14_bb_8 // type of target is $float<8,23>
+    $phi flagx_x12 := 			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000000  ) ) $on bbx_xnph_bb_8			  ($cast ($uint<8>) flagx_x0 ) $on bb_14_bb_8 // type of target is $uint<8>
+    $endmerge
+    tmp13 := (tmp15 + iNsTr_44)
+    iNsTr_45 := ($cast ($uint<64>) tmp13 )
+    iNsTr_46 := @(message[iNsTr_45])
+    iNsTr_47 := ->(iNsTr_46)
+    iNsTr_48 := ($cast ($float<11,52>) iNsTr_47 )
+    iNsTr_49 := (iNsTr_48 < ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_49 $then 
+    $place[bb_8_bb_9]
+    $else 
+    $place[bb_8_bb_10]
+    $endif
+    $merge bb_8_bb_9 
+    $endmerge
+    iNsTr_51 := (($bitcast ($float<8,23>) _h80000000  ) - iNsTr_47)
+    $place[bb_9_bb_10]
+    $merge bb_8_bb_10 bb_9_bb_10 
+    $phi temp1x_x0 := 			  ($cast ($float<8,23>) iNsTr_51 ) $on bb_9_bb_10			  ($cast ($float<8,23>) iNsTr_47 ) $on bb_8_bb_10 // type of target is $float<8,23>
+    $endmerge
+    iNsTr_53 := (iNsTr_44 == iNsTr_42)
+    $if iNsTr_53 $then 
+    $place[bb_10_bb_14]
+    $else 
+    $place[bb_10_bb_11]
+    $endif
+    $merge bb_10_bb_11 
+    $endmerge
+    iNsTr_57 := (iNsTr_48 < ($bitcast ($float<11,52>) _h0  ))
+    iNsTr_58 := ($cast ($uint<8>) iNsTr_57 )
+    exorx_x0 := (iNsTr_58 ^ exorx_x25)
+    iNsTr_59 := (flagx_x12 == ($bitcast ($uint<8>) _b00000000  ))
+    $if iNsTr_59 $then 
+    $place[bb_11_bb_14]
+    $else 
+    $place[bb_11_bb_12]
+    $endif
+    $merge bb_11_bb_12 
+    $endmerge
+    iNsTr_68 := (temp1x_x0 < valx_x23)
+    $if iNsTr_68 $then 
+    $place[bb_12_bb_13]
+    $else 
+    $place[bb_12_bb_14]
+    $endif
+    $merge bb_12_bb_13 
+    $endmerge
+    $place[bb_13_bb_14]
+    $merge bb_10_bb_14 bb_11_bb_14 bb_12_bb_14 bb_13_bb_14 
+    $phi flagx_x0 := 			  ($cast ($uint<8>) flagx_x12 ) $on bb_10_bb_14			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000001  ) ) $on bb_11_bb_14			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000001  ) ) $on bb_13_bb_14			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000001  ) ) $on bb_12_bb_14 // type of target is $uint<8>
+    $phi valx_x1 := 			  ($cast ($float<8,23>) valx_x23 ) $on bb_10_bb_14			  ($cast ($float<8,23>) temp1x_x0 ) $on bb_11_bb_14			  ($cast ($float<8,23>) temp1x_x0 ) $on bb_13_bb_14			  ($cast ($float<8,23>) valx_x23 ) $on bb_12_bb_14 // type of target is $float<8,23>
+    $phi exorx_x1 := 			  ($cast ($uint<8>) exorx_x25 ) $on bb_10_bb_14			  ($cast ($uint<8>) exorx_x0 ) $on bb_11_bb_14			  ($cast ($uint<8>) exorx_x0 ) $on bb_13_bb_14			  ($cast ($uint<8>) exorx_x0 ) $on bb_12_bb_14 // type of target is $uint<8>
+    $endmerge
+    iNsTr_55 := (iNsTr_44 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    exitcond1 := (iNsTr_55 == rangex_x0)
+    $if exitcond1 $then 
+    $place[bb_14_xx_x_crit_edge]
+    $else 
+    $place[bb_14_bb_8]
+    $endif
+    $merge bb_14_xx_x_crit_edge 
+    $phi exorx_x1x_xlcssa := 			  ($cast ($uint<8>) exorx_x1 ) $on bb_14_xx_x_crit_edge // type of target is $uint<8>
+    $phi valx_x1x_xlcssa := 			  ($cast ($float<8,23>) valx_x1 ) $on bb_14_xx_x_crit_edge // type of target is $float<8,23>
+    $endmerge
+    iNsTr_61 := (exorx_x1x_xlcssa == ($bitcast ($uint<8>) _b00000000  ))
+    signx_x0 := ( $mux iNsTr_61 ($bitcast ($float<8,23>) _f1.000000e+00 )  ($bitcast ($float<8,23>) _f-1.000000e+00 ) ) 
+    iNsTr_62 := (valx_x1x_xlcssa * signx_x0)
+    iNsTr_63 := ($cast ($uint<64>) tmp16 )
+    iNsTr_64 := @(ext_info[iNsTr_63])
+    ->(iNsTr_64) := iNsTr_62
+    iNsTr_66 := (iNsTr_42 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    exitcond := (iNsTr_66 == rangex_x0)
+    $if exitcond $then 
+    $place[xx_x_crit_edge_xx_x_crit_edge9x_xloopexit]
+    $else 
+    $place[xx_x_crit_edge_bbx_xnph]
+    $endif
+    $merge xx_x_crit_edge_xx_x_crit_edge9x_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edge9x_xloopexit_xx_x_crit_edge9]
+    $merge bb_5_xx_x_crit_edge9 xx_x_crit_edge9x_xloopexit_xx_x_crit_edge9 
+    $endmerge
+    iNsTr_33 := (tmp17 < iNsTr_10)
+    $if iNsTr_33 $then 
+    $place[xx_x_crit_edge9_bbx_xnph11]
+    $else 
+    $place[xx_x_crit_edge9_xx_x_crit_edge12x_xloopexit]
+    $endif
+    $merge xx_x_crit_edge9_xx_x_crit_edge12x_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edge12x_xloopexit_xx_x_crit_edge12]
+    $merge bb_0_xx_x_crit_edge12 xx_x_crit_edge12x_xloopexit_xx_x_crit_edge12 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [ebbyNo_initializer_in_progx_xoptx_xo]
+$in ()
+$out ()
+$is
+{
+  ebbyNo := _h0 
+  $attribute nooptimize 
+}
+$module [rate_initializer_in_progx_xoptx_xo]
+$in ()
+$out ()
+$is
+{
+  rate := _h0 
+  $attribute nooptimize 
+}
+$module [progx_xoptx_xo_storage_initializer_]
+$in ()
+$out ()
+$is
+{
+  $parallelblock[pb]
+  {
+    $call ebbyNo_initializer_in_progx_xoptx_xo () () 
+    $call rate_initializer_in_progx_xoptx_xo () () 
+  }
+  $attribute initializer 
+}
+$module [global_storage_initializer_]
+$in ()
+$out ()
+$is
+{
+  $parallelblock[pb]
+  {
+    $call progx_xoptx_xo_storage_initializer_ () () 
+  }
+}
+$module [initInputs]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_1 := maxNitr_in
+    maxNitr := iNsTr_1
+    iNsTr_4 := ebbyNo_in
+    ebbyNo := iNsTr_4
+    $place[bbx_xnph3_bb_1]
+    $merge bb_1_bb_1 bbx_xnph3_bb_1 
+    $phi indvar7 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph3_bb_1			  ($cast ($uint<64>) indvarx_xnext8 ) $on bb_1_bb_1 // type of target is $uint<64>
+    $endmerge
+    scevgep10 := @(mem[indvar7])
+    iNsTr_8 := matrix_in
+    ->(scevgep10) := iNsTr_8
+    indvarx_xnext8 := (indvar7 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond := (indvarx_xnext8 == ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    $if exitcond $then 
+    $place[bb_1_xx_x_crit_edge4]
+    $else 
+    $place[bb_1_bb_1]
+    $endif
+    $merge bb_1_xx_x_crit_edge4 
+    $endmerge
+    iNsTr_11 := @(mem[($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  )])
+    iNsTr_12 := ->(iNsTr_11)
+    nrows := iNsTr_12
+    iNsTr_14 := @(mem[($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  )])
+    iNsTr_15 := ->(iNsTr_14)
+    ncols := iNsTr_15
+    iNsTr_17 := @(mem[($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000010  )])
+    iNsTr_18 := ->(iNsTr_17)
+    ncol_ind := iNsTr_18
+    iNsTr_20 := (($bitcast ($uint<16>) _b0000000000000000  ) - iNsTr_18)
+    iNsTr_21 := (iNsTr_12 == iNsTr_20)
+    $if iNsTr_21 $then 
+    $place[xx_x_crit_edge4_xx_x_crit_edge]
+    $else 
+    $place[xx_x_crit_edge4_bbx_xnph]
+    $endif
+    $merge xx_x_crit_edge4_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_12 + iNsTr_18)
+    tmp1 := ($cast ($uint<64>) tmp )
+    $place[bbx_xnph_bb_4]
+    $merge bbx_xnph_bb_4 
+    $phi indvar_at_entry := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_4 // type of target is $uint<64>
+    $endmerge
+    $dopipeline $depth 16 $buffering 2
+    $fullrate 
+    $merge $entry $loopback 
+    $phi indvar := 			  ($cast ($uint<64>) indvarx_xnext ) $on $loopback			  indvar_at_entry $on $entry // type of target is $uint<64>
+    $endmerge
+    tmp3 := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    scevgep := @(mem[tmp3])
+    iNsTr_30 := matrix_in
+    ->(scevgep) := iNsTr_30
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond2 := (indvarx_xnext == tmp1)
+    bb_4_xx_x_crit_edgex_xloopexit_taken := exitcond2
+    $while ( ~ exitcond2 )
+    $if bb_4_xx_x_crit_edgex_xloopexit_taken $then 
+    $place[bb_4_xx_x_crit_edgex_xloopexit]
+    $endif
+    $merge bb_4_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge xx_x_crit_edge4_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    iNsTr_24 := rate_in
+    rate := iNsTr_24
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [initializeExtrinsicInfo]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncol_ind
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_4 := ($cast ($uint<64>) xx_xop )
+    xx_xop5 := (iNsTr_4 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop5  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_2_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_2_bb_2 // type of target is $uint<64>
+    $endmerge
+    scevgep := @(ext_info[indvar])
+    ->(scevgep) := ($bitcast ($float<8,23>) _h0  )
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_2_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_2_bb_2]
+    $endif
+    $merge bb_2_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [initializeMessage]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncol_ind
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_4 := ($cast ($uint<64>) xx_xop )
+    xx_xop7 := (iNsTr_4 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop7  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_2_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_2_bb_2 // type of target is $uint<64>
+    $endmerge
+    tmp2 := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    scevgep6 := @(mem[tmp2])
+    scevgep := @(message[indvar])
+    iNsTr_6 := ->(scevgep6)
+    iNsTr_7 := (iNsTr_6 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_8 := ($cast ($uint<64>) iNsTr_7 )
+    iNsTr_9 := @(aPriori[iNsTr_8])
+    iNsTr_10 := ->(iNsTr_9)
+    ->(scevgep) := iNsTr_10
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_2_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_2_bb_2]
+    $endif
+    $merge bb_2_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [initialize_aPosteriori]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncols
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_4 := ($cast ($uint<64>) xx_xop )
+    xx_xop6 := (iNsTr_4 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop6  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_2_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_2_bb_2 // type of target is $uint<64>
+    $endmerge
+    scevgep5 := @(aPosteriori[indvar])
+    scevgep := @(aPriori[indvar])
+    iNsTr_6 := ->(scevgep)
+    ->(scevgep5) := iNsTr_6
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_2_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_2_bb_2]
+    $endif
+    $merge bb_2_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [initialize_aPriori]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncols
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    iNsTr_4 := ebbyNo
+    iNsTr_5 := rate
+    iNsTr_6 := (iNsTr_5 * iNsTr_4)
+    tmp := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_7 := ($cast ($uint<64>) xx_xop )
+    xx_xop6 := (iNsTr_7 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop6  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_2_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_2_bb_2 // type of target is $uint<64>
+    $endmerge
+    scevgep5 := @(aPriori[indvar])
+    scevgep := @(code_block[indvar])
+    iNsTr_9 := ->(scevgep)
+    iNsTr_10 := (iNsTr_9 * ($bitcast ($float<8,23>) _f-4.000000e+00 ))
+    iNsTr_11 := (iNsTr_6 * iNsTr_10)
+    ->(scevgep5) := iNsTr_11
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_2_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_2_bb_2]
+    $endif
+    $merge bb_2_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [minSumDecode]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    $place[bb_0_bb_1]
+    $merge bb_0_bb_1 send_outputx_xexit_bb_1 
+    $endmerge
+    $call initInputs () () 
+    iNsTr_2 := ncols
+    iNsTr_3 := (iNsTr_2 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_3 $then 
+    $place[bb_1_initialize_aPriorix_xexit]
+    $else 
+    $place[bb_1_bbx_xnphx_xix_xpreheader]
+    $endif
+    $merge bb_1_bbx_xnphx_xix_xpreheader 
+    $endmerge
+    $place[bbx_xnphx_xix_xpreheader_bbx_xnphx_xi]
+    $merge bbx_xnphx_xix_xpreheader_bbx_xnphx_xi 
+    $phi iNsTr_13_at_entry := 			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000000  ) ) $on bbx_xnphx_xix_xpreheader_bbx_xnphx_xi // type of target is $uint<8>
+    $endmerge
+    $dopipeline $depth 16 $buffering 2
+    $fullrate 
+    $merge $entry $loopback 
+    $phi iNsTr_13 := 			  ($cast ($uint<8>) iNsTr_14 ) $on $loopback			  iNsTr_13_at_entry $on $entry // type of target is $uint<8>
+    $endmerge
+    tmp64 := (iNsTr_13 + ($bitcast ($uint<8>) _b00000001  ))
+    iNsTr_14 := (iNsTr_13 + ($bitcast ($uint<8>) _b00000001  ))
+    iNsTr_17 := code_block_in
+    iNsTr_18 := ($cast ($uint<64>) iNsTr_13 )
+    iNsTr_19 := @(code_block[iNsTr_18])
+    ->(iNsTr_19) := iNsTr_17
+    iNsTr_21 := ($cast ($uint<32>) tmp64 )
+    iNsTr_22 := ncols
+    iNsTr_23 := ($cast ($uint<32>) iNsTr_22 )
+    iNsTr_24 := (iNsTr_21 < iNsTr_23)
+    bbx_xnphx_xi_readCodeBlockx_xexit_taken := ( ~ iNsTr_24 )
+    $while iNsTr_24
+    $if bbx_xnphx_xi_readCodeBlockx_xexit_taken $then 
+    $place[bbx_xnphx_xi_readCodeBlockx_xexit]
+    $endif
+    $merge bbx_xnphx_xi_readCodeBlockx_xexit 
+    $phi xx_xlcssa := 			  ($cast ($uint<16>) iNsTr_22 ) $on bbx_xnphx_xi_readCodeBlockx_xexit // type of target is $uint<16>
+    $endmerge
+    iNsTr_38 := (xx_xlcssa == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_38 $then 
+    $place[readCodeBlockx_xexit_initialize_aPriorix_xexit]
+    $else 
+    $place[readCodeBlockx_xexit_bbx_xnphx_xi1]
+    $endif
+    $merge readCodeBlockx_xexit_bbx_xnphx_xi1 
+    $endmerge
+    iNsTr_46 := ebbyNo
+    iNsTr_47 := rate
+    iNsTr_48 := (iNsTr_47 * iNsTr_46)
+    tmpx_xi := (xx_xlcssa > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi := (xx_xlcssa + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_49 := ($cast ($uint<64>) xx_xopx_xi )
+    xx_xop6x_xi := (iNsTr_49 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi := ( $mux tmpx_xi xx_xop6x_xi  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi1_bb_6]
+    $merge bb_6_bb_6 bbx_xnphx_xi1_bb_6 
+    $phi indvarx_xi := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi1_bb_6			  ($cast ($uint<64>) indvarx_xnextx_xi ) $on bb_6_bb_6 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi := @(code_block[indvarx_xi])
+    scevgep5x_xi := @(aPriori[indvarx_xi])
+    iNsTr_60 := ->(scevgepx_xi)
+    iNsTr_61 := (iNsTr_60 * ($bitcast ($float<8,23>) _f-4.000000e+00 ))
+    iNsTr_62 := (iNsTr_48 * iNsTr_61)
+    ->(scevgep5x_xi) := iNsTr_62
+    indvarx_xnextx_xi := (indvarx_xi + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond := (indvarx_xnextx_xi == tmp4x_xi)
+    $if exitcond $then 
+    $place[bb_6_initialize_aPriorix_xexitx_xloopexit]
+    $else 
+    $place[bb_6_bb_6]
+    $endif
+    $merge bb_6_initialize_aPriorix_xexitx_xloopexit 
+    $endmerge
+    $place[initialize_aPriorix_xexitx_xloopexit_initialize_aPriorix_xexit]
+    $merge bb_1_initialize_aPriorix_xexit initialize_aPriorix_xexitx_xloopexit_initialize_aPriorix_xexit readCodeBlockx_xexit_initialize_aPriorix_xexit 
+    $phi iNsTr_5 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bb_1_initialize_aPriorix_xexit			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on readCodeBlockx_xexit_initialize_aPriorix_xexit			  ($cast ($uint<16>) xx_xlcssa ) $on initialize_aPriorix_xexitx_xloopexit_initialize_aPriorix_xexit // type of target is $uint<16>
+    $endmerge
+    iNsTr_6 := ncol_ind
+    iNsTr_7 := (iNsTr_6 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_7 $then 
+    $place[initialize_aPriorix_xexit_initializeMessagex_xexitx_xpreheader]
+    $else 
+    $place[initialize_aPriorix_xexit_bbx_xnphx_xi5]
+    $endif
+    $merge initialize_aPriorix_xexit_bbx_xnphx_xi5 
+    $endmerge
+    tmpx_xi2 := (iNsTr_6 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi3 := (iNsTr_6 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_11 := ($cast ($uint<64>) xx_xopx_xi3 )
+    xx_xop7x_xi := (iNsTr_11 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi4 := ( $mux tmpx_xi2 xx_xop7x_xi  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi5_bb_10]
+    $merge bb_10_bb_10 bbx_xnphx_xi5_bb_10 
+    $phi indvarx_xi6 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi5_bb_10			  ($cast ($uint<64>) indvarx_xnextx_xi8 ) $on bb_10_bb_10 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi7 := @(message[indvarx_xi6])
+    tmp4 := (indvarx_xi6 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    scevgep6x_xi := @(mem[tmp4])
+    iNsTr_31 := ->(scevgep6x_xi)
+    iNsTr_32 := (iNsTr_31 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_33 := ($cast ($uint<64>) iNsTr_32 )
+    iNsTr_34 := @(aPriori[iNsTr_33])
+    iNsTr_35 := ->(iNsTr_34)
+    ->(scevgepx_xi7) := iNsTr_35
+    indvarx_xnextx_xi8 := (indvarx_xi6 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond3 := (indvarx_xnextx_xi8 == tmp4x_xi4)
+    $if exitcond3 $then 
+    $place[bb_10_initializeMessagex_xexitx_xloopexit]
+    $else 
+    $place[bb_10_bb_10]
+    $endif
+    $merge bb_10_initializeMessagex_xexitx_xloopexit 
+    $endmerge
+    $place[initializeMessagex_xexitx_xloopexit_initializeMessagex_xexitx_xpreheader]
+    $merge initializeMessagex_xexitx_xloopexit_initializeMessagex_xexitx_xpreheader initialize_aPriorix_xexit_initializeMessagex_xexitx_xpreheader 
+    $phi xx_xph := 			  ($cast ($uint<16>) iNsTr_6 ) $on initializeMessagex_xexitx_xloopexit_initializeMessagex_xexitx_xpreheader			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on initialize_aPriorix_xexit_initializeMessagex_xexitx_xpreheader // type of target is $uint<16>
+    $endmerge
+    $place[initializeMessagex_xexitx_xpreheader_initializeMessagex_xexit]
+    $merge initializeMessagex_xexitx_xpreheader_initializeMessagex_xexit updateMessagex_xexit_initializeMessagex_xexit 
+    $phi indvar18 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on initializeMessagex_xexitx_xpreheader_initializeMessagex_xexit			  ($cast ($uint<16>) indvarx_xnext ) $on updateMessagex_xexit_initializeMessagex_xexit // type of target is $uint<16>
+    $phi iNsTr_26 := 			  ($cast ($uint<16>) iNsTr_66 ) $on updateMessagex_xexit_initializeMessagex_xexit			  ($cast ($uint<16>) xx_xph ) $on initializeMessagex_xexitx_xpreheader_initializeMessagex_xexit // type of target is $uint<16>
+    $phi iNsTr_27 := 			  ($cast ($uint<16>) iNsTr_83 ) $on updateMessagex_xexit_initializeMessagex_xexit			  ($cast ($uint<16>) iNsTr_5 ) $on initializeMessagex_xexitx_xpreheader_initializeMessagex_xexit // type of target is $uint<16>
+    $endmerge
+    indvar := (indvar18 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    iNsTr_28 := maxNitr
+    iNsTr_29 := (indvar < iNsTr_28)
+    $if iNsTr_29 $then 
+    $place[initializeMessagex_xexit_bb_14]
+    $else 
+    $place[initializeMessagex_xexit_checkIsdecodedx_xexitx_xthread]
+    $endif
+    $merge initializeMessagex_xexit_bb_14 
+    $endmerge
+    iNsTr_40 := (iNsTr_27 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_40 $then 
+    $place[bb_14_initialize_aPosteriorix_xexit]
+    $else 
+    $place[bb_14_bbx_xnphx_xi18]
+    $endif
+    $merge bb_14_bbx_xnphx_xi18 
+    $endmerge
+    tmpx_xi14 := (iNsTr_27 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi15 := (iNsTr_27 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_53 := ($cast ($uint<64>) xx_xopx_xi15 )
+    xx_xop6x_xi16 := (iNsTr_53 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi17 := ( $mux tmpx_xi14 xx_xop6x_xi16  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi18_bb_16]
+    $merge bb_16_bb_16 bbx_xnphx_xi18_bb_16 
+    $phi indvarx_xi19 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi18_bb_16			  ($cast ($uint<64>) indvarx_xnextx_xi22 ) $on bb_16_bb_16 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi20 := @(aPriori[indvarx_xi19])
+    scevgep5x_xi21 := @(aPosteriori[indvarx_xi19])
+    iNsTr_71 := ->(scevgepx_xi20)
+    ->(scevgep5x_xi21) := iNsTr_71
+    indvarx_xnextx_xi22 := (indvarx_xi19 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond15 := (indvarx_xnextx_xi22 == tmp4x_xi17)
+    $if exitcond15 $then 
+    $place[bb_16_initialize_aPosteriorix_xexitx_xloopexit]
+    $else 
+    $place[bb_16_bb_16]
+    $endif
+    $merge bb_16_initialize_aPosteriorix_xexitx_xloopexit 
+    $endmerge
+    $place[initialize_aPosteriorix_xexitx_xloopexit_initialize_aPosteriorix_xexit]
+    $merge bb_14_initialize_aPosteriorix_xexit initialize_aPosteriorix_xexitx_xloopexit_initialize_aPosteriorix_xexit 
+    $endmerge
+    iNsTr_51 := (iNsTr_26 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_51 $then 
+    $place[initialize_aPosteriorix_xexit_initializeExtrinsicInfox_xexit]
+    $else 
+    $place[initialize_aPosteriorix_xexit_bbx_xnphx_xi27]
+    $endif
+    $merge initialize_aPosteriorix_xexit_bbx_xnphx_xi27 
+    $endmerge
+    tmpx_xi24 := (iNsTr_26 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi25 := (iNsTr_26 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_69 := ($cast ($uint<64>) xx_xopx_xi25 )
+    xx_xop5x_xi := (iNsTr_69 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi26 := ( $mux tmpx_xi24 xx_xop5x_xi  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi27_bb_20]
+    $merge bb_20_bb_20 bbx_xnphx_xi27_bb_20 
+    $phi indvarx_xi28 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi27_bb_20			  ($cast ($uint<64>) indvarx_xnextx_xi30 ) $on bb_20_bb_20 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi29 := @(ext_info[indvarx_xi28])
+    ->(scevgepx_xi29) := ($bitcast ($float<8,23>) _h0  )
+    indvarx_xnextx_xi30 := (indvarx_xi28 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond14 := (indvarx_xnextx_xi30 == tmp4x_xi26)
+    $if exitcond14 $then 
+    $place[bb_20_initializeExtrinsicInfox_xexitx_xloopexit]
+    $else 
+    $place[bb_20_bb_20]
+    $endif
+    $merge bb_20_initializeExtrinsicInfox_xexitx_xloopexit 
+    $endmerge
+    $place[initializeExtrinsicInfox_xexitx_xloopexit_initializeExtrinsicInfox_xexit]
+    $merge initializeExtrinsicInfox_xexitx_xloopexit_initializeExtrinsicInfox_xexit initialize_aPosteriorix_xexit_initializeExtrinsicInfox_xexit 
+    $endmerge
+    $call checkNodeComputeEngine () () 
+    iNsTr_66 := ncol_ind
+    iNsTr_67 := (iNsTr_66 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_67 $then 
+    $place[initializeExtrinsicInfox_xexit_update_aPosteriorix_xexit]
+    $else 
+    $place[initializeExtrinsicInfox_xexit_bbx_xnphx_xi54]
+    $endif
+    $merge initializeExtrinsicInfox_xexit_bbx_xnphx_xi54 
+    $endmerge
+    tmpx_xi50 := (iNsTr_66 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi51 := (iNsTr_66 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_86 := ($cast ($uint<64>) xx_xopx_xi51 )
+    xx_xop7x_xi52 := (iNsTr_86 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi53 := ( $mux tmpx_xi50 xx_xop7x_xi52  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi54_bb_24]
+    $merge bb_24_bb_24 bbx_xnphx_xi54_bb_24 
+    $phi indvarx_xi55 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi54_bb_24			  ($cast ($uint<64>) indvarx_xnextx_xi59 ) $on bb_24_bb_24 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi56 := @(ext_info[indvarx_xi55])
+    tmp13 := (indvarx_xi55 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    scevgep6x_xi58 := @(mem[tmp13])
+    iNsTr_96 := ->(scevgep6x_xi58)
+    iNsTr_97 := (iNsTr_96 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_98 := ->(scevgepx_xi56)
+    iNsTr_99 := ($cast ($uint<64>) iNsTr_97 )
+    iNsTr_100 := @(aPosteriori[iNsTr_99])
+    iNsTr_101 := ->(iNsTr_100)
+    iNsTr_102 := (iNsTr_101 + iNsTr_98)
+    ->(iNsTr_100) := iNsTr_102
+    indvarx_xnextx_xi59 := (indvarx_xi55 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond12 := (indvarx_xnextx_xi59 == tmp4x_xi53)
+    $if exitcond12 $then 
+    $place[bb_24_update_aPosteriorix_xexitx_xloopexit]
+    $else 
+    $place[bb_24_bb_24]
+    $endif
+    $merge bb_24_update_aPosteriorix_xexitx_xloopexit 
+    $endmerge
+    $place[update_aPosteriorix_xexitx_xloopexit_update_aPosteriorix_xexit]
+    $merge initializeExtrinsicInfox_xexit_update_aPosteriorix_xexit update_aPosteriorix_xexitx_xloopexit_update_aPosteriorix_xexit 
+    $endmerge
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000001  )
+    iNsTr_83 := ncols
+    iNsTr_84 := (iNsTr_83 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_84 $then 
+    $place[update_aPosteriorix_xexit_checkIsdecodedx_xexitx_xthreadx_xthread]
+    $else 
+    $place[update_aPosteriorix_xexit_bbx_xnphx_xi43]
+    $endif
+    $merge update_aPosteriorix_xexit_checkIsdecodedx_xexitx_xthreadx_xthread 
+    $phi indvarx_xlcssa17 := 			  ($cast ($uint<16>) indvar ) $on update_aPosteriorix_xexit_checkIsdecodedx_xexitx_xthreadx_xthread // type of target is $uint<16>
+    $endmerge
+    Nitr_required := indvarx_xlcssa17
+    $place[checkIsdecodedx_xexitx_xthreadx_xthread_send_outputx_xexit]
+    $merge update_aPosteriorix_xexit_bbx_xnphx_xi43 
+    $endmerge
+    tmpx_xi39 := (iNsTr_83 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi40 := (iNsTr_83 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_94 := ($cast ($uint<64>) xx_xopx_xi40 )
+    xx_xop6x_xi41 := (iNsTr_94 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4x_xi42 := ( $mux tmpx_xi39 xx_xop6x_xi41  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnphx_xi43_bb_29]
+    $merge bb_37_bb_29 bbx_xnphx_xi43_bb_29 
+    $phi xx_xpr85 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000001  ) ) $on bbx_xnphx_xi43_bb_29			  ($cast ($uint<16>) xx_xpr ) $on bb_37_bb_29 // type of target is $uint<16>
+    $phi indvarx_xi44 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi43_bb_29			  ($cast ($uint<64>) indvarx_xnextx_xi47 ) $on bb_37_bb_29 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi45 := @(aPosteriori[indvarx_xi44])
+    scevgep5x_xi46 := @(code_block[indvarx_xi44])
+    iNsTr_106 := ->(scevgepx_xi45)
+    iNsTr_107 := ($cast ($float<11,52>) iNsTr_106 )
+    iNsTr_108 := (iNsTr_107 > ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_108 $then 
+    $place[bb_29_bb_30]
+    $else 
+    $place[bb_29_bb_33]
+    $endif
+    $merge bb_29_bb_30 
+    $endmerge
+    iNsTr_111 := ->(scevgep5x_xi46)
+    iNsTr_112 := ($cast ($float<11,52>) iNsTr_111 )
+    iNsTr_113 := (iNsTr_112 > ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_113 $then 
+    $place[bb_30_bb_31]
+    $else 
+    $place[bb_30_bb_32]
+    $endif
+    $merge bb_30_bb_31 
+    $endmerge
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000000  )
+    $place[bb_31_bb_32]
+    $merge bb_30_bb_32 bb_31_bb_32 
+    $phi xx_xpr87 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bb_31_bb_32			  ($cast ($uint<16>) xx_xpr85 ) $on bb_30_bb_32 // type of target is $uint<16>
+    $endmerge
+    ->(scevgep5x_xi46) := ($bitcast ($float<8,23>) _f-1.000000e+00 )
+    $place[bb_32_bb_37]
+    $merge bb_29_bb_33 
+    $endmerge
+    iNsTr_115 := (iNsTr_107 < ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_115 $then 
+    $place[bb_33_bb_34]
+    $else 
+    $place[bb_33_bb_37]
+    $endif
+    $merge bb_33_bb_34 
+    $endmerge
+    iNsTr_121 := ->(scevgep5x_xi46)
+    iNsTr_122 := ($cast ($float<11,52>) iNsTr_121 )
+    iNsTr_123 := (iNsTr_122 < ($bitcast ($float<11,52>) _h0  ))
+    $if iNsTr_123 $then 
+    $place[bb_34_bb_35]
+    $else 
+    $place[bb_34_bb_36]
+    $endif
+    $merge bb_34_bb_35 
+    $endmerge
+    is_decoded := ($bitcast ($uint<16>) _b0000000000000000  )
+    $place[bb_35_bb_36]
+    $merge bb_34_bb_36 bb_35_bb_36 
+    $phi xx_xpr84 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bb_35_bb_36			  ($cast ($uint<16>) xx_xpr85 ) $on bb_34_bb_36 // type of target is $uint<16>
+    $endmerge
+    ->(scevgep5x_xi46) := ($bitcast ($float<8,23>) _f1.000000e+00 )
+    $place[bb_36_bb_37]
+    $merge bb_32_bb_37 bb_33_bb_37 bb_36_bb_37 
+    $phi xx_xpr := 			  ($cast ($uint<16>) xx_xpr84 ) $on bb_36_bb_37			  ($cast ($uint<16>) xx_xpr85 ) $on bb_33_bb_37			  ($cast ($uint<16>) xx_xpr87 ) $on bb_32_bb_37 // type of target is $uint<16>
+    $endmerge
+    indvarx_xnextx_xi47 := (indvarx_xi44 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond16 := (indvarx_xnextx_xi47 == tmp4x_xi42)
+    $if exitcond16 $then 
+    $place[bb_37_checkIsdecodedx_xexit]
+    $else 
+    $place[bb_37_bb_29]
+    $endif
+    $merge bb_37_checkIsdecodedx_xexit 
+    $phi xx_xprx_xlcssa := 			  ($cast ($uint<16>) xx_xpr ) $on bb_37_checkIsdecodedx_xexit // type of target is $uint<16>
+    $endmerge
+    iNsTr_130 := (xx_xprx_xlcssa == ($bitcast ($uint<16>) _b0000000000000001  ))
+    $if iNsTr_130 $then 
+    $place[checkIsdecodedx_xexit_checkIsdecodedx_xexitx_xthread]
+    $else 
+    $place[checkIsdecodedx_xexit_bb_39]
+    $endif
+    $merge checkIsdecodedx_xexit_bb_39 
+    $endmerge
+    iNsTr_132 := nrows
+    iNsTr_133 := (iNsTr_132 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_133 $then 
+    $place[bb_39_updateMessagex_xexit]
+    $else 
+    $place[bb_39_bbx_xnph4x_xi]
+    $endif
+    $merge bb_39_bbx_xnph4x_xi 
+    $endmerge
+    iNsTr_136 := ($cast ($uint<32>) iNsTr_132 )
+    iNsTr_137 := (iNsTr_136 + ($bitcast ($uint<32>) _b11111111111111111111111111111111  ))
+    tmp7x_xi := (iNsTr_132 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xopx_xi32 := (iNsTr_132 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_138 := ($cast ($uint<64>) xx_xopx_xi32 )
+    xx_xop19x_xi := (iNsTr_138 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp10x_xi := ( $mux tmp7x_xi xx_xop19x_xi  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    xx_xneg1x_xi := (iNsTr_66 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    tmp := ($cast ($uint<64>) iNsTr_66 )
+    tmp7 := (tmp + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000100  ))
+    tmp10 := (tmp + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    $place[bbx_xnph4x_xi_bb_41]
+    $merge bbx_xnph4x_xi_bb_41 xx_x_crit_edgex_xi_bb_41 
+    $phi indvarx_xi33 := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph4x_xi_bb_41			  ($cast ($uint<64>) indvarx_xnextx_xi38 ) $on xx_x_crit_edgex_xi_bb_41 // type of target is $uint<64>
+    $endmerge
+    tmp8 := (tmp7 + indvarx_xi33)
+    scevgep18x_xi := @(mem[tmp8])
+    tmp12x_xi := ($cast ($uint<32>) indvarx_xi33 )
+    tmp11 := (tmp10 + indvarx_xi33)
+    scevgepx_xi34 := @(mem[tmp11])
+    iNsTr_140 := (tmp12x_xi == iNsTr_137)
+    $if iNsTr_140 $then 
+    $place[bb_41_bb_42]
+    $else 
+    $place[bb_41_bb_43]
+    $endif
+    $merge bb_41_bb_42 
+    $endmerge
+    iNsTr_142 := ->(scevgepx_xi34)
+    iNsTr_143 := (xx_xneg1x_xi - iNsTr_142)
+    $place[bb_42_bb_44]
+    $merge bb_41_bb_43 
+    $endmerge
+    iNsTr_145 := ->(scevgepx_xi34)
+    iNsTr_146 := ->(scevgep18x_xi)
+    iNsTr_147 := (iNsTr_146 - iNsTr_145)
+    $place[bb_43_bb_44]
+    $merge bb_42_bb_44 bb_43_bb_44 
+    $phi iNsTr_149 := 			  ($cast ($uint<16>) iNsTr_142 ) $on bb_42_bb_44			  ($cast ($uint<16>) iNsTr_145 ) $on bb_43_bb_44 // type of target is $uint<16>
+    $phi rangex_x0x_xi := 			  ($cast ($uint<16>) iNsTr_143 ) $on bb_42_bb_44			  ($cast ($uint<16>) iNsTr_147 ) $on bb_43_bb_44 // type of target is $uint<16>
+    $endmerge
+    iNsTr_150 := (rangex_x0x_xi == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_150 $then 
+    $place[bb_44_xx_x_crit_edgex_xi]
+    $else 
+    $place[bb_44_bbx_xnphx_xi36]
+    $endif
+    $merge bb_44_bbx_xnphx_xi36 
+    $endmerge
+    tmpx_xi35 := (iNsTr_149 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    $place[bbx_xnphx_xi36_bb_46]
+    $merge bb_46_bb_46 bbx_xnphx_xi36_bb_46 
+    $phi colx_x02x_xi := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bbx_xnphx_xi36_bb_46			  ($cast ($uint<16>) iNsTr_168 ) $on bb_46_bb_46 // type of target is $uint<16>
+    $endmerge
+    tmp6x_xi := (tmpx_xi35 + colx_x02x_xi)
+    iNsTr_155 := ($cast ($uint<64>) tmp6x_xi )
+    iNsTr_156 := (iNsTr_155 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    iNsTr_157 := @(mem[iNsTr_156])
+    iNsTr_158 := ->(iNsTr_157)
+    iNsTr_159 := (iNsTr_158 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_160 := ($cast ($uint<64>) iNsTr_159 )
+    iNsTr_161 := @(aPosteriori[iNsTr_160])
+    iNsTr_162 := ->(iNsTr_161)
+    iNsTr_163 := @(ext_info[iNsTr_155])
+    iNsTr_164 := ->(iNsTr_163)
+    iNsTr_165 := (iNsTr_162 - iNsTr_164)
+    iNsTr_166 := @(message[iNsTr_155])
+    ->(iNsTr_166) := iNsTr_165
+    iNsTr_168 := (colx_x02x_xi + ($bitcast ($uint<16>) _b0000000000000001  ))
+    exitcond5 := (iNsTr_168 == rangex_x0x_xi)
+    $if exitcond5 $then 
+    $place[bb_46_xx_x_crit_edgex_xix_xloopexit]
+    $else 
+    $place[bb_46_bb_46]
+    $endif
+    $merge bb_46_xx_x_crit_edgex_xix_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xix_xloopexit_xx_x_crit_edgex_xi]
+    $merge bb_44_xx_x_crit_edgex_xi xx_x_crit_edgex_xix_xloopexit_xx_x_crit_edgex_xi 
+    $endmerge
+    indvarx_xnextx_xi38 := (indvarx_xi33 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond6 := (indvarx_xnextx_xi38 == tmp10x_xi)
+    $if exitcond6 $then 
+    $place[xx_x_crit_edgex_xi_updateMessagex_xexitx_xloopexit]
+    $else 
+    $place[xx_x_crit_edgex_xi_bb_41]
+    $endif
+    $merge xx_x_crit_edgex_xi_updateMessagex_xexitx_xloopexit 
+    $endmerge
+    $place[updateMessagex_xexitx_xloopexit_updateMessagex_xexit]
+    $merge bb_39_updateMessagex_xexit updateMessagex_xexitx_xloopexit_updateMessagex_xexit 
+    $endmerge
+    indvarx_xnext := (indvar18 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    $place[updateMessagex_xexit_initializeMessagex_xexit]
+    $merge checkIsdecodedx_xexit_checkIsdecodedx_xexitx_xthread initializeMessagex_xexit_checkIsdecodedx_xexitx_xthread 
+    $phi indvarx_xlcssa := 			  ($cast ($uint<16>) indvar ) $on checkIsdecodedx_xexit_checkIsdecodedx_xexitx_xthread			  ($cast ($uint<16>) indvar ) $on initializeMessagex_xexit_checkIsdecodedx_xexitx_xthread // type of target is $uint<16>
+    $phi xx_xpr62 := 			  ($cast ($uint<16>) iNsTr_83 ) $on checkIsdecodedx_xexit_checkIsdecodedx_xexitx_xthread			  ($cast ($uint<16>) iNsTr_27 ) $on initializeMessagex_xexit_checkIsdecodedx_xexitx_xthread // type of target is $uint<16>
+    $endmerge
+    Nitr_required := indvarx_xlcssa
+    iNsTr_43 := (xx_xpr62 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_43 $then 
+    $place[checkIsdecodedx_xexitx_xthread_send_outputx_xexit]
+    $else 
+    $place[checkIsdecodedx_xexitx_xthread_bbx_xnphx_xi13x_xpreheader]
+    $endif
+    $merge checkIsdecodedx_xexitx_xthread_bbx_xnphx_xi13x_xpreheader 
+    $endmerge
+    $place[bbx_xnphx_xi13x_xpreheader_bbx_xnphx_xi13]
+    $merge bbx_xnphx_xi13_bbx_xnphx_xi13 bbx_xnphx_xi13x_xpreheader_bbx_xnphx_xi13 
+    $phi indvarx_xi10 := 			  ($cast ($uint<64>) tmp82 ) $on bbx_xnphx_xi13_bbx_xnphx_xi13			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xi13x_xpreheader_bbx_xnphx_xi13 // type of target is $uint<64>
+    $endmerge
+    scevgepx_xi11 := @(code_block[indvarx_xi10])
+    tmp1 := (indvarx_xi10 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp2x_xi := ($cast ($uint<32>) tmp1 )
+    tmp82 := (indvarx_xi10 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    iNsTr_74 := ->(scevgepx_xi11)
+    code_block_decoded := iNsTr_74
+    iNsTr_77 := ncols
+    iNsTr_78 := ($cast ($uint<32>) iNsTr_77 )
+    iNsTr_79 := (($bitcast ($int<32>) tmp2x_xi ) < ($bitcast ($int<32>) iNsTr_78 ))
+    $if iNsTr_79 $then 
+    $place[bbx_xnphx_xi13_bbx_xnphx_xi13]
+    $else 
+    $place[bbx_xnphx_xi13_send_outputx_xexitx_xloopexit]
+    $endif
+    $merge bbx_xnphx_xi13_send_outputx_xexitx_xloopexit 
+    $endmerge
+    xx_xpre := Nitr_required
+    $place[send_outputx_xexitx_xloopexit_send_outputx_xexit]
+    $merge checkIsdecodedx_xexitx_xthread_send_outputx_xexit checkIsdecodedx_xexitx_xthreadx_xthread_send_outputx_xexit send_outputx_xexitx_xloopexit_send_outputx_xexit 
+    $phi iNsTr_55 := 			  ($cast ($uint<16>) xx_xpre ) $on send_outputx_xexitx_xloopexit_send_outputx_xexit			  ($cast ($uint<16>) indvarx_xlcssa17 ) $on checkIsdecodedx_xexitx_xthreadx_xthread_send_outputx_xexit			  ($cast ($uint<16>) indvarx_xlcssa ) $on checkIsdecodedx_xexitx_xthread_send_outputx_xexit // type of target is $uint<16>
+    $endmerge
+    nitr_required := iNsTr_55
+    $place[send_outputx_xexit_bb_1]
+  }
+}
+$module [readCodeBlock]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncols
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnphx_xpreheader]
+    $endif
+    $merge bb_0_bbx_xnphx_xpreheader 
+    $endmerge
+    $place[bbx_xnphx_xpreheader_bbx_xnph]
+    $merge bbx_xnphx_xpreheader_bbx_xnph 
+    $phi iNsTr_5_at_entry := 			  ($cast ($uint<8>) ($bitcast ($uint<8>) _b00000000  ) ) $on bbx_xnphx_xpreheader_bbx_xnph // type of target is $uint<8>
+    $endmerge
+    $dopipeline $depth 16 $buffering 2
+    $fullrate 
+    $merge $entry $loopback 
+    $phi iNsTr_5 := 			  ($cast ($uint<8>) iNsTr_12 ) $on $loopback			  iNsTr_5_at_entry $on $entry // type of target is $uint<8>
+    $endmerge
+    tmp := (iNsTr_5 + ($bitcast ($uint<8>) _b00000001  ))
+    iNsTr_8 := code_block_in
+    iNsTr_9 := ($cast ($uint<64>) iNsTr_5 )
+    iNsTr_10 := @(code_block[iNsTr_9])
+    ->(iNsTr_10) := iNsTr_8
+    iNsTr_12 := (iNsTr_5 + ($bitcast ($uint<8>) _b00000001  ))
+    iNsTr_13 := ($cast ($uint<32>) tmp )
+    iNsTr_14 := ncols
+    iNsTr_15 := ($cast ($uint<32>) iNsTr_14 )
+    iNsTr_16 := (iNsTr_13 < iNsTr_15)
+    bbx_xnph_xx_x_crit_edgex_xloopexit_taken := ( ~ iNsTr_16 )
+    $while iNsTr_16
+    $if bbx_xnph_xx_x_crit_edgex_xloopexit_taken $then 
+    $place[bbx_xnph_xx_x_crit_edgex_xloopexit]
+    $endif
+    $merge bbx_xnph_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [send_output]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncols
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnphx_xpreheader]
+    $endif
+    $merge bb_0_bbx_xnphx_xpreheader 
+    $endmerge
+    $place[bbx_xnphx_xpreheader_bbx_xnph]
+    $merge bbx_xnph_bbx_xnph bbx_xnphx_xpreheader_bbx_xnph 
+    $phi indvar := 			  ($cast ($uint<64>) tmp ) $on bbx_xnph_bbx_xnph			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnphx_xpreheader_bbx_xnph // type of target is $uint<64>
+    $endmerge
+    tmp1 := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp2 := ($cast ($uint<32>) tmp1 )
+    scevgep := @(code_block[indvar])
+    iNsTr_8 := ->(scevgep)
+    code_block_decoded := iNsTr_8
+    tmp := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    iNsTr_11 := ncols
+    iNsTr_12 := ($cast ($uint<32>) iNsTr_11 )
+    iNsTr_13 := (($bitcast ($int<32>) tmp2 ) < ($bitcast ($int<32>) iNsTr_12 ))
+    $if iNsTr_13 $then 
+    $place[bbx_xnph_bbx_xnph]
+    $else 
+    $place[bbx_xnph_xx_x_crit_edgex_xloopexit]
+    $endif
+    $merge bbx_xnph_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    iNsTr_3 := Nitr_required
+    nitr_required := iNsTr_3
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [updateMessage]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := nrows
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge5]
+    $else 
+    $place[bb_0_bbx_xnph4]
+    $endif
+    $merge bb_0_bbx_xnph4 
+    $endmerge
+    iNsTr_4 := ncol_ind
+    iNsTr_5 := ($cast ($uint<32>) iNsTr_0 )
+    iNsTr_6 := (iNsTr_5 + ($bitcast ($uint<32>) _b11111111111111111111111111111111  ))
+    xx_xneg1 := (iNsTr_4 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    tmp7 := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_7 := ($cast ($uint<64>) xx_xop )
+    xx_xop19 := (iNsTr_7 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp10 := ( $mux tmp7 xx_xop19  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    tmp3 := ($cast ($uint<64>) iNsTr_4 )
+    tmp4 := (tmp3 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000100  ))
+    tmp8 := (tmp3 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    $place[bbx_xnph4_bb_2]
+    $merge bbx_xnph4_bb_2 xx_x_crit_edge_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph4_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on xx_x_crit_edge_bb_2 // type of target is $uint<64>
+    $endmerge
+    tmp5 := (tmp4 + indvar)
+    scevgep18 := @(mem[tmp5])
+    tmp9 := (tmp8 + indvar)
+    scevgep := @(mem[tmp9])
+    tmp12 := ($cast ($uint<32>) indvar )
+    iNsTr_9 := (tmp12 == iNsTr_6)
+    $if iNsTr_9 $then 
+    $place[bb_2_bb_3]
+    $else 
+    $place[bb_2_bb_4]
+    $endif
+    $merge bb_2_bb_3 
+    $endmerge
+    iNsTr_11 := ->(scevgep)
+    iNsTr_12 := (xx_xneg1 - iNsTr_11)
+    $place[bb_3_bb_5]
+    $merge bb_2_bb_4 
+    $endmerge
+    iNsTr_14 := ->(scevgep)
+    iNsTr_15 := ->(scevgep18)
+    iNsTr_16 := (iNsTr_15 - iNsTr_14)
+    $place[bb_4_bb_5]
+    $merge bb_3_bb_5 bb_4_bb_5 
+    $phi iNsTr_18 := 			  ($cast ($uint<16>) iNsTr_11 ) $on bb_3_bb_5			  ($cast ($uint<16>) iNsTr_14 ) $on bb_4_bb_5 // type of target is $uint<16>
+    $phi rangex_x0 := 			  ($cast ($uint<16>) iNsTr_12 ) $on bb_3_bb_5			  ($cast ($uint<16>) iNsTr_16 ) $on bb_4_bb_5 // type of target is $uint<16>
+    $endmerge
+    iNsTr_19 := (rangex_x0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_19 $then 
+    $place[bb_5_xx_x_crit_edge]
+    $else 
+    $place[bb_5_bbx_xnph]
+    $endif
+    $merge bb_5_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_18 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    $place[bbx_xnph_bb_7]
+    $merge bb_7_bb_7 bbx_xnph_bb_7 
+    $phi colx_x02 := 			  ($cast ($uint<16>) ($bitcast ($uint<16>) _b0000000000000000  ) ) $on bbx_xnph_bb_7			  ($cast ($uint<16>) iNsTr_37 ) $on bb_7_bb_7 // type of target is $uint<16>
+    $endmerge
+    tmp6 := (tmp + colx_x02)
+    iNsTr_24 := ($cast ($uint<64>) tmp6 )
+    iNsTr_25 := (iNsTr_24 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    iNsTr_26 := @(mem[iNsTr_25])
+    iNsTr_27 := ->(iNsTr_26)
+    iNsTr_28 := (iNsTr_27 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_29 := ($cast ($uint<64>) iNsTr_28 )
+    iNsTr_30 := @(aPosteriori[iNsTr_29])
+    iNsTr_31 := ->(iNsTr_30)
+    iNsTr_32 := @(ext_info[iNsTr_24])
+    iNsTr_33 := ->(iNsTr_32)
+    iNsTr_34 := (iNsTr_31 - iNsTr_33)
+    iNsTr_35 := @(message[iNsTr_24])
+    ->(iNsTr_35) := iNsTr_34
+    iNsTr_37 := (colx_x02 + ($bitcast ($uint<16>) _b0000000000000001  ))
+    exitcond1 := (iNsTr_37 == rangex_x0)
+    $if exitcond1 $then 
+    $place[bb_7_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_7_bb_7]
+    $endif
+    $merge bb_7_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_5_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond := (indvarx_xnext == tmp10)
+    $if exitcond $then 
+    $place[xx_x_crit_edge_xx_x_crit_edge5x_xloopexit]
+    $else 
+    $place[xx_x_crit_edge_bb_2]
+    $endif
+    $merge xx_x_crit_edge_xx_x_crit_edge5x_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edge5x_xloopexit_xx_x_crit_edge5]
+    $merge bb_0_xx_x_crit_edge5 xx_x_crit_edge5x_xloopexit_xx_x_crit_edge5 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+$module [update_aPosteriori]
+$in ()
+$out ()
+$is
+{
+  $branchblock [body]
+  {
+    iNsTr_0 := ncol_ind
+    iNsTr_1 := (iNsTr_0 == ($bitcast ($uint<16>) _b0000000000000000  ))
+    $if iNsTr_1 $then 
+    $place[bb_0_xx_x_crit_edge]
+    $else 
+    $place[bb_0_bbx_xnph]
+    $endif
+    $merge bb_0_bbx_xnph 
+    $endmerge
+    tmp := (iNsTr_0 > ($bitcast ($uint<16>) _b0000000000000001  ))
+    xx_xop := (iNsTr_0 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_4 := ($cast ($uint<64>) xx_xop )
+    xx_xop7 := (iNsTr_4 + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    tmp4 := ( $mux tmp xx_xop7  ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ) ) 
+    $place[bbx_xnph_bb_2]
+    $merge bb_2_bb_2 bbx_xnph_bb_2 
+    $phi indvar := 			  ($cast ($uint<64>) ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000000  ) ) $on bbx_xnph_bb_2			  ($cast ($uint<64>) indvarx_xnext ) $on bb_2_bb_2 // type of target is $uint<64>
+    $endmerge
+    tmp2 := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000011  ))
+    scevgep6 := @(mem[tmp2])
+    scevgep := @(ext_info[indvar])
+    iNsTr_6 := ->(scevgep6)
+    iNsTr_7 := (iNsTr_6 + ($bitcast ($uint<16>) _b1111111111111111  ))
+    iNsTr_8 := ->(scevgep)
+    iNsTr_9 := ($cast ($uint<64>) iNsTr_7 )
+    iNsTr_10 := @(aPosteriori[iNsTr_9])
+    iNsTr_11 := ->(iNsTr_10)
+    iNsTr_12 := (iNsTr_11 + iNsTr_8)
+    ->(iNsTr_10) := iNsTr_12
+    indvarx_xnext := (indvar + ($bitcast ($uint<64>) _b0000000000000000000000000000000000000000000000000000000000000001  ))
+    exitcond1 := (indvarx_xnext == tmp4)
+    $if exitcond1 $then 
+    $place[bb_2_xx_x_crit_edgex_xloopexit]
+    $else 
+    $place[bb_2_bb_2]
+    $endif
+    $merge bb_2_xx_x_crit_edgex_xloopexit 
+    $endmerge
+    $place[xx_x_crit_edgex_xloopexit_xx_x_crit_edge]
+    $merge bb_0_xx_x_crit_edge xx_x_crit_edgex_xloopexit_xx_x_crit_edge 
+    $endmerge
+    $place[return__]
+    $merge return__ 
+    $endmerge
+  }
+}
+// Memory space 0: Nitr_required 
+// Memory space 1: aPosteriori 
+// Memory space 2: aPriori 
+// Memory space 3: code_block 
+// Memory space 4: ebbyNo 
+// Memory space 5: ext_info 
+// Memory space 6: is_decoded 
+// Memory space 7: maxNitr 
+// Memory space 8: mem 
+// Memory space 9: message 
+// Memory space 10: ncol_ind 
+// Memory space 11: ncols 
+// Memory space 12: nrows 
+// Memory space 13: rate 

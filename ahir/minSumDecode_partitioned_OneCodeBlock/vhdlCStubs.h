@@ -1,0 +1,72 @@
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <Pipes.h>
+#include <SocketLib.h>
+float absf(float f);
+void bpsk_demodulate();
+uint8_t checkIsdecoded1();
+uint8_t checkIsdecoded2();
+void checkNodeComputeEngine11();
+void checkNodeComputeEngine12();
+void checkNodeComputeEngine21();
+void checkNodeComputeEngine22();
+void daemon_3();
+void daemon_4();
+void ebbyNo_initializer_in_progx_xoptx_xo();
+float fpadd32(float L,float R);
+double fpadd64(double L,double R);
+double fpadd64_inner(double L,double R);
+float fpdiv32_inner(float a,float b);
+double fpdiv64(double a,double b);
+double fpdiv64_inner(double a,double b);
+float fpmul32(float L,float R);
+double fpmul64(double L,double R);
+double fpmul64_inner(double L,double R);
+float fpsqrt32(float a);
+double fpsqrt64(double a);
+double fpsqrt64_inner(double a);
+float fpsub32(float L,float R);
+double fpsub64(double L,double R);
+double fpsub64_inner(double L,double R);
+float fpu32(float L,float R,uint8_t OP_ID);
+double fpu64(double L,double R,uint8_t OP_ID);
+void global_storage_initializer_();
+void initInputs();
+void initMem();
+void initializeExtrinsicInfo11();
+void initializeExtrinsicInfo12();
+void initializeExtrinsicInfo21();
+void initializeExtrinsicInfo22();
+void initializeMessage11();
+void initializeMessage12();
+void initializeMessage21();
+void initializeMessage22();
+void initializeTransInfo11_12();
+void initializeTransInfo12_11();
+void initializeTransInfo21_22();
+void initializeTransInfo22_21();
+void initialize_aPosteriori1();
+void initialize_aPosteriori2();
+void initialize_aPriori1();
+void initialize_aPriori2();
+float modifyInfo(float ext_info,float self_information);
+void progx_xoptx_xo_storage_initializer_();
+void rate_initializer_in_progx_xoptx_xo();
+void readCodeBlock();
+double sqrtDoubleApprox(uint64_t a);
+void top_daemon_1();
+void top_daemon_2();
+void transverseCorrection11();
+void transverseCorrection12();
+void transverseCorrection21();
+void transverseCorrection22();
+void updateMessage11();
+void updateMessage12();
+void updateMessage21();
+void updateMessage22();
+void update_aPosteriori11();
+void update_aPosteriori12();
+void update_aPosteriori21();
+void update_aPosteriori22();

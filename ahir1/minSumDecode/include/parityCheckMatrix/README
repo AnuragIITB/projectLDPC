@@ -1,0 +1,19 @@
+	
+		o Parity check matrix file is written as >
+			..................................
+			|	nrows_H11
+			|	ncols_H11
+			|	ncol_ind_H11
+			|	col_ind[0]_H11
+			|	col_ind[1]_H11
+			.
+			.
+			.
+			|	col_ind[ncol_ind-1]_H11
+			|	row_ptr[0]_H11
+			|	row_ptr[1]_H11
+			.
+			.
+			|	row_ptr[nrows-1]_H11
+			................................
+			similar structure for H12 then H21 then H22.

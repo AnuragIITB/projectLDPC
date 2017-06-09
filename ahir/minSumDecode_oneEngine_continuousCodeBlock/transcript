@@ -1,0 +1,33 @@
+# //  ModelSim SE 10.0 Dec  4 2010 Linux 3.13.0-32-generic
+# //
+# //  Copyright 1991-2010 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading project minSumDecode1
+# Compile of ahir_system.vhdl failed with 1 errors.
+# Compile of ahir_system_global_package.vhdl was successful.
+# Compile of ahir_system_test_bench.vhdl failed with 2 errors.
+# 3 compiles, 2 failed with 3 errors. 
+# Compile of ahir_system.vhdl failed with 2 errors.
+# Compile of ahir_system_global_package.vhdl was successful.
+# Compile of ahir_system_test_bench.vhdl failed with 2 errors.
+# 3 compiles, 2 failed with 4 errors. 
+# Compile of ahir_system.vhdl failed with 2 errors.
+# Compile of ahir_system_global_package.vhdl was successful.
+# Compile of ahir_system_test_bench.vhdl failed with 2 errors.
+# 3 compiles, 2 failed with 4 errors. 
+# Compile of ahir_system.vhdl failed with 2 errors.
+# Compile of ahir_system_global_package.vhdl was successful.
+# Compile of ahir_system_test_bench.vhdl failed with 2 errors.
+# Compile of aHiR_ieee_proposed.vhdl failed with 1 errors.
+# 4 compiles, 3 failed with 5 errors. 
+# Compile of ahir_system.vhdl failed with 2 errors.
+# Compile of ahir_system_global_package.vhdl was successful.
+# Compile of ahir_system_test_bench.vhdl failed with 2 errors.
+# Compile of aHiR_ieee_proposed.vhdl failed with 1 errors.
+# Compile of ahir.vhdl failed with 1 errors.
+# 5 compiles, 4 failed with 6 errors. 
