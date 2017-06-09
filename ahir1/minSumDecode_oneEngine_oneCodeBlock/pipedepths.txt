@@ -1,0 +1,12 @@
+matrix_in  	 4
+maxNitr_in 	 4
+maxNitr_in	 4
+ebbyNo_in	 4
+matrix_in 	 4
+rate_in          4
+ebbyNodb_out	 4
+code_block_in 	 4
+code_block_out   4
+is_decoded_out   4
+aPosteriori_out  4
+

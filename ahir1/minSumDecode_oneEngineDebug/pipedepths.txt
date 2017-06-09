@@ -1,0 +1,15 @@
+matrix_in  	 2
+maxNitr_in 	 2
+maxNitr_in	 2
+ebbyNo_in	 2
+matrix_in 	 2
+rate_in          2
+ebbyNodb_out	 2
+code_block_in 	 2
+code_block_out   2
+is_decoded_out   2
+aPosteriori_out  2
+I_out		 2
+aPriori_out	2
+code_block_in	2
+ncols_out	2
