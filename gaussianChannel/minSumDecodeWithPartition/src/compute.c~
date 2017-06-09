@@ -395,13 +395,13 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 					//
 					//	Evaluating extrinsic information 
 					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
-					//printf( "ext_info( %d,%d ) = %f \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;		
+					printf( "ext_info( %d,%d ) = %f \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;		
 					if (col == 0)
 						{
 						//
 						// modifing transverse_info for a check node
 						transverse_info[row] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ] , transverse_info[row]);
-						//printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
+						printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
 						}
 					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 					//
@@ -412,7 +412,7 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 				else if ( CHECK_BIT_COUNT1 == 1)
 					{
 					transverse_info[row] = message[ (pm_p->row_ptr[row]-1) ] ;
-					//printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
+					printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
 					}
 				}
 			else
@@ -483,13 +483,13 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 					//
 					//	Evaluating extrinsic information 
 					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
-					//printf( "ext_info( %d,%d ) = %lf \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;	
+					printf( "ext_info( %d,%d ) = %lf \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;	
 					if (col == 0)
 						{
 						//
 						// modifing transverse_info for a check node
 						transverse_info[row] = modifyInfo (ext_info[ (pm_p->row_ptr[row]-1) + col ] , transverse_info[row]);
-						//printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
+						printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
 						}
 					
 					//
@@ -500,7 +500,7 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 			else if ( CHECK_BIT_COUNT2 == 1)
 				{
 				transverse_info[row] = message[ (pm_p->row_ptr[row]-1) ] ;
-			   //printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
+			   printf( "trasnverse_info( %d ) = %lf \n", row , transverse_info[row] ) ;
 				}
 			}
 		}

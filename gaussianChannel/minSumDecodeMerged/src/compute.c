@@ -123,11 +123,11 @@ int minSumDecode( int max_nitr, ParityCheckMatrix* pm_p, double* code_block, dou
 //
 //	Performing computation on Check nodes	:
 		checkNodeComputeEngine( pm_p,  message,  ext_info, aPosteriori);
-		
-//			for ( I = 0 ; I < pm_p->ncols ; I++)
-//			{
-//			printf( " aPosteriori = %lf \n",aPosteriori[I]);
-//			}
+			int I ;
+			for ( I = 0 ; I < pm_p->ncols ; I++)
+			{
+			printf( " aPosteriori = %lf \n",aPosteriori[I]);
+			}
 
 //
 //	Modifing the code block according to a posteriori probabilities 
@@ -227,7 +227,7 @@ void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteri
 								message [ (pm_p->row_ptr[row]-1) + col ] =  \
 								aPosteriori[ chk_node_bit_p[col]-1] - 		\
 								ext_info [(pm_p->row_ptr[row]-1) + col] ;
-//	printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
+	printf (" message(%d) = %lf \n ",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
 							}
 						}
 					else 
@@ -241,7 +241,7 @@ void updateMessage ( ParityCheckMatrix* pm_p, double* ext_info, double* aPosteri
 							message [ (pm_p->row_ptr[row]-1) + col ] =    \
 							aPosteriori[ chk_node_bit_p[col]-1]  -  	  \
 							ext_info [(pm_p->row_ptr[row]-1) + col] ;
-//	printf (" message(%d) = %lf",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
+	printf (" message(%d) = %lf \n",(pm_p->row_ptr[row]-1) + col,message [ (pm_p->row_ptr[row]-1) + col ] );
 							}
 						}
 				}
@@ -321,7 +321,7 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 					//
 					//	Evaluating extrinsic information 
 					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
-					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+					printf( "ext_info( %d,%d ) = %lf \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 					//
 					// Modify a posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
 					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ; 	
@@ -385,7 +385,7 @@ void checkNodeComputeEngine ( ParityCheckMatrix* pm_p, double* message, double* 
 					//
 					//	Evaluating extrinsic information 
 					ext_info[ (pm_p->row_ptr[row]-1) + col ] = val * sign ;
-					//printf( "ext_info( %d,%d ) = %lf \t", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
+					printf( "ext_info( %d,%d ) = %lf \n", row ,col , ext_info[ (pm_p->row_ptr[row]-1) + col ] ) ;
 					//
 					// Modify posteriori	: 	Sum of extrinsic inforamtion from all check nodes to a bit node.
 					aPosteriori[chk_node_bit_p[col]-1 ] += ext_info[ (pm_p->row_ptr[row]-1) + col ] ; 	

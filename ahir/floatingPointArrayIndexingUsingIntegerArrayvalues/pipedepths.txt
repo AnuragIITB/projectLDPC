@@ -1,3 +1,0 @@
-read_input_a    2
-read_input_b    2
-write_output_c  2
