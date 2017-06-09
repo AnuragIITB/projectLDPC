@@ -1,3 +1,0 @@
-a_in  2
-b_in  2
-c_out 2

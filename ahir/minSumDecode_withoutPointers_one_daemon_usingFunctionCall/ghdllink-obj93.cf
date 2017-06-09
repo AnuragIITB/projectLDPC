@@ -1,8 +1,0 @@
-v 3
-file / "/home/anurag/anurag_drive/Assignment2_InstallAhir/ahir/release/vhdl/GhdlLink.vhdl" "20170519165717.000" "20170530190341.428":
-  package utility_package at 2( 27) + 0 on 11 body;
-  package body utility_package at 34( 1740) + 0 on 12;
-  package vhpi_foreign at 203( 7004) + 0 on 13 body;
-  package body vhpi_foreign at 235( 8286) + 0 on 14;
-  package logutilities at 279( 9752) + 0 on 15 body;
-  package body logutilities at 381( 12312) + 0 on 16;
