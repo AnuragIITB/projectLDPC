@@ -72,8 +72,6 @@ void sendInputs(FILE* in_file)
 		write_float32("rate_in", rate );
 		fprintf(stderr, "rate_in = %f \n",rate);
 
-		uint8_t read_inputs_written = read_uint8("inputs_written");
-		fprintf(stderr , "read_inputs_written = %d \n" , read_inputs_written );
 }
 
 //
@@ -96,12 +94,10 @@ void sendCodeBlock(FILE* in_file)
 //			fprintf(stderr,"Info: write to code_block_in pipe = %f\n",val);	
 			write_float32("code_block_in", val);			
 		}
-	uint8_t read_code_block_written = read_uint8("code_block_written");
-	fprintf(stderr , "read_code_blcok_written = %d \n ",read_code_block_written);
 }
 
 #ifdef SW
-DEFINE_THREAD(top_daemon)
+DEFINE_THREAD(minSumDecode)
 #endif
 
 int main(int argc,char* argv[])
@@ -112,8 +108,8 @@ int main(int argc,char* argv[])
 
 #ifdef SW
 	init_pipe_handler();
-	PTHREAD_DECL(top_daemon);
-	PTHREAD_CREATE(top_daemon);	
+	PTHREAD_DECL(minSumDecode);
+	PTHREAD_CREATE(minSumDecode);	
 #endif
 	FILE* matrix_file ;
 	
@@ -130,49 +126,23 @@ int main(int argc,char* argv[])
 	code_block_file = fopen(argv[2],"r");
 	sendCodeBlock(code_block_file);
 	fclose(code_block_file);
-	
-	//
-	// read aPriori initialization
-//	int II;
-//	for ( II = 0 ; II < ncols ; II++)
-//		{	
-		float val1 = read_float32("initialize_aPriori1");
-		fprintf(stderr," aPriori_out1 = %f \n ", val1);
-		float val2 = read_float32("initialize_aPriori2");
-		fprintf(stderr," aPriori_out2 = %f \n ", val2);
 
-//		}		
-
-
-	while(1)
-	{
-	
-	// read aposteriori
-	int P ;
-	for (P = 0 ; P < ncols ; P++)
-		{
-		float aPosteriori = read_float32("aPosteriori_out");
-		fprintf(stderr,"aPosteriori_out[%d]=%f\n", P , aPosteriori );
-		}
-	// read is_decoded status
-	uint8_t is_decoded_tb = read_uint8("is_decoded_out");
-	fprintf(stderr , "is_decoded_out = %d", is_decoded_tb);
-	if(is_decoded_tb == 1)
-	break;
-	}
 	
 	uint16_t I ;
 	float code_block[ncols];
 	for ( I = 0 ; I < ncols ; I++ )
 	{
-	float val_code_block  = read_float32("code_block_out");
+	float val_code_block  = read_float32("code_block_decoded");
 	code_block[I] = val_code_block;
 	fprintf(stderr, "code_block[%d] = %f \n",I,code_block[I] );
 	}
 	
+	uint16_t Nitr_req = read_uint16("nitr_required");
+	fprintf( stderr , " number of iteration required = %d \n", Nitr_req) ;
+	
 #ifdef SW
 	close_pipe_handler();
-	PTHREAD_CANCEL(top_daemon);	
+	PTHREAD_CANCEL(minSumDecode);	
 #endif
     return 0;
 }
