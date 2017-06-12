@@ -1,0 +1,109 @@
+$parameter MATRIX_NNZ         60000
+$parameter MATRIX_ORDER       13000
+
+
+$storage mem : $array [ MATRIX_NNZ ] $of $uint<16>
+$storage code_block : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPriori    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPosteriori    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage message : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage ext_info : $array [ MATRIX_NNZ ] $of $float <8,23>
+
+
+$pipe maxNitr_in : $uint<16>
+$pipe ebbyNo_in  : $float<8,23>
+$pipe matrix_in : $uint<16>  $depth 2
+$pipe rate_in  : $float<8,23>
+
+
+$module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr: $uint<16> ebbyNo rate: $float<8,23>) $is
+{
+	maxNitr := maxNitr_in
+	ebbyNo := ebbyNo_in
+	nrows := matrix_in
+	ncols := matrix_in
+	ncol_ind := matrix_in
+	range := (ncol_ind + nrows)
+
+	$brancblock [matrixRead] {
+
+		range_min_1 := (range - 1)
+		$dopipeline $depth 7 $buffering 1
+
+			$merge $entry $loopback
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I+1)
+			mem[(I+3)] := matrix_in
+
+		$while (I < range_min_1)
+	}
+	rate := rate_in
+}
+
+
+//
+// reading code block to decode
+$module [readCodeBlock] $in (ncols: $uint<16>) $out () $is
+{
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [readCodeBlockLoop] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I + 1)
+			code_block[I] := code_block_in
+		$while (I < ncols_minus_1)
+	}
+}
+
+//
+//---------------------------------------------------------------------------------------------- 
+
+$module [minSumDecode] $in () $out () $is
+{
+	$branchblock[loop] 
+	{
+	    $merge $entry loopback $endmerge
+
+		$call initInputs () (nrows ncols nocl_ind maxNitr ebbyNo rate)
+		$call readCodeBlock (ncols) ()
+		
+		... etc....
+		initialize_aPriori();
+		initializeMessage () ;
+	uint16_t nitr = 1 ;
+	
+	while ( nitr < maxNitr )
+		{
+		initialize_aPosteriori ( ) ;
+	
+		initializeExtrinsicInfo ();
+	
+		checkNodeComputeEngine ();
+	
+		update_aPosteriori() ;
+	
+		checkIsdecoded() ;
+		
+		if (is_decoded==1)
+			break ;
+		else
+			updateMessage() ;
+			
+		nitr++ ;
+		}		
+		
+		Nitr_required = nitr ;
+			
+		send_output() ;
+
+		exit_condition := (NITR < MAX)
+
+		$if (~exit_condition) $then
+		   $place [loopback]
+		$endif
+	}
+}
+
