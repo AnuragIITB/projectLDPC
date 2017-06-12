@@ -1,68 +1,27 @@
+#include <stdlib.h>
 #include <stdint.h>
 #include <Pipes.h>
 #include <stdio.h>
-#include <math.h>
-#include <fpu.h>
 #include "prog.h"
 
-
-#define CHECK_BIT_COUNT1   ( ncol_ind - ( mem[3 + ncol_ind +row] -1 ) )
-#define CHECK_BIT_COUNT2   (  mem[3 + ncol_ind +row + 1] ) - (  mem[3 + ncol_ind +row]  )
-#define	nrows 	 mem[0]
-#define	ncols 	 mem[1]
-#define	ncol_ind 	 mem[2]
-#define 	index_2D	mem[3 + ncol_ind + row] -1 + col 
-#define	index_1D 	mem [3 + index_2D] - 1
+uint16_t mem[MATRIX_NNZ];
+float code_block[MATRIX_ORDER];
+uint16_t maxNitr    ;
+float   ebbyNo    ; 
+float   rate  		;
+uint16_t is_decoded ;
+uint16_t Nitr_required ;
+	
+float aPriori[MATRIX_ORDER];	
+float message[MATRIX_NNZ] ; 
+float aPosteriori[MATRIX_ORDER];
+float ext_info[MATRIX_NNZ];
+uint16_t ncols,nrows,ncol_ind;
 
 #ifndef SW
 void __loop_pipelining_on__(uint32_t val, uint32_t buf, uint32_t extreme_flag);
 #endif
-//-------------------------------------------------------------------------------------------------
-//
-//
-	uint16_t mem[MATRIX_NNZ];
-	uint16_t maxNitr    ;
-	float   ebbyNo    ; 
-	float  rate  		;
-	float code_block[MATRIX_ORDER];
-	float aPriori[MATRIX_ORDER];	// aPriori matrix
-	float message[MATRIX_NNZ] ; 
-	float aPosteriori[MATRIX_ORDER];
-	float ext_info[MATRIX_NNZ];
 
-//
-//
-void initMem( )
-{
-uint16_t I,val,range;
-	for(I = 0; I < 3; I++)
-		{
-		val = read_uint16("matrix_in");
-		mem[I] = val ; 
-#ifdef SW
-//		fprintf(stderr,"Info: read data = %d\n",val); 
-#endif
-		}
-		
-	range = (mem[2]+mem[0]) ;
-	
-	for(I = 0; I < range ; I++)
-		{
-#ifndef SW
-			__loop_pipelining_on__(16,2,1);
-#endif
-		val = read_uint16("matrix_in");
-		mem[I+3] = val ;
-#ifdef SW
-//		fprintf(stderr,"Info: read data = %d\n",val);
-#endif
-		} 
-}
-
-//---------------------------------------------------------------------------
-
-
-	
 void initInputs()
 {
 	//
@@ -81,14 +40,36 @@ void initInputs()
 #endif
 	//
 	// Populating mem with parity check matrix H11
-	initMem() ;
+	uint16_t I,val,range;
+	for(I = 0; I < 3; I++)
+		{
+		val = read_uint16("matrix_in");
+		mem[I] = val ; 
+#ifdef SW
+//		fprintf(stderr,"Info: read data = %d\n",val); 
+#endif
+		}
+	nrows = mem[0];
+	ncols = mem[1];
+	ncol_ind = mem[2] ; 
+	range = (mem[2]+mem[0]) ;
+	
+	for(I = 0; I < range ; I++)
+		{
+#ifndef SW
+			__loop_pipelining_on__(16,2,1);
+#endif
+		val = read_uint16("matrix_in");
+		mem[I+3] = val ;
+#ifdef SW
+//		fprintf(stderr,"Info: read data = %d\n",val);
+#endif
+		} 
 	//
 	// reading rate of code as input
 	float Rate = read_float32("rate_in");
 	rate = Rate ;
 	//
-	//
-	write_uint8("inputs_written",1);
 }
 //--------------------------------------------------------------------
 
@@ -99,7 +80,7 @@ void initInputs()
 // reading code block to decode
 void readCodeBlock ()
 {
-	uint16_t I;	
+	uint8_t I;	
 	for(I = 0; I < ncols; I++)
 			{
 #ifndef SW
@@ -111,127 +92,86 @@ void readCodeBlock ()
 #endif
 			code_block[I] = code_bit ;
 			}
-	write_uint8("code_block_written",1);
 }
 //
 //---------------------------------------------------------------------------------------------- 
 
-//
-// initializing apriori probabilities
-void initialize_aPriori ( )
+void initialize_aPriori ()
 {
-	uint16_t I;
-
-// 	Initializing a priori probabilities	:
+	uint16_t I;	
 	for ( I = 0 ; I < ncols ; I++ )
 		{
 #ifndef SW
-//			__loop_pipelining_on__(16,2,1);
-#endif
-		// It has a minus sign in contrast to papers.
-		// Reason is :
-		//
-		// Here BPSK modulation :	0  ->  -1
-		// 							1  ->   1
-		//
-		//
-		//aPriori[I] = 4*code_block[I]/(2*sigma2) ;    // for test_matrix 
-		aPriori[I]   = -4*code_block[I]*(rate*ebbyNo) ;
-		fprintf(stderr , "aPriori[%d] = %f \n" , I , aPriori[I]); 
-//#endif
+//	__loop_pipelining_on__(16,2,0);
+#endif	
+		float StoN = ebbyNo ;
+		float R = rate ;
+		float temp1 = rate * StoN  ;
+		float code_bit = -4*code_block[ I ] ;
+		float temp2 =  temp1 * code_bit ; 
+		float val =  temp2;
+		aPriori[I] = val  ;  
 		}
-//		int kk;
-//		for (kk = 0 ; kk < ncols ; kk++)
-//			{
-			float val1 = aPriori[0] ;
-			write_float32("initialize_aPriori1" ,val1);
-			float val2 = aPriori[1] ;
-			write_float32("initialize_aPriori2" ,val2);		
-
-//			}
-
 }
-//--------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------
 
 
-
-
-//
-//	the function takes a priori probabilities at bit nodes as a input and initializes the messages passing 
-//	through edges, from bit nodes side to check node side.
 void initializeMessage ()
-{
+{	
 	uint16_t I ;
-	for ( I=0 ; I < ncol_ind ; I++)
+	for ( I = 0 ; I < ncol_ind ; I++)
 	{
 #ifndef SW
-	__loop_pipelining_on__(16,2,1);
+//	__loop_pipelining_on__(16,2,0);
 #endif
-	message[I] = aPriori[mem[3+I]-1];	
-#ifdef SW
-//	fprintf(stderr," message[%d]= aPriori[%d]%f \n ",I,mem[3+I],message[I]);
-#endif	
+	uint16_t temp1 = mem[ 3 + I ];
+	uint16_t temp2 = temp1 - 1;
+	float val = aPriori[ temp2 ]; 
+	message[I] = val ;	
 	}
-}			
-		
-//-------------------------------------------------------------------------------------------------------------------
+}	
 
-//
-// initialize a posteriori probability by a priori probabilities.
 void initialize_aPosteriori ( )
-{		
-
+{	
 	uint16_t I;
 	for ( I = 0 ; I < ncols ; I++)
-			{
+		{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//	__loop_pipelining_on__(16,2,0);
 #endif
-			aPosteriori[I] = aPriori[I] ;
-			}
-#ifdef SW
-	fprintf(stderr," aPosteriori initialized \n");
-#endif
-	
+		aPosteriori[I] = aPriori[I] ;
+		}	
 }
-//----------------------------------------------------------------------------------------------------------------
 
-//
-// initialize extrinsic inforamtion for every iteration to zero.
+
 void initializeExtrinsicInfo ( )
 {
-uint16_t I;
-		for ( I = 0 ; I < ncol_ind ; I++)
-			{
+	uint16_t I;
+	for ( I = 0 ; I < ncol_ind ; I++)
+	{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//	__loop_pipelining_on__(16,2,1);
 #endif
-			ext_info[I] = 0;
-			}
-#ifdef SW
-			fprintf(stderr,"ext_info initialized \n");
-#endif
-
+	ext_info[I] = 0;
+	}
 }
-//---------------------------------------------------------------------------------------------------------------
 
-//
-// The function takes messages from bit nodes and compute extrinsic inforamtion for all the edges
-// and a posteriori probabilities for all the bits. 
+
+
+
 void checkNodeComputeEngine ()
 {
 
 	uint16_t row = 0;
 	uint16_t col = 0;
-	uint16_t range = 0;
-		
+	uint16_t range = 0;	
 	for ( row = 0 ; row < nrows ; row++ )
 		{
 #ifndef SW
 		__loop_pipelining_on__(16,2,1);
-#endif						
-		
+#endif		
+		uint16_t CHECK_BIT_COUNT1   = ( ncol_ind - ( mem[3 + ncol_ind +row] -1 ) ) ;
+        uint16_t CHECK_BIT_COUNT2   = (  mem[3 + ncol_ind +row + 1] ) - (  mem[3 + ncol_ind +row]  ) ;				
+		 
 		if ( row == (nrows-1) )
 			range = CHECK_BIT_COUNT1 ;
 		else 
@@ -240,9 +180,10 @@ void checkNodeComputeEngine ()
 		for ( col = 0 ; col < range ; col++)
 			{
 #ifndef SW	
-			__loop_pipelining_on__(16,2,1);
+//			__loop_pipelining_on__(16,2,1);
 #endif 			
 			// iterating through all the bit nodes corrosponding to a check 
+			uint16_t index_2D = mem[3 + ncol_ind + row] -1 + col ;
 			uint16_t I = 0 ;
 			float val = 0.0;				// represents magnitude of the extrensic information.
 			uint8_t flag = 0 ; 				// represents first iteration through the inner most loop.
@@ -251,9 +192,11 @@ void checkNodeComputeEngine ()
 			for ( I = 0 ; I < range ; I++)
 				{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//			__loop_pipelining_on__(16,2,1);
 #endif			
 				uint16_t index =  mem[3 + ncol_ind + row] -1 + I  ;
+				float temp1 ;
+				__absf(message[index],temp1);
 				//
 				// To calculating extrinsic information for all the edges from a check to all the bit nodes,
 		   		// iterating through all the bit nodes corrosponding to a perticular check node.
@@ -263,9 +206,10 @@ void checkNodeComputeEngine ()
 					continue;
 				else
 					{
+
 					//
 					// finding sign of the extrinsic information 
-					if ( message[ index] >= 0.0 )
+					if ( message[ index ] >= 0.0 )
 						{
 						exor = exor ^ 0 ;
 						}
@@ -279,13 +223,13 @@ void checkNodeComputeEngine ()
 						{
 						// 
 						// true for first iteration to initialize the magnitude of the extrinsic information.
-						val = absf(message[ index]);
+						val = temp1 ;
 						}
 					else
 						{
-						if ( absf(message[ index]) < val )
+						if (temp1 < val )
 							{
-							val = absf(message[ index]) ; 
+							val = temp1 ; 
 							}
 						}  
 					} 
@@ -295,59 +239,33 @@ void checkNodeComputeEngine ()
 				else 			sign = -1.0;
 				
 				ext_info[ index_2D ] = val * sign ;
-//			 	aPosteriori[ index_1D ] += ext_info[ index_2D  ] ; 	
-#ifdef SW
-//				fprintf(stderr, " ext_info[%d] = %f \n", index_2D , ext_info[index_2D]  ) ;
-#endif
-				
 			}	
 		}
-		
-#ifdef SW
-		fprintf(stderr, "computation done \n");	
-#endif
 }
-//-------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
 
 void update_aPosteriori()
 {
-        uint16_t I ;
-        for ( I = 0 ; I < ncol_ind ; I++)
-                {
-                aPosteriori[mem[3+I]-1] += ext_info[I] ;
-                }
+	uint16_t I ;
+    for ( I = 0 ; I < ncol_ind ; I++)
+	{
+	uint16_t val = mem[3+I]-1 ;
+	aPosteriori[val] += ext_info[I] ;
+    }
 }
 
 
-//----------------------------------------------------------------------------------------------------------
-
-float absf( float f)
-{
-float ret ;
-if (f < 0.0)
-ret = (-f);
-else
-ret = (f);
-return(ret) ;
-}
-
-//-------------------------------------------------------------------------------------------------------------------------
-
-//
-// Function to modify code block and check if the new code block satisfies all parity checks	:
-// it modifies the code block according to a piosteriori probabilities.
-// return the decode status of the code block.
-uint8_t checkIsdecoded() 
+void checkIsdecoded() 
 {
 		
-	uint8_t is_decoded = 1;
+	is_decoded = 1;
 	uint16_t I;
 	for( I = 0 ; I < ncols ; I++)
 		{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//		__loop_pipelining_on__(16,2,1);
 #endif 
-//	 iterating through all code bits	:
 		if ( aPosteriori[I] > 0.0 )    		// indicates that code bit is likely to be 0.
 			{
 			if ( code_block[I] > 0.0)		// indicates that code bit is 1 at present.
@@ -366,113 +284,168 @@ uint8_t checkIsdecoded()
 			code_block[I] = 1.0;			// modifies the code bit.
 			}
 		}
-#ifdef SW
-		fprintf(stderr,"check is decoded done \n");
-#endif
-	return(is_decoded);
 }
-//-------------------------------------------------------------------------------------------------------------
-//
-//	function to update the bit node information (message) according to a posteriori probability and extrinsic information.
+
 void updateMessage ()
 {
-
-		uint16_t row,col;
-		for ( row = 0 ; row < nrows ; row++ )
-				{
+	uint16_t row,col;
+	for ( row = 0 ; row < nrows ; row++ )
+		{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//		__loop_pipelining_on__(16,2,1);
 #endif
-				uint16_t range ;
-				if ( row == (nrows-1) )
-					range = CHECK_BIT_COUNT1 ;
-				else
-					range = CHECK_BIT_COUNT2 ;
-				//
-				// true for last check node only.
-				for ( col = 0 ; col < range ; col++)
-					{
+		uint16_t range ;
+		uint16_t CHECK_BIT_COUNT1   = ( ncol_ind - ( mem[3 + ncol_ind +row] -1 ) ) ;
+        uint16_t CHECK_BIT_COUNT2  =  ( mem[3 + ncol_ind +row + 1] ) - (  mem[3 + ncol_ind +row]  ) ;
+		if ( row == (nrows-1) )
+			range = CHECK_BIT_COUNT1 ;
+		else
+			range = CHECK_BIT_COUNT2 ;
+		for ( col = 0 ; col < range ; col++)
+			{
 #ifndef SW
-			__loop_pipelining_on__(16,2,1);
+//			__loop_pipelining_on__(16,2,1);
 #endif
-					//
-					//	iterating through all the bit nodes of a check node and updating message.
-					message [ index_2D ] =  aPosteriori[ index_1D ] -ext_info [ index_2D] ;
-#ifdef SW
-//					fprintf (stderr,"message(%d) = %f \n", index_2D , message [ index_2D ] );
-#endif
-					}
-				}
+			uint16_t index_2D = mem[3 + ncol_ind + row] -1 + col ;
+			uint16_t index_1D = mem [3 + index_2D] - 1 ;
+			message [ index_2D ] =  aPosteriori[ index_1D ] - ext_info [ index_2D] ;
+			}
+		}
 
 }
 
 
+void send_output()
+{	
 
-//
-//-----------------------------------------------------------------------------------------------------------
+		int J ;
+/*
+		for( J = 0 ; J < nrows+ncol_ind+3 ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,1);
+#endif	
+		uint16_t val = mem[J];
+		write_uint16("mem_out", val);		
+		} 
+		
+		for( J = 0 ; J < ncols ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,1);
+#endif	
+		float val = code_block[J];
+		write_float32("code_block_out", val);		
+		} 
+		
+		for( J = 0 ; J < ncols ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = aPriori[J];
+		write_float32("aPriori_out", val);		
+		} 	
+		
+		for( J = 0 ; J < ncol_ind ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = message[J];
+		write_float32("init_message_out", val);		
+		} 
+		
+		for( J = 0 ; J < ncols ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = aPosteriori[J];
+		write_float32("init_aPosteriori_out", val);		
+		} 	
+		
+		for( J = 0 ; J < ncol_ind; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = ext_info[J];
+		write_float32("init_ext_info_out", val);		
+		}
+		
+		for( J = 0 ; J < ncol_ind; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = ext_info[J];
+		write_float32("ext_info_out", val);		
+		}
+		
+		for( J = 0 ; J < ncols ; J++)
+		{
+#ifndef SW
+		__loop_pipelining_on__(16,2,0);
+#endif	
+		float val = aPosteriori[J];
+		write_float32("aPosteriori_out", val);		
+		} 
+		
+		write_uint16("decode_done", is_decoded);	
+*/		
+		for( J = 0 ; J < ncols ; J++)
+		{
+#ifndef SW
+//		__loop_pipelining_on__(16,2,1);
+#endif	
+		float val = code_block[J];
+		write_float32("code_block_decoded", val);		
+		} 
+		
+		write_uint16("nitr_required", Nitr_required );
+}		
 
-void top_daemon ()
+
+void minSumDecode()
 {
-	
+	while(1)
+	{
 	initInputs() ; 
 	
 	readCodeBlock();
-	
-	uint8_t nitr = 1 ;
 
 	initialize_aPriori();
 	
-	initializeMessage ();
+	initializeMessage () ;
 	
+	uint16_t nitr = 1 ;
 	
-	
-	while(nitr < maxNitr)
+	while ( nitr < maxNitr )
 		{
-	
-		initialize_aPosteriori ();
+		initialize_aPosteriori ( ) ;
 	
 		initializeExtrinsicInfo ();
 	
 		checkNodeComputeEngine ();
-		
-		update_aPosteriori() ;
-		 
-		int P = 0 ;
-
-		for ( P = 0 ; P < ncols ; P++)
-		{
-//		fprintf(stderr,"aPosteriori[%d] = %f \n",P,aPosteriori[P]);
-		write_float32("aPosteriori_out",aPosteriori[P]);
-		}
 	
-		uint8_t is_decoded = checkIsdecoded() ;
-		write_uint8("is_decoded_out",is_decoded);
+		update_aPosteriori() ;
+	
+		checkIsdecoded() ;
 		
-		if (is_decoded)
+		if (is_decoded==1)
 			break ;
 		else
-			updateMessage ();
-		
+			updateMessage() ;
+			
 		nitr++ ;
-		}
+		}		
 		
-		
-
-#ifdef SW
-	fprintf(stderr," number of iteration required = %d \n",(nitr)) ;
-	int I;
-	for(I = 0; I < ncols; I++)
-		{
-//		fprintf(stderr,"code_block[%d] = %f \n" , I,code_block[I]);
-		}
-#endif
-	
-
-	uint16_t K ;
-	
-	for ( K = 0 ; K < ncols ; K++ )
-	{
-	write_float32("code_block_out",code_block[K]);
-	}		
+		Nitr_required = nitr ;
+			
+		send_output() ;
+	}
 }
+
+
 
