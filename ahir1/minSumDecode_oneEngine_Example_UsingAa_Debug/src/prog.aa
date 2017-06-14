@@ -12,12 +12,27 @@ $storage ext_info : $array [ MATRIX_NNZ ] $of $float <8,23>
 
 $pipe maxNitr_in : $uint<16>
 $pipe ebbyNo_in  : $float<8,23>
+$pipe maxNitr_out : $uint<16>
+$pipe ebbyNo_out : $float<8,23>
 $pipe matrix_in : $uint<16>  $depth 2
 $pipe rate_in  : $float<8,23>
+$pipe rate_out  : $float<8,23>
 $pipe code_block_in: $float<8,23> $depth 2
 $pipe code_block_decoded: $float<8,23> 
 $pipe Nitr_required : $uint<16>
-
+$pipe mem_out : $uint<16> $depth 2
+$pipe aPriori_out: $float<8,23> 
+$pipe init_message_out : $float<8,23> 
+$pipe init_aPosteriori_out : $float<8,23> 
+$pipe init_ext_info_out : $float<8,23>
+$pipe ext_info_out : $float<8,23>
+$pipe index_2D_pipe : $uint<16>
+$pipe val_pipe : $float<8,23>
+$pipe sign_pipe: $float<8,23>
+$pipe temp_info_pipe : $float<8,23>
+$pipe aPosteriori_out : $float<8,23>
+$pipe decode_done : $uint<16>
+$pipe message_out : $float<8,23>
 
 $module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr: $uint<16> ebbyNo rate: $float<8,23>) $is
 {
@@ -319,69 +334,195 @@ $module [updateMessage] $in (nrows ncol_ind: $uint<16>) $out() $is
 //
 //
 //
-
-//
-//
-//
-$module [send_output] $in(ncols: $uint<16> nitr : $uint<16>) $out() $is
+$module [minSumDecode] $in () $out () $is
 {
 
+	
+
+		$call initInputs () (nrows ncols ncol_ind maxNitr ebbyNo rate)
+		$call readCodeBlock (ncols) ()
+		
+//--------------------------------------------------
+//send inputs
+	maxNitr_out := maxNitr
+	ebbyNo_out := ebbyNo
+
+	range_minus_1 := (((nrows+ncol_ind)+3) - 1)
+	$branchblock [send_outputs_loop] 
+	{
+	$merge loopback $entry  
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+	$endmerge
+	
+	NI := (I + 1)
+	val := mem[I]
+	mem_out := val 
+	
+	$if (I < range_minus_1)	 $then
+			$place[loopback]
+		$endif	
+	}				
+
+	rate_out := rate
+	
+	
+	
+// send code block in 
 	ncols_minus_1 := (ncols - 1)
-	$branchblock [send_outputs_loop] {
-	$merge $entry loopback 
+	$branchblock [readCodeBlockLoop1] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I + 1)
+			code_block_decoded := code_block[I] 
+		$while (I < ncols_minus_1)
+	}
+//---------------------------------------------------------
+		$call initialize_aPriori (ncols ebbyNo rate) ()
+//-----------------------------------------------------------		
+	// read_apriori_init
+	//
+	$branchblock [readCodeBlockLoop11] {
+			$merge loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge 
+			NI := (I + 1)
+			aPriori_out := aPriori[I] 
+		$if (I < ncols_minus_1) $then
+			$place[loopback]
+		$endif
+	}	
+
+//------------------------------------------------------------
+		$call initializeMessage (ncol_ind) ()
+//------------------------------------------------------------
+
+// read message
+
+
+	//
+		ncol_ind_minus_1 := (ncol_ind - 1)
+	$branchblock [initializeMessage_loop1] {
+
+			$merge  loopback $entry 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge
+			NI := (I + 1)
+
+			init_message_out := message[I]  
+		$if(I < ncol_ind_minus_1)	$then
+					$place[loopback]
+		$endif
+		}
+// loop 2-----------------------------------------
+nloop_minus_one := ((ncol_ind - ncol_ind)+1)
+	$branchblock [initializeMessage_loop456] {
+			$merge lOopback $entry  
+				$phi II := ($bitcast ($uint<16>) 0) $on $entry NII $on lOopback
+			$endmerge
+			NII := (II + 1)
+//----------------------------------------------------------
+$call initialize_aPosteriori ( ncols) () 
+//----------------------------------------------------------
+
+// read init aposteriori
+
+
+	$branchblock [initialize_aPosteriori_loop1] {
+			$merge loopback  $entry 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge
+			NI := (I + 1)
+			init_aPosteriori_out := aPosteriori[I] 	
+		$if(I < ncols_minus_1) $then
+							$place[loopback]
+		$endif	
+		}	
+//----------------------------------------------------------
+$call initializeExtrinsicInfo (ncol_ind) ()
+//----------------------------------------------------------
+
+// read init ext info 
+	
+	$branchblock [initializeExtrinsicInfo_loop1] {
+			$merge loopback  $entry 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge
+			NI := (I + 1)
+			init_ext_info_out := ext_info[I] 
+		$if (I < ncol_ind_minus_1) $then
+			$place[loopback]
+		$endif	
+		}
+//---------------------------------------------------------
+$call checkNodeComputeEngine (ncol_ind nrows) ()
+//-------------------------------------------------
+
+// read ext_info
+	$branchblock [initializeExtrinsicInfo_loop2] {
+			$merge  loopback $entry 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge
+			NI := (I + 1)
+			ext_info_out := ext_info[I] 
+		$if  (I < ncol_ind_minus_1) $then
+			$place[loopback]
+		$endif	
+		}
+//---------------------------------------------------------
+$call update_aPosteriori(ncol_ind) ()
+//--------------------------------------------------------
+
+//
+// read aposteriori
+
+	$branchblock [update_aPosteriori_loop11] {
+	$merge loopback $entry  
 	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
 	$endmerge
 	NI := (I + 1)
 	//
-	val := code_block[I]
-	code_block_decoded := val 
+    aPosteriori_out := aPosteriori[I] 
 	//
-	$if (I < ncols_minus_1) $then
-		$place[loopback]
-	$endif	
+	$if (I < ncols_minus_1)	$then
+			$place[loopback]
+		$endif	
 	}
-	Nitr_required := nitr 
-}
-
-//
-//
-//
-$module [minSumDecode] $in () $out () $is
-{
-
-	$call initInputs () (nrows ncols ncol_ind maxNitr ebbyNo rate)
-	$call readCodeBlock (ncols) ()
-		
-	$call initialize_aPriori (ncols ebbyNo rate) ()
-
-	$call initializeMessage (ncol_ind) ()
 	
-		$branchblock[minSumDecode_loop] 
-		{	
-		$merge $entry loopback
-		$phi nitr := ($bitcast ($uint<16>) 1) $on $entry next_nitr $on loopback
-		$endmerge
-		next_nitr := (nitr + 1)
-		
-		$call initialize_aPosteriori ( ncols) () 
+//-----------------------------------------------------------
+$call checkIsdecoded(ncols) (is_decoded)
+//----------------------------------------------------------
+//
+// read 
+	val_decode := ($mux is_decoded ($bitcast ($uint<16>) 1) ($bitcast ($uint<16>) 0))
+	decode_done := val_decode 
+//------------------------------------------------------------
+$call updateMessage(nrows ncol_ind) ()
+//-----------------------------------------------------------
 
-		$call initializeExtrinsicInfo (ncol_ind) ()
 
-		$call checkNodeComputeEngine (ncol_ind nrows) ()
-
-		$call update_aPosteriori(ncol_ind) ()
-
-		$call checkIsdecoded(ncols) (is_decoded)
-
-		exit_condition := ((nitr > maxNitr) | is_decoded ) 
-		
-		$if (~exit_condition) $then
-			$call updateMessage(nrows ncol_ind) ()
-			$place [loopback]
+//
+// read 
+	$branchblock [update_aPosteriori_loop111] {
+	$merge loopback  $entry 
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+	$endmerge
+	NI := (I + 1)
+	//
+    message_out := message[I] 
+	//
+	$if (I < ncol_ind_minus_1)	$then
+			$place[loopback]
 		$endif
-		}(nitr => nitr)	
-		
-		$call send_output (ncols nitr) () 
+	}
+
+// call 2 values
+$if (II < nloop_minus_one) $then
+	$place[lOopback]
+$endif	
+		}
+
 } //end min sum
 
 

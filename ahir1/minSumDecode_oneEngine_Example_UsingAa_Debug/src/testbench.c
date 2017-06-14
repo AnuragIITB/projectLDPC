@@ -60,13 +60,13 @@ void sendInputs()
 		//
 		// write maximum number of iterations
 		write_uint16("maxNitr_in", maxNitr );
-		//fprintf(stderr, "maxNitr = %d \n",maxNitr);
+		fprintf(stderr, "maxNitr = %d \n",maxNitr);
 		//
 		// write SNR in db
 		
 		ebbyNo = pow(10,0.1*ebbyNodb) ;
 		write_float32("ebbyNo_in", ebbyNo );
-		//fprintf(stderr, "ebbyNo_in = %f \n",ebbyNo);
+		fprintf(stderr, "ebbyNo_in = %f \n",ebbyNo);
 		
 		//
 		// write matrix entries from matrix pipe
@@ -80,7 +80,7 @@ void sendInputs()
 		} 	
  
 		write_float32("rate_in", rate );
-		//fprintf(stderr, "rate_in = %f \n",rate);
+		fprintf(stderr, "rate_in = %f \n",rate);
 
 }
 
@@ -97,7 +97,7 @@ void sendCodeBlock()
 	for ( J = 0 ; J < ncols ; J++)
 		{
 		val = code_block[J] ; 
-		//fprintf(stderr,"Info: write to code_block_in pipe = %f\n",val);	
+		fprintf(stderr,"Info: write to code_block_in pipe = %f\n",val);	
 		write_float32("code_block_in", val);			
 		}
 }
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 	sendCodeBlock() ;
 
 		int I ;
-/*		float valf ;
+		float valf ;
 		
 		uint16_t val = read_uint16("maxNitr_out");
 		fprintf(stderr, "maxNitr_out = %d \n",val);
@@ -160,7 +160,9 @@ int main(int argc, char* argv[])
 		float val = read_float32("init_message_out");
 		fprintf(stderr, "init_message_out = %f \n",val);
 		} 		
-		
+int A ;
+for ( A = 0 ; A < 2 ; A++)	
+{	
 	for( I = 0 ; I < ncols ; I++)
 		{	
 		float val = read_float32("init_aPosteriori_out");
@@ -198,7 +200,7 @@ int main(int argc, char* argv[])
 		float val = read_float32("temp_info_pipe");
 		fprintf(stderr, "temp_info_pipe = %f \n",val);
 		}
-			
+	*/			
 		for( I = 0 ; I < ncol_ind ; I++)
 		{	
 		float val = read_float32("ext_info_out");
@@ -218,19 +220,19 @@ int main(int argc, char* argv[])
 		{	
 		float val = read_float32("message_out");
 		fprintf(stderr, "message_out = %f \n",val);
-		}  	
-*/	
-		
+		} 
+} 		
+/*		
 		for( I = 0 ; I < ncols ; I++)
 		{	
 		float val = read_float32("code_block_decoded");
 		fprintf(stderr, "code_block_out = %f \n",val);
 		}
 		
-		uint16_t nitr_required = read_uint16("Nitr_required");
-		fprintf(stderr, "nitr_required =  %d \n",nitr_required);	
+		uint16_t Nitr_required = read_uint16("nitr_required");
+		fprintf(stderr, "Nitr_required =  %d \n",Nitr_required);	
 		
-
+*/
 		
 #ifdef SW
 	close_pipe_handler();
