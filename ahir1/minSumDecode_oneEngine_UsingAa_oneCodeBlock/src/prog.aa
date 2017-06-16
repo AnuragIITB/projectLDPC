@@ -140,7 +140,7 @@ $module [initializeExtrinsicInfo] $in ( ncol_ind: $uint<16>  ) $out() $is
 
 	$module [checkNodeComputeEngine] $in (ncol_ind nrows: $uint<16> ) $out() $is
 {
-//	row := ((nrows - nrows )+1)
+
 	nrows_minus_1 := (nrows - 1)
 	$branchblock [checkNodeComputeEngine_loop1] 
 	{ 
@@ -158,8 +158,7 @@ $module [initializeExtrinsicInfo] $in ( ncol_ind: $uint<16>  ) $out() $is
 	
  
 	range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
-//
-		col := ((range - range)+1) 
+ 
 		range_minus_1 := (range- 1)
 		$branchblock [checkNodeComputeEngine_loop2] 
 		{
