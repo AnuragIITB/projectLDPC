@@ -21,8 +21,6 @@ $pipe Nitr_required : $uint<16>
 
 $module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr: $uint<16> ebbyNo rate: $float<8,23>) $is
 {
-	maxNitr := maxNitr_in
-	ebbyNo := ebbyNo_in
 	nrows := matrix_in
 	ncols := matrix_in
 	ncol_ind := matrix_in
@@ -42,6 +40,9 @@ $module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr: $uint<16> ebbyNo
 		$while (I < range_min_1)
 	}
 	rate := rate_in
+	
+	maxNitr := maxNitr_in
+	ebbyNo := ebbyNo_in
 }
 
 //
