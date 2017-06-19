@@ -1,0 +1,221 @@
+$parameter MATRIX_NNZ         60000
+$parameter MATRIX_ORDER       13000
+
+
+$storage mem : $array [ MATRIX_NNZ ] $of $uint<16>
+$storage code_block : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPriori    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPosteriori    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage message : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage ext_info : $array [ MATRIX_NNZ ] $of $float <8,23>
+
+
+$pipe maxNitr_in : $uint<16>
+$pipe ebbyNo_in  : $float<8,23>
+$pipe maxNitr_out : $uint<16>
+$pipe ebbyNo_out : $float<8,23>
+$pipe matrix_in : $uint<16>  $depth 2
+$pipe rate_in  : $float<8,23>
+$pipe rate_out  : $float<8,23>
+$pipe code_block_in: $float<8,23> $depth 2
+$pipe code_block_decoded: $float<8,23> 
+$pipe Nitr_required : $uint<16>
+$pipe mem_out : $uint<16> $depth 2
+$pipe aPriori_out: $float<8,23> 
+$pipe init_message_out : $float<8,23> 
+$pipe init_aPosteriori_out : $float<8,23> 
+$pipe init_ext_info_out : $float<8,23>
+$pipe ext_info_out : $float<8,23>
+$pipe index_2D_pipe : $uint<16>
+$pipe val_pipe : $float<8,23>
+$pipe sign_pipe: $float<8,23>
+$pipe temp_info_pipe : $float<8,23>
+$pipe aPosteriori_out : $float<8,23>
+$pipe decode_done : $uint<16>
+$pipe message_out : $float<8,23>
+$pipe I_out_pipe : $uint<16>
+
+
+
+$module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr: $uint<16> ebbyNo rate: $float<8,23>) $is
+{
+	//
+	nrows := matrix_in
+	ncols := matrix_in
+	ncol_ind := matrix_in
+	//
+	$volatile range := (ncol_ind + nrows)
+	$volatile range_min_5 := ((ncol_ind + nrows) - 5)
+	$branchblock [matrixRead] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			$volatile NI := (I+4)
+			
+			mem[(I+3)] := matrix_in
+			mem[(I+4)] := matrix_in
+			mem[(I+5)] := matrix_in
+			mem[(I+6)] := matrix_in
+
+		$while ((I+3) < range_min_5)
+	}( I => I )
+	
+	$volatile index_count:= (I+4)
+	$volatile range_minus_1 := (range-1)
+	$branchblock [matrixRead_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+			mem[(J+3)] := matrix_in
+			$while (J < range_minus_1) 	
+		}	
+	//	
+	rate := rate_in	
+	maxNitr := maxNitr_in
+	ebbyNo := ebbyNo_in
+}
+
+//
+// reading code block to decode
+$module [readCodeBlock] $in (ncols: $uint<16>) $out () $is
+{
+	ncols_minus_5 := (ncols - 5)
+	$branchblock [readCodeBlockLoop] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I + 4)
+			code_block[I] := code_block_in
+			code_block[(I+1)] := code_block_in
+			code_block[(I+2)] := code_block_in
+			code_block[(I+3)] := code_block_in
+			
+		$while ((I+3) < ncols_minus_5)
+	}( I => I )
+	
+	$volatile index_count:= (I+4)
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [readCodeBlockLoop_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			code_block[J] := code_block_in
+			
+			$while (J < ncols_minus_1 ) 	
+		}		
+	
+}
+
+//
+$module [initialize_aPriori] $in (ncols: $uint<16> ebbyNo rate: $float<8,23>) $out() $is
+{
+	temp1 := ((rate * ebbyNo )* ($bitcast ($float<8,23>) _f-4.00e+0) )
+	ncols_minus_4 := (ncols - 4)
+	$branchblock [init_aPriori_loop1] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			NI := (I + 4)
+			I_out_pipe := I 
+			aPriori[I] 	 := (temp1 * code_block[I]  )     
+			aPriori[(I+1)] := (temp1 * code_block[(I+1)]) 
+			aPriori[(I+2)] := (temp1 * code_block[(I+2)]) 
+			aPriori[(I+3)] := (temp1 * code_block[(I+3)]) 
+		
+			$while ((I+3) < ncols_minus_4) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	index_count:= (I+4)
+	ncols_minus_1 := (ncols-1)
+	$branchblock [init_aPriori_loop2] 
+		{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			//I_out_pipe := J
+			aPriori[J] := (temp1 * code_block[J])
+			$while ( J < ncols_minus_1 ) 	
+		}		
+		
+}
+
+
+//
+//
+//
+$module [minSumDecode] $in () $out () $is
+{
+
+	$call initInputs () (nrows ncols ncol_ind maxNitr ebbyNo rate)
+
+//send inputs
+	maxNitr_out := maxNitr
+	ebbyNo_out := ebbyNo
+
+	range_minus_1 := (((nrows+ncol_ind)+3) - 1)
+	$branchblock [send_outputs_loop] 
+	{
+	$merge loopback $entry  
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+	$endmerge
+	
+	NI := (I + 1)
+	val := mem[I]
+	mem_out := val 
+	
+	$if (I < range_minus_1)	 $then
+			$place[loopback]
+		$endif	
+	}				
+
+	rate_out := rate
+	
+//----------------------------------------------------------	
+	$call readCodeBlock (ncols) ()
+//---------------------------------------------------------
+	
+// send code block in 
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [readCodeBlockLoop1] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I + 1)
+			code_block_decoded := code_block[I] 
+		$while (I < ncols_minus_1)
+	}
+//-----
+
+//---------------------------------------------------------
+		$call initialize_aPriori (ncols ebbyNo rate) ()
+//-----------------------------------------------------------		
+	// read_apriori_init
+	//
+	$branchblock [readCodeBlockLoop11] {
+			$merge loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on loopback
+			$endmerge 
+			NI := (I + 1)
+			aPriori_out := aPriori[I] 
+		$if (I < ncols_minus_1) $then
+			$place[loopback]
+		$endif
+	}	
+
+	
+} //end min sum
+
+
