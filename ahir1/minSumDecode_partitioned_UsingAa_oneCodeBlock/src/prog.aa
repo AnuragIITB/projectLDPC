@@ -1,0 +1,2239 @@
+$parameter MATRIX_NNZ         60000
+$parameter MATRIX_ORDER       13000
+$parameter MATRIX_ROWS		  13000	//rate*MATRIX_ORDER (to be exact)
+
+
+$storage mem11 : $array [ MATRIX_NNZ ] $of $uint<16>
+$storage mem12 : $array [ MATRIX_NNZ ] $of $uint<16>
+$storage mem21 : $array [ MATRIX_NNZ ] $of $uint<16>
+$storage mem22 : $array [ MATRIX_NNZ ] $of $uint<16>
+
+$storage code_block1 : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage code_block2 : $array [ MATRIX_ORDER ] $of $float<8,23>
+
+$storage aPriori1    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPriori2    : $array [ MATRIX_ORDER ] $of $float<8,23>
+
+$storage aPosteriori1    : $array [ MATRIX_ORDER ] $of $float<8,23>
+$storage aPosteriori2    : $array [ MATRIX_ORDER ] $of $float<8,23>
+
+$storage message11 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage message12 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage message21 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage message22 : $array [ MATRIX_NNZ ] $of $float <8,23>
+
+$storage ext_info11 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage ext_info12 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage ext_info21 : $array [ MATRIX_NNZ ] $of $float <8,23>
+$storage ext_info22 : $array [ MATRIX_NNZ ] $of $float <8,23>
+
+$storage trans_info11_12 : $array [ MATRIX_ROWS ] $of $float <8,23>
+$storage trans_info12_11 : $array [ MATRIX_ROWS] $of $float <8,23>
+$storage trans_info21_22 : $array [ MATRIX_ROWS ] $of $float <8,23>
+$storage trans_info22_21 : $array [ MATRIX_ROWS ] $of $float <8,23>
+
+//--------------------------------------------
+$pipe maxNitr_in : $uint<16>
+$pipe ebbyNo_in  : $float<8,23>
+$pipe maxNitr_out : $uint<16>
+$pipe ebbyNo_out : $float<8,23>
+$pipe matrix_in : $uint<16>  $depth 2
+$pipe rate_in  : $float<8,23>
+$pipe rate_out  : $float<8,23>
+$pipe code_block_in: $float<8,23> $depth 2
+$pipe code_block_decoded: $float<8,23> 
+$pipe Nitr_required : $uint<16>
+$pipe mem_out : $uint<16> $depth 2
+$pipe aPriori_out: $float<8,23> 
+$pipe init_message_out : $float<8,23> 
+$pipe init_aPosteriori_out : $float<8,23> 
+$pipe init_ext_info_out : $float<8,23>
+$pipe ext_info_out : $float<8,23>
+$pipe index_2D_pipe : $uint<16>
+$pipe val_pipe : $float<8,23>
+$pipe sign_pipe: $float<8,23>
+$pipe temp_info_pipe : $float<8,23>
+$pipe aPosteriori_out : $float<8,23>
+$pipe decode_done_1 : $uint<16>
+$pipe decode_done_2 : $uint<16>
+$pipe message_out : $float<8,23>
+$pipe init_trans_info_out : $float<8,23>
+$pipe trans_info_out : $float<8,23>
+$pipe par_ext_info_out : $float<8,23>
+//----------------- internal pipes -------------------------
+$pipe reading_code_block_done: $uint<1>
+$pipe apriori2_wrote : $uint<1>
+$pipe pipe_compute_1_done : $uint<1>
+$pipe pipe_compute_2_done : $uint<1>
+$pipe pipe_compute_3_done : $uint<1>
+$pipe pipe_compute_4_done : $uint<1>
+$pipe pipe_check_2_done : $uint<1>
+$pipe is_decoded_from_2 : $uint<1>
+$pipe is_decoded_d2 : $uint<1>
+$pipe is_decoded_d3 : $uint<1>
+$pipe is_decoded_d4 : $uint<1>
+$pipe  pipe_do_decode_2 : $uint<1>
+
+$pipe  trans_info11_12_calulation_done  : $uint<1>
+$pipe  trans_info12_11_calulation_done  : $uint<1>
+$pipe  trans_info21_22_calulation_done  : $uint<1>
+$pipe  trans_info22_21_calulation_done  : $uint<1>
+
+$pipe   aPosteriori1_phase_1_done  : $uint<1>
+$pipe   aPosteriori2_phase_1_done  : $uint<1>
+
+$pipe message11_initialized : $uint<1>
+$pipe message12_initialized : $uint<1>
+
+$pipe  message11_modified : $uint<1>
+$pipe  message12_modified : $uint<1>
+$pipe  message21_modified : $uint<1>
+$pipe  message22_modified : $uint<1>
+
+
+
+$pipe	nrows_to_deamon_2_pipe : $uint<16>
+$pipe	ncols_to_deamon_2_pipe : $uint<16>
+$pipe	ncols_11_to_deamon_2_pipe : $uint<16>
+$pipe	ncols_12_to_deamon_2_pipe : $uint<16>
+$pipe	ncols_21_to_deamon_2_pipe : $uint<16>
+$pipe	ncols_22_to_deamon_2_pipe : $uint<16>
+$pipe	ebbyNo_to_deamon_2_pipe : $float<8,23>
+$pipe	maxNitr_to_deamon_2_pipe : $uint<16>
+$pipe	rate_to_deamon_2_pipe : $float<8,23>
+
+$pipe	nrows_to_deamon_3_pipe  : $uint<16>
+$pipe	ncols_to_deamon_3_pipe  : $uint<16>
+$pipe	ncols_11_to_deamon_3_pipe : $uint<16>
+$pipe	ncols_12_to_deamon_3_pipe : $uint<16>
+$pipe	ncols_21_to_deamon_3_pipe : $uint<16>
+$pipe	ncols_22_to_deamon_3_pipe : $uint<16>
+$pipe	rate_to_deamon_3_pipe  : $float<8,23>
+$pipe	ebbyNo_to_deamon_3_pipe  : $float<8,23>
+$pipe	maxNitr_to_deamon_3_pipe : $uint<16>
+	
+$pipe	nrows_to_deamon_4_pipe : $uint<16>
+$pipe	ncols_to_deamon_4_pipe : $uint<16>
+$pipe	ncols_11_to_deamon_4_pipe : $uint<16>
+$pipe	ncols_12_to_deamon_4_pipe : $uint<16>
+$pipe	ncols_21_to_deamon_4_pipe : $uint<16>
+$pipe	ncols_22_to_deamon_4_pipe : $uint<16>
+$pipe	rate_to_deamon_4_pipe : $float<8,23>
+$pipe	ebbyNo_to_deamon_4_pipe : $float<8,23>
+$pipe	maxNitr_to_deamon_4_pipe : $uint<16>
+	
+//----------------------------------------------------------
+
+$module [initInputs] $in () $out (nrows ncols ncol_ind_11 ncol_ind_12 ncol_ind_21 ncol_ind_22 maxNitr: $uint<16> ebbyNo rate: $float<8,23>) $is
+{
+	//----------------------------------
+	nrows := matrix_in
+	ncols := matrix_in
+	ncol_ind_11 := matrix_in
+	//
+	$volatile range_11 := (ncol_ind_11 + nrows)
+	$volatile range_11_min_5 := ((ncol_ind_11 + nrows) - 5)
+	$branchblock [matrixRead11] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I_11 := ($bitcast ($uint<16>) 0) $on $entry NI_11 $on $loopback
+			$endmerge 
+			$volatile NI_11 := (I_11+4)
+			
+			mem11[(I_11+3)] := matrix_in
+			mem11[(I_11+4)] := matrix_in
+			mem11[(I_11+5)] := matrix_in
+			mem11[(I_11+6)] := matrix_in
+
+		$while ((I_11+3) < range_11_min_5)
+	}( I_11 => I_11 )
+	
+	$volatile index_count_11:= (I_11+4)
+	$volatile range_11_minus_1 := (range_11-1)
+	$branchblock [matrixRead_loop112] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J_11 := ($bitcast ($uint<16>) index_count_11) $on $entry NJ_11 $on $loopback
+			$endmerge
+			$volatile  NJ_11 := (J_11 + 1)
+			mem11[(J_11+3)] := matrix_in
+			$while (J_11 < range_11_minus_1) 	
+		}	
+	//---------------------------
+	
+	//----------------------------------
+	nrows12 := matrix_in
+	ncols12 := matrix_in
+	ncol_ind_12 := matrix_in
+	//
+	$volatile range_12 := (ncol_ind_12 + nrows)
+	$volatile range_12_min_4 := ((ncol_ind_12 + nrows) - 4)
+	$branchblock [matrixRead12] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I_12 := ($bitcast ($uint<16>) 0) $on $entry NI_12 $on $loopback
+			$endmerge 
+			$volatile NI_12 := (I_12+3)
+			
+			mem12[(I_12+3)] := matrix_in
+			mem12[(I_12+4)] := matrix_in
+			mem12[(I_12+5)] := matrix_in
+
+		$while ((I_12+2) < range_12_min_4)
+	}( I_12 => I_12 )
+	
+	$volatile index_count_12:= (I_12+3)
+	$volatile range_12_minus_1 := (range_12-1)
+	$branchblock [matrixRead_loop122] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J_12 := ($bitcast ($uint<16>) index_count_12) $on $entry NJ_12 $on $loopback
+			$endmerge
+			$volatile  NJ_12 := (J_12 + 1)
+			mem12[(J_12+3)] := matrix_in
+			$while (J_12 < range_12_minus_1) 	
+		}	
+	//---------------------------
+	
+	//----------------------------------
+	nrows21 := matrix_in
+	ncols21 := matrix_in
+	ncol_ind_21 := matrix_in
+	//
+	$volatile range_21 := (ncol_ind_21 + nrows)
+	$volatile range_21_min_5 := ((ncol_ind_21 + nrows) - 5)
+	$branchblock [matrixRead21] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I_21 := ($bitcast ($uint<16>) 0) $on $entry NI_21 $on $loopback
+			$endmerge 
+			$volatile NI_21 := (I_21+4)
+			
+			mem21[(I_21+3)] := matrix_in
+			mem21[(I_21+4)] := matrix_in
+			mem21[(I_21+5)] := matrix_in
+			mem21[(I_21+6)] := matrix_in
+
+		$while ((I_21+3) < range_21_min_5)
+	}( I_21 => I_21 )
+	
+	$volatile index_count_21:= (I_21+4)
+	$volatile range_21_minus_1 := (range_21-1)
+	$branchblock [matrixRead_loop212] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J_21 := ($bitcast ($uint<16>) index_count_21) $on $entry NJ_21 $on $loopback
+			$endmerge
+			$volatile  NJ_21 := (J_21 + 1)
+			mem21[(J_21+3)] := matrix_in
+			$while (J_21 < range_21_minus_1) 	
+		}	
+	//---------------------------
+	
+	//----------------------------------
+	nrows22 := matrix_in
+	ncols22 := matrix_in
+	ncol_ind_22 := matrix_in
+	//
+	$volatile range_22 := (ncol_ind_22 + nrows)
+	$volatile range_22_min_5 := ((ncol_ind_22 + nrows) - 5)
+	$branchblock [matrixRead22] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I_22 := ($bitcast ($uint<16>) 0) $on $entry NI_22 $on $loopback
+			$endmerge 
+			$volatile NI_22 := (I_22+4)
+			
+			mem22[(I_22+3)] := matrix_in
+			mem22[(I_22+4)] := matrix_in
+			mem22[(I_22+5)] := matrix_in
+			mem22[(I_22+6)] := matrix_in
+
+		$while ((I_22+3) < range_22_min_5)
+	}( I_22 => I_22 )
+	
+	$volatile index_count_22:= (I_22+4)
+	$volatile range_22_minus_1 := (range_22-1)
+	$branchblock [matrixRead_loop222] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J_22 := ($bitcast ($uint<16>) index_count_22) $on $entry NJ_22 $on $loopback
+			$endmerge
+			$volatile  NJ_22 := (J_22 + 1)
+			mem22[(J_22+3)] := matrix_in
+			$while (J_22 < range_22_minus_1) 	
+		}	
+	//---------------------------		
+	rate := rate_in	
+	maxNitr := maxNitr_in
+	ebbyNo := ebbyNo_in
+}
+
+//================================================================================
+
+$module [readCodeBlock] $in (ncols: $uint<16>) $out () $is
+{
+//---------------------- code block1 -----------------------------
+	ncols_minus_3 := (ncols - 3)
+	$branchblock [readCodeBlockLoop1] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I + 2)
+			code_block1[I] := code_block_in
+			code_block1[(I+1)] := code_block_in
+			
+		$while ((I+1) < ncols_minus_3)
+	}( I => I )
+	
+	$volatile index_count:= (I+2)
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [readCodeBlockLoop_loop12] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			code_block1[J] := code_block_in
+			
+			$while (J < ncols_minus_1 ) 	
+		}		
+
+//--------------------- code block 2 ----------------------------
+	$branchblock [readCodeBlockLoop2] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $entry $loopback 
+				$phi I_1 := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			NI := (I_1 + 2)
+			code_block2[I_1] := code_block_in
+			code_block2[(I_1+1)] := code_block_in
+			
+		$while ((I_1+1) < ncols_minus_3)
+	}( I_1 => I_1 )
+	
+	$volatile index_count_1:= (I_1+2)
+	$branchblock [readCodeBlockLoop_loop22] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count_1) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			code_block2[J] := code_block_in
+			
+			$while (J < ncols_minus_1 ) 	
+		}		
+}
+//=====================================================================
+//
+//
+$module [initialize_aPriori1] $in (ncols: $uint<16> ebbyNo rate: $float<8,23>) $out() $is
+{
+	$volatile temp1 := ((rate * ebbyNo )* ($bitcast ($float<8,23>) _f-4.00e+0) )
+	$volatile ncols_minus_3 := (ncols - 3)
+	$branchblock [init_aPriori_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			aPriori1[I] 	 := (temp1 * code_block1[I]  )     
+			aPriori1[(I+1)] := (temp1 * code_block1[(I+1)]) 
+		
+			$while ((I+1) < ncols_minus_3) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (I+2)
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [init_aPriori_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			aPriori1[J] := (temp1 * code_block1[J])
+			$while (J < ncols_minus_1 ) 	
+		}		
+		
+}
+
+//====================================================================
+//
+//
+$module [initialize_aPriori2] $in (ncols: $uint<16> ebbyNo rate: $float<8,23>) $out() $is
+{
+	$volatile temp1 := ((rate * ebbyNo )* ($bitcast ($float<8,23>) _f-4.00e+0) )
+	$volatile ncols_minus_3 := (ncols - 3)
+	$branchblock [init_aPriori_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			aPriori2[I] 	 := (temp1 * code_block2[I]  )     
+			aPriori2[(I+1)] := (temp1 * code_block2[(I+1)]) 
+		
+			$while ((I+1) < ncols_minus_3) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (I+2)
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [init_aPriori_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			aPriori2[J] := (temp1 * code_block2[J])
+			$while (J < ncols_minus_1 ) 	
+		}		
+		
+}
+//===================================================================
+$module [initializeMessage11] $in ( ncol_ind_11: $uint<16>  ) $out() $is
+{	
+	$volatile ncol_ind_11_minus_3 := (ncol_ind_11 - 3)
+	$branchblock [initializeMessage_loop1] 
+	{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+			$volatile  temp00 := (3 + I) 
+			$volatile  temp01 := (4 + I) 
+			 
+			$volatile temp10 := ( mem11[ temp00 ] - 1 )
+			$volatile temp11 := ( mem11[ temp01 ] - 1 )
+			
+			message11[I] := aPriori1[ temp10 ]
+			message11[(I+1)] := aPriori1[ temp11 ]
+			
+		$while ((I+1) < ncol_ind_11_minus_3) 	
+		}( I => count )
+		
+	$volatile index_count:= (count+2)
+	$volatile ncol_ind_11_minus_1 := (ncol_ind_11 - 1)
+	$branchblock [initializeMessage_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			
+			$volatile  NJ := (J + 1)
+			$volatile  temp0 := (3 + J) 
+			$volatile temp1 := ( mem11[ temp0 ] - 1 )
+			message11[J] := aPriori1[ temp1 ]
+			
+			$while (J < ncol_ind_11_minus_1 ) 	
+		}			
+		
+}
+//====================================================================
+$module [initializeMessage22] $in ( ncol_ind_22: $uint<16>  ) $out() $is
+{	
+	$volatile ncol_ind_22_minus_3 := (ncol_ind_22 - 3)
+	$branchblock [initializeMessage22_loop1] 
+	{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+			$volatile  temp00 := (3 + I) 
+			$volatile  temp01 := (4 + I) 
+			 
+			$volatile temp10 := ( mem22[ temp00 ] - 1 )
+			$volatile temp22 := ( mem22[ temp01 ] - 1 )
+			
+			message22[I] := aPriori2[ temp10 ]
+			message22[(I+1)] := aPriori2[ temp22 ]
+			
+		$while ((I+1) < ncol_ind_22_minus_3) 	
+		}( I => count )
+		
+	$volatile index_count:= (count+2)
+	$volatile ncol_ind_22_minus_1 := (ncol_ind_22 - 1)
+	$branchblock [initializeMessage22_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			
+			$volatile  NJ := (J + 1)
+			$volatile  temp0 := (3 + J) 
+			$volatile temp1 := ( mem22[ temp0 ] - 1 )
+			message22[J] := aPriori2[ temp1 ]
+			
+			$while (J < ncol_ind_22_minus_1 ) 	
+		}			
+		
+}
+//====================================================================
+$module [initializeMessage21] $in ( ncol_ind_21: $uint<16>  ) $out() $is
+{	
+	$volatile ncol_ind_21_minus_3 := (ncol_ind_21 - 3)
+	$branchblock [initializeMessage21_loop1] 
+	{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+			$volatile  temp00 := (3 + I) 
+			$volatile  temp01 := (4 + I) 
+			 
+			$volatile temp10 := ( mem21[ temp00 ] - 1 )
+			$volatile temp21 := ( mem21[ temp01 ] - 1 )
+			
+			message21[I] := aPriori1[ temp10 ]
+			message21[(I+1)] := aPriori1[ temp21 ]
+			
+		$while ((I+1) < ncol_ind_21_minus_3) 	
+		}( I => count )
+		
+	$volatile index_count:= (count+2)
+	$volatile ncol_ind_21_minus_1 := (ncol_ind_21 - 1)
+	$branchblock [initializeMessage21_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			
+			$volatile  NJ := (J + 1)
+			$volatile  temp0 := (3 + J) 
+			$volatile temp1 := ( mem21[ temp0 ] - 1 )
+			message21[J] := aPriori1[ temp1 ]
+			
+			$while (J < ncol_ind_21_minus_1 ) 	
+		}			
+		
+}
+//===================================================================\
+$module [initializeMessage12] $in ( ncol_ind_12: $uint<16>  ) $out() $is
+{	
+	$volatile ncol_ind_12_minus_1 := (ncol_ind_12 - 1)
+	$branchblock [initializeMessage12_loop1] 
+	{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+			$volatile  temp00 := (3 + I) 
+			 
+			$volatile temp10 := ( mem12[ temp00 ] - 1 )
+			
+			message12[I] := aPriori2[ temp10 ]
+			
+		$while (I < ncol_ind_12_minus_1) 	
+		}( I => count )
+		
+	$volatile index_count:= (count+0)
+//	$volatile ncol_ind_12_minus_1 := (ncol_ind_12 - 1)
+	$branchblock [initializeMessage12_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			
+			$volatile  NJ := (J + 1)
+			$volatile  temp0 := (3 + J) 
+			$volatile temp1 := ( mem12[ temp0 ] - 1 )
+			message12[J] := aPriori2[ temp1 ]
+			
+			$while (J < ncol_ind_12_minus_1 ) 	
+		}			
+		
+}
+
+//====================================================================
+//
+$module [initialize_aPosteriori1] $in (ncols: $uint<16>) $out() $is
+{
+
+	$volatile ncols_minus_3 := (ncols - 3)
+	$branchblock [initialize_aPosteriori1_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) 0) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 2)
+			
+			aPosteriori1[J] := aPriori1[J] 
+			aPosteriori1[(J+1)] := aPriori1[(J+1)] 
+
+		
+			$while ((J+1) < ncols_minus_3) 	
+		}( J => count )
+		
+		// for the last entries less than or equal to 8
+	$volatile index_count:= (count+2)
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [initialize_aPosteriori1_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) index_count) $on $entry NI $on $loopback
+			$endmerge
+			NI := (I + 1)
+			aPosteriori1[I] := aPriori1[I] 	
+		$while (I < ncols_minus_1)	
+		}
+}
+
+//==================================================================
+
+//
+$module [initialize_aPosteriori2] $in (ncols: $uint<16>) $out() $is
+{
+
+	$volatile ncols_minus_3 := (ncols - 3)
+	$branchblock [initialize_aPosteriori2_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) 0) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 2)
+			
+			aPosteriori2[J] := aPriori2[J] 
+			aPosteriori2[(J+1)] := aPriori2[(J+1)] 
+
+			$while ((J+1) < ncols_minus_3) 	
+		}( J => count )
+		
+		// for the last entries less than or equal to 8
+	$volatile index_count:= (count+2)
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [initialize_aPosteriori2_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) index_count) $on $entry NI $on $loopback
+			$endmerge
+			NI := (I + 1)
+			aPosteriori2[I] := aPriori2[I] 	
+		$while (I < ncols_minus_1)	
+		}
+}
+
+//====================================================================
+$module [initializeExtrinsicInfo11] $in ( ncol_ind_11: $uint<16>  ) $out() $is
+{
+
+	$volatile ncol_ind_11_minus_3 := (ncol_ind_11 - 3)
+	$branchblock [initializeExtrinsicInfo11_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			ext_info11[I] := _f0.00e+0
+			ext_info11[(I+1)] := _f0.00e+0
+		
+			$while ((I+1) < ncol_ind_11_minus_3) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	$volatile ncol_ind_11_minus_1 := (ncol_ind_11 - 1)
+	$branchblock [initializeExtrinsicInfo_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			ext_info11[J] := _f0.00e+0
+		$while (J < ncol_ind_11_minus_1)			
+		}
+}
+//==================================================
+
+$module [initializeExtrinsicInfo12] $in ( ncol_ind_12: $uint<16>  ) $out() $is
+{
+
+	$volatile ncol_ind_12_minus_1 := (ncol_ind_12 - 1)
+	$branchblock [initializeExtrinsicInfo12_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+
+			ext_info12[I] := _f0.00e+0
+		
+			$while (I < ncol_ind_12_minus_1) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+0)
+	
+	//$volatile ncol_ind_12_minus_1 := (ncol_ind_12 - 1)
+	$branchblock [initializeExtrinsicInfo_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			ext_info12[J] := _f0.00e+0
+		$while (J < ncol_ind_12_minus_1)			
+		}
+}
+//===========================================================
+$module [initializeExtrinsicInfo21] $in ( ncol_ind_21: $uint<16>  ) $out() $is
+{
+
+	$volatile ncol_ind_21_minus_3 := (ncol_ind_21 - 3)
+	$branchblock [initializeExtrinsicInfo21_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			ext_info21[I] := _f0.00e+0
+			ext_info21[(I+1)] := _f0.00e+0
+		
+			$while ((I+1) < ncol_ind_21_minus_3) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	$volatile ncol_ind_21_minus_1 := (ncol_ind_21 - 1)
+	$branchblock [initializeExtrinsicInfo_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			ext_info21[J] := _f0.00e+0
+		$while (J < ncol_ind_21_minus_1)			
+		}
+}
+//===========================================================
+$module [initializeExtrinsicInfo22] $in ( ncol_ind_22: $uint<16>  ) $out() $is
+{
+
+	$volatile ncol_ind_22_minus_3 := (ncol_ind_22 - 3)
+	$branchblock [initializeExtrinsicInfo22_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			ext_info22[I] := _f0.00e+0
+			ext_info22[(I+1)] := _f0.00e+0
+		
+			$while ((I+1) < ncol_ind_22_minus_3) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	$volatile ncol_ind_22_minus_1 := (ncol_ind_22 - 1)
+	$branchblock [initializeExtrinsicInfo_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			ext_info22[J] := _f0.00e+0
+		$while (J < ncol_ind_22_minus_1)			
+		}
+}
+//=========================================================
+$module [initializeTransInfo11_12] $in ( nrows: $uint<16>  ) $out() $is
+{
+
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo11_12_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+
+			trans_info11_12[I] := _f0.00e+0
+		
+			$while (I <  nrows_minus_1) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+0)
+	
+	//$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo11_12_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			trans_info11_12[J] := _f0.00e+0
+		$while (J <  nrows_minus_1 )			
+		}
+}
+//===========================================================
+$module [initializeTransInfo12_11] $in ( nrows: $uint<16>  ) $out() $is
+{
+
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo12_11_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+
+			trans_info12_11[I] := _f0.00e+0
+		
+			$while (I <  nrows_minus_1) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+0)
+	
+	//$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo12_11_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			trans_info12_11[J] := _f0.00e+0
+		$while (J <  nrows_minus_1 )			
+		}
+}
+//===========================================================
+$module [initializeTransInfo21_22] $in ( nrows: $uint<16>  ) $out() $is
+{
+
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo21_22_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+
+			trans_info21_22[I] := _f0.00e+0
+		
+			$while (I <  nrows_minus_1) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+0)
+	
+	//$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo21_22_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			trans_info21_22[J] := _f0.00e+0
+		$while (J <  nrows_minus_1 )			
+		}
+}
+//===========================================================
+$module [initializeTransInfo22_21] $in ( nrows: $uint<16>  ) $out() $is
+{
+
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo22_21_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 1)
+
+			trans_info22_21[I] := _f0.00e+0
+		
+			$while (I <  nrows_minus_1) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+0)
+	
+	//$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [initializeTransInfo22_21_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			trans_info22_21[J] := _f0.00e+0
+		$while (J <  nrows_minus_1 )			
+		}
+}
+//========================================,===================
+$module [modify_info] $in ( in1 in2: $float<8,23>  ) $out( val_out :$float<8,23> ) $is
+{
+	$volatile in1_neg := (in1 < ($bitcast ($float<8,23>) _f0.00e+0))
+	$volatile in2_pos := (in2 > ($bitcast ($float<8,23>) _f0.00e+0))
+	$volatile cond_pos_1 := ((~in1_neg) & in2_pos)
+	$volatile cond_pos_2 := ((~in2_pos) & in1_neg)
+	$volatile cond_pos := (cond_pos_1 | cond_pos_2)
+	
+	$volatile sign := ($mux cond_pos  ($bitcast ($float<8,23>) _f1.00e+0) ($bitcast ($float<8,23>) _f-1.00e+0))
+	
+	$volatile mod_in1 := ($mux in1_neg  (in1* ($bitcast ($float<8,23>) _f-1.00e+0)) in1)
+	$volatile mod_in2 := ($mux in2_pos  in2  (in2* ($bitcast ($float<8,23>) _f-1.00e+0)) )
+	
+	$volatile cond_mag := ( mod_in1 > mod_in2 )
+	
+	$volatile magnitude := ($mux cond_mag mod_in2 mod_in1 )
+	
+	val_out := ( sign * magnitude )
+}
+//============================================================
+	$module [checkNodeComputeEngine11] $in (ncol_ind_11 nrows: $uint<16> ) $out() $is
+{
+	$storage exor : $uint<1>
+	$storage val  : $float<8,23>
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [checkNodeComputeEngine11_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_11 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_11 - ( mem11[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_11 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem11[temp12] - mem11[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$volatile  range_minus_1 := (range- 1)
+		$branchblock [checkNodeComputeEngine11_loop2] 
+		{
+		$merge loopback2 $entry 
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on loopback2
+		$endmerge
+		$volatile  Ncol := (col + 1)
+		$volatile  temp20 := (3 + ncol_ind_11 )
+		$volatile temp21 := (temp20 + row )
+		index_2D := ((mem11[temp21] -1) + col )
+ 			
+ 			exor := 0
+ 			val  := 0
+			$branchblock [checkNodeComputeEngine11_loop3] 
+			{
+			$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+			$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$phi flag := ($bitcast ($uint<1>) 0) $on $entry next_flag $on $loopback	
+			$endmerge
+			$volatile NI := (I + 1)
+			
+			index := ( (mem11[((3 + ncol_ind_11) + row)] -1) + I )
+			mod_temp30 := ( message11[index] * ($bitcast ($float<8,23>) _f-1.00e+0) )
+			condition_mesg := (message11[index] < ($bitcast ($float<8,23>) _f0.00e+0)) 
+			temp1 := ($mux condition_mesg  mod_temp30 message11[index])			
+				$volatile condition_I := (I==col)
+				$volatile condition_flag := (flag == 0)
+				$volatile condition_swap := ( temp1 < val )
+				$volatile condtion_exor_1 := ((~condition_I) &condition_mesg)
+				$volatile condtion_val_init := ((~condition_I) & condition_flag ) 
+				$volatile condtion_val_swap_par :=  ( ( ~condition_I) & condition_swap ) 
+				$volatile condtion_val_swap := ((~condition_flag) & condtion_val_swap_par )
+				$volatile  condition_val_change := (condtion_val_init|condtion_val_swap) 
+				$volatile  next_flag := ($mux condition_I flag  1)
+				//$volatile  next_exor := ($mux condtion_exor_1  (exor^1) exor)
+				$guard (condtion_exor_1) exor := (exor^1)
+				//$volatile  next_val:= ($mux condition_val_change  temp1 val)
+				$guard (condition_val_change) val := temp1
+				
+			$while (I < range_minus_1) 	
+			} // end loop 1
+			
+			$volatile sign := ($mux  (exor == 0)  ($bitcast ($float<8,23>) _f1.00e+0) ($bitcast ($float<8,23>) _f-1.00e+0))
+
+			$volatile  temp_info := ( val * sign )
+			ext_info11[ index_2D ] := temp_info 
+			
+			$if (col==0)	$then
+				val1 := ext_info11[ index_2D ]
+				val2 := message11[ index_2D ] 		
+				$call modify_info (val1 val2) (valo)
+				trans_info11_12[row] := valo
+			$endif
+		$if (col < range_minus_1) $then 
+			$place [loopback2]
+		$endif	
+		} // end loop 2
+	$endif
+			
+	$if (range==1) $then 
+		trans_info11_12[row] := message11[( mem11[((3 + ncol_ind_11) + row)] -1) ] 
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 3
+}		// end function
+
+//===========================================================
+	$module [checkNodeComputeEngine12] $in (ncol_ind_12 nrows: $uint<16> ) $out() $is
+{
+	$storage exor : $uint<1>
+	$storage val  : $float<8,23>
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [checkNodeComputeEngine12_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_12 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_12 - ( mem12[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_12 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem12[temp12] - mem12[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$volatile  range_minus_1 := (range- 1)
+		$branchblock [checkNodeComputeEngine12_loop2] 
+		{
+		$merge loopback2 $entry 
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on loopback2
+		$endmerge
+		$volatile  Ncol := (col + 1)
+		$volatile  temp20 := (3 + ncol_ind_12 )
+		$volatile temp21 := (temp20 + row )
+		index_2D := ((mem12[temp21] -1) + col )
+ 			
+ 			exor := 0
+ 			val  := 0
+			$branchblock [checkNodeComputeEngine12_loop3] 
+			{
+			$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+			$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$phi flag := ($bitcast ($uint<1>) 0) $on $entry next_flag $on $loopback	
+			$endmerge
+			$volatile NI := (I + 1)
+			
+			index := ( (mem12[((3 + ncol_ind_12) + row)] -1) + I )
+			mod_temp30 := ( message12[index] * ($bitcast ($float<8,23>) _f-1.00e+0) )
+			condition_mesg := (message12[index] < ($bitcast ($float<8,23>) _f0.00e+0)) 
+			temp1 := ($mux condition_mesg  mod_temp30 message12[index])			
+				$volatile condition_I := (I==col)
+				$volatile condition_flag := (flag == 0)
+				$volatile condition_swap := ( temp1 < val )
+				$volatile condtion_exor_1 := ((~condition_I) &condition_mesg)
+				$volatile condtion_val_init := ((~condition_I) & condition_flag ) 
+				$volatile condtion_val_swap_par :=  ( ( ~condition_I) & condition_swap ) 
+				$volatile condtion_val_swap := ((~condition_flag) & condtion_val_swap_par )
+				$volatile  condition_val_change := (condtion_val_init|condtion_val_swap) 
+				$volatile  next_flag := ($mux condition_I flag  1)
+				//$volatile  next_exor := ($mux condtion_exor_1  (exor^1) exor)
+				$guard (condtion_exor_1) exor := (exor^1)
+				//$volatile  next_val:= ($mux condition_val_change  temp1 val)
+				$guard (condition_val_change) val := temp1
+				
+			$while (I < range_minus_1) 	
+			} // end loop 1
+			
+			$volatile sign := ($mux  (exor == 0)  ($bitcast ($float<8,23>) _f1.00e+0) ($bitcast ($float<8,23>) _f-1.00e+0))
+
+			$volatile  temp_info := ( val * sign )
+			ext_info12[ index_2D ] := temp_info 
+			
+			$if (col==0)	$then
+				val1 := ext_info12[ index_2D ]
+				val2 := message12[ index_2D ] 		
+				$call modify_info (val1 val2) (valo)
+				trans_info12_11[row] := valo
+			$endif
+		$if (col < range_minus_1) $then 
+			$place [loopback2]
+		$endif	
+		} // end loop 2
+	$endif
+		
+	$if (range ==1) $then 
+		trans_info12_11[row] := message12[( mem12[((3 + ncol_ind_12) + row)] -1) ] 
+	$endif
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 3
+}		// end function
+
+//===========================================================
+	$module [checkNodeComputeEngine21] $in (ncol_ind_21 nrows: $uint<16> ) $out() $is
+{
+	$storage exor : $uint<1>
+	$storage val  : $float<8,23>
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [checkNodeComputeEngine21_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_21 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_21 - ( mem21[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_21 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem21[temp12] - mem21[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$volatile  range_minus_1 := (range- 1)
+		$branchblock [checkNodeComputeEngine21_loop2] 
+		{
+		$merge loopback2 $entry 
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on loopback2
+		$endmerge
+		$volatile  Ncol := (col + 1)
+		$volatile  temp20 := (3 + ncol_ind_21 )
+		$volatile temp21 := (temp20 + row )
+		index_2D := ((mem21[temp21] -1) + col )
+ 			
+ 			exor := 0
+ 			val  := 0
+			$branchblock [checkNodeComputeEngine21_loop3] 
+			{
+			$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+			$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$phi flag := ($bitcast ($uint<1>) 0) $on $entry next_flag $on $loopback	
+			$endmerge
+			$volatile NI := (I + 1)
+			
+			index := ( (mem21[((3 + ncol_ind_21) + row)] -1) + I )
+			mod_temp30 := ( message21[index] * ($bitcast ($float<8,23>) _f-1.00e+0) )
+			condition_mesg := (message21[index] < ($bitcast ($float<8,23>) _f0.00e+0)) 
+			temp1 := ($mux condition_mesg  mod_temp30 message21[index])			
+				$volatile condition_I := (I==col)
+				$volatile condition_flag := (flag == 0)
+				$volatile condition_swap := ( temp1 < val )
+				$volatile condtion_exor_1 := ((~condition_I) &condition_mesg)
+				$volatile condtion_val_init := ((~condition_I) & condition_flag ) 
+				$volatile condtion_val_swap_par :=  ( ( ~condition_I) & condition_swap ) 
+				$volatile condtion_val_swap := ((~condition_flag) & condtion_val_swap_par )
+				$volatile  condition_val_change := (condtion_val_init|condtion_val_swap) 
+				$volatile  next_flag := ($mux condition_I flag  1)
+				//$volatile  next_exor := ($mux condtion_exor_1  (exor^1) exor)
+				$guard (condtion_exor_1) exor := (exor^1)
+				//$volatile  next_val:= ($mux condition_val_change  temp1 val)
+				$guard (condition_val_change) val := temp1
+				
+			$while (I < range_minus_1) 	
+			} // end loop 1
+			
+			$volatile sign := ($mux  (exor == 0)  ($bitcast ($float<8,23>) _f1.00e+0) ($bitcast ($float<8,23>) _f-1.00e+0))
+
+			$volatile  temp_info := ( val * sign )
+			ext_info21[ index_2D ] := temp_info 
+			
+			$if (col==0)	$then
+				val1 := ext_info21[ index_2D ]
+				val2 := message21[ index_2D ] 		
+				$call modify_info (val1 val2) (valo)
+				trans_info21_22[row] := valo
+			$endif
+		$if (col < range_minus_1) $then 
+			$place [loopback2]
+		$endif	
+		} // end loop 2
+	$endif
+			
+	$if (range==1) $then 
+		trans_info21_22[row] := message21[( mem21[((3 + ncol_ind_21) + row)] -1) ] 
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 3
+}		// end function
+
+//===========================================================
+	$module [checkNodeComputeEngine22] $in (ncol_ind_22 nrows: $uint<16> ) $out() $is
+{
+	$storage exor : $uint<1>
+	$storage val  : $float<8,23>
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [checkNodeComputeEngine22_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_22 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_22 - ( mem22[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_22 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem22[temp12] - mem22[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$volatile  range_minus_1 := (range- 1)
+		$branchblock [checkNodeComputeEngine22_loop2] 
+		{
+		$merge loopback2 $entry 
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on loopback2
+		$endmerge
+		$volatile  Ncol := (col + 1)
+		$volatile  temp20 := (3 + ncol_ind_22 )
+		$volatile temp21 := (temp20 + row )
+		index_2D := ((mem22[temp21] -1) + col )
+ 			
+ 			exor := 0
+ 			val  := 0
+			$branchblock [checkNodeComputeEngine22_loop3] 
+			{
+			$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+			$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$phi flag := ($bitcast ($uint<1>) 0) $on $entry next_flag $on $loopback	
+			$endmerge
+			$volatile NI := (I + 1)
+			
+			index := ( (mem22[((3 + ncol_ind_22) + row)] -1) + I )
+			mod_temp30 := ( message22[index] * ($bitcast ($float<8,23>) _f-1.00e+0) )
+			condition_mesg := (message22[index] < ($bitcast ($float<8,23>) _f0.00e+0)) 
+			temp1 := ($mux condition_mesg  mod_temp30 message22[index])			
+				$volatile condition_I := (I==col)
+				$volatile condition_flag := (flag == 0)
+				$volatile condition_swap := ( temp1 < val )
+				$volatile condtion_exor_1 := ((~condition_I) &condition_mesg)
+				$volatile condtion_val_init := ((~condition_I) & condition_flag ) 
+				$volatile condtion_val_swap_par :=  ( ( ~condition_I) & condition_swap ) 
+				$volatile condtion_val_swap := ((~condition_flag) & condtion_val_swap_par )
+				$volatile  condition_val_change := (condtion_val_init|condtion_val_swap) 
+				$volatile  next_flag := ($mux condition_I flag  1)
+				//$volatile  next_exor := ($mux condtion_exor_1  (exor^1) exor)
+				$guard (condtion_exor_1) exor := (exor^1)
+				//$volatile  next_val:= ($mux condition_val_change  temp1 val)
+				$guard (condition_val_change) val := temp1
+				
+			$while (I < range_minus_1) 	
+			} // end loop 1
+			
+			$volatile sign := ($mux  (exor == 0)  ($bitcast ($float<8,23>) _f1.00e+0) ($bitcast ($float<8,23>) _f-1.00e+0))
+
+			$volatile  temp_info := ( val * sign )
+			ext_info22[ index_2D ] := temp_info 
+			
+			$if (col==0)	$then
+				val1 := ext_info22[ index_2D ]
+				val2 := message22[ index_2D ] 		
+				$call modify_info (val1 val2) (valo)
+				trans_info22_21[row] := valo
+			$endif
+		$if (col < range_minus_1) $then 
+			$place [loopback2]
+		$endif	
+		} // end loop 2
+	$endif
+			
+	$if (range==1) $then 
+		trans_info22_21[row] := message22[( mem22[((3 + ncol_ind_22) + row)] -1) ] 
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 3
+}		// end function
+
+//============================================================
+
+	$module [transverseCorrection11] $in (ncol_ind_11 nrows: $uint<16> ) $out() $is
+{
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [transverseCorrection11_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_11 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_11 - ( mem11[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_11 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem11[temp12] - mem11[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$if ( trans_info12_11[row] != ($bitcast ($float<8,23>) _f0.00e+0) )  	$then
+			$volatile  range_minus_1 := (range- 1)
+			$branchblock [transverseCorrection11_loop2] 
+			{
+			$dopipeline $depth 7 $buffering 1
+			$merge $loopback $entry 
+			$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+			$volatile  Ncol := (col + 1)
+			$volatile  temp20 := (3 + ncol_ind_11 )
+			$volatile temp21 := (temp20 + row )
+			index_2D := ((mem11[temp21] -1) + col )
+			
+			temp1 := ext_info11[ index_2D]
+			temp2 := trans_info12_11[row] 
+			$call modify_info (temp1 temp2) (temp3)
+			ext_info11[ index_2D ] := temp3 
+			
+		$while (col < range_minus_1) 	
+		} // end loop 2
+	$endif  // for range>1
+	$endif	// for next one
+	
+	$if (range==1) $then 
+
+		ext_info11[(mem11[((3 + ncol_ind_11) + row)] -1 )] := trans_info12_11[row]
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 1
+}		// end function
+//============================================================
+	$module [transverseCorrection12] $in (ncol_ind_12 nrows: $uint<16> ) $out() $is
+{
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [transverseCorrection12_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_12 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_12 - ( mem12[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_12 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem12[temp12] - mem12[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$if ( trans_info11_12[row] != ($bitcast ($float<8,23>) _f0.00e+0) )  	$then
+			$volatile  range_minus_1 := (range- 1)
+			$branchblock [transverseCorrection12_loop2] 
+			{
+			$dopipeline $depth 7 $buffering 1
+			$merge $loopback $entry 
+			$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+			$volatile  Ncol := (col + 1)
+			$volatile  temp20 := (3 + ncol_ind_12 )
+			$volatile temp21 := (temp20 + row )
+			index_2D := ((mem12[temp21] -1) + col )
+			
+			temp1 := ext_info12[ index_2D]
+			temp2 := trans_info11_12[row] 
+			$call modify_info (temp1 temp2) (temp3)
+			ext_info12[ index_2D ] := temp3 
+			
+		$while (col < range_minus_1) 	
+		} // end loop 2
+	$endif  // for range>1
+	$endif	// for next one
+	
+	$if (range==1) $then 
+
+		ext_info12[(mem12[((3 + ncol_ind_12) + row)] -1 )] := trans_info11_12[row]
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 1
+}		// end function
+//==========================================================
+	$module [transverseCorrection21] $in (ncol_ind_21 nrows: $uint<16> ) $out() $is
+{
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [transverseCorrection21_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_21 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_21 - ( mem21[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_21 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem21[temp12] - mem21[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$if ( trans_info22_21[row] != ($bitcast ($float<8,23>) _f0.00e+0) )  	$then
+			$volatile  range_minus_1 := (range- 1)
+			$branchblock [transverseCorrection21_loop2] 
+			{
+			$dopipeline $depth 7 $buffering 1
+			$merge $loopback $entry 
+			$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+			$volatile  Ncol := (col + 1)
+			$volatile  temp20 := (3 + ncol_ind_21 )
+			$volatile temp21 := (temp20 + row )
+			index_2D := ((mem21[temp21] -1) + col )
+			
+			temp1 := ext_info21[ index_2D]
+			temp2 := trans_info22_21[row] 
+			$call modify_info (temp1 temp2) (temp3)
+			ext_info21[ index_2D ] := temp3 
+			
+		$while (col < range_minus_1)	
+		} // end loop 2
+	$endif  // for range>1
+	$endif	// for next one
+	
+	$if (range==1) $then 
+
+		ext_info21[(mem21[((3 + ncol_ind_21) + row)] -1 )] := trans_info22_21[row]
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 1
+}		// end function
+//=========================================================
+	$module [transverseCorrection22] $in (ncol_ind_22 nrows: $uint<16> ) $out() $is
+{
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [transverseCorrection22_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind_22 )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_22 - ( mem22[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind_22 )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11)
+	CHECK_BIT_COUNT2 := (mem22[temp12] - mem22[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+	$if (range > 1 )	$then
+		$if ( trans_info21_22[row] != ($bitcast ($float<8,23>) _f0.00e+0) )  	$then
+			$volatile  range_minus_1 := (range- 1)
+			$branchblock [transverseCorrection22_loop2] 
+			{
+			$dopipeline $depth 7 $buffering 1
+			$merge  $entry $loopback
+			$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+			$volatile  Ncol := (col + 1)
+			$volatile  temp20 := (3 + ncol_ind_22 )
+			$volatile temp21 := (temp20 + row )
+			index_2D := ((mem22[temp21] -1) + col )
+			
+			temp1 := ext_info22[ index_2D]
+			temp2 := trans_info21_22[row] 
+			$call modify_info (temp1 temp2) (temp3)
+			ext_info22[ index_2D ] := temp3 
+			
+		$while (col < range_minus_1) 	
+		} // end loop 2
+	$endif  // for range>1
+	$endif	// for next one
+	
+	$if (range==1) $then 
+
+		ext_info22[(mem22[((3 + ncol_ind_22) + row)] -1 )] := trans_info21_22[row]
+	$endif
+
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}  // end loop 1
+}		// end function
+//=========================================================
+$module [update_aPosteriori11] $in (ncol_ind_11: $uint<16>) $out() $is
+{
+
+	$volatile ncol_ind_11_minus_3  := (ncol_ind_11 - 3)
+	$branchblock [update_aPosteriori11_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			val0 := ( mem11[(3+I)]-1 )
+			val1 := ( mem11[(4+I)]-1 )
+			
+			temp0 := ( aPosteriori1[val0] + ext_info11[I] ) 
+			temp1 := ( aPosteriori1[val1] + ext_info11[(I+1)] )
+			
+			aPosteriori1[val0] := temp0 
+			aPosteriori1[val1] := temp1 
+
+			
+			$while ((I+1) < ncol_ind_11_minus_3 ) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	ncol_ind_11_minus_1 := (ncol_ind_11 - 1)
+	$branchblock [update_aPosteriori11_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge  $loopback  $entry
+	$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+	$endmerge
+	NJ := (J + 1)
+	//
+	val := ( mem11[(3+J)]-1 )
+	temp := ( aPosteriori1[val] + ext_info11[J] ) 
+	aPosteriori1[val] := temp 
+	//
+	$while (J < ncol_ind_11_minus_1 ) 	
+	}
+}
+//=========================================================
+$module [update_aPosteriori21] $in (ncol_ind_21: $uint<16>) $out() $is
+{
+
+	$volatile ncol_ind_21_minus_3  := (ncol_ind_21 - 3)
+	$branchblock [update_aPosteriori21_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			val0 := ( mem21[(3+I)]-1 )
+			val1 := ( mem21[(4+I)]-1 )
+			
+			temp0 := ( aPosteriori1[val0] + ext_info21[I] ) 
+			temp1 := ( aPosteriori1[val1] + ext_info21[(I+1)] )
+			
+			aPosteriori1[val0] := temp0 
+			aPosteriori1[val1] := temp1 
+
+			
+			$while ((I+1) < ncol_ind_21_minus_3 ) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	ncol_ind_21_minus_1 := (ncol_ind_21 - 1)
+	$branchblock [update_aPosteriori21_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge  $loopback  $entry
+	$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+	$endmerge
+	NJ := (J + 1)
+	//
+	val := ( mem21[(3+J)]-1 )
+	temp := ( aPosteriori1[val] + ext_info21[J] ) 
+	aPosteriori1[val] := temp 
+	//
+	$while (J < ncol_ind_21_minus_1 ) 	
+	}
+}
+//==========================================================
+$module [update_aPosteriori22] $in (ncol_ind_22: $uint<16>) $out() $is
+{
+
+	$volatile ncol_ind_22_minus_3  := (ncol_ind_22 - 3)
+	$branchblock [update_aPosteriori22_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			val0 := ( mem22[(3+I)]-1 )
+			val1 := ( mem22[(4+I)]-1 )
+			
+			temp0 := ( aPosteriori2[val0] + ext_info22[I] ) 
+			temp1 := ( aPosteriori2[val1] + ext_info22[(I+1)] )
+			
+			aPosteriori2[val0] := temp0 
+			aPosteriori2[val1] := temp1 
+
+			
+			$while ((I+1) < ncol_ind_22_minus_3 ) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	ncol_ind_22_minus_1 := (ncol_ind_22 - 1)
+	$branchblock [update_aPosteriori22_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge  $loopback  $entry
+	$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+	$endmerge
+	NJ := (J + 1)
+	//
+	val := ( mem22[(3+J)]-1 )
+	temp := ( aPosteriori2[val] + ext_info22[J] ) 
+	aPosteriori2[val] := temp 
+	//
+	$while (J < ncol_ind_22_minus_1 ) 	
+	}
+}
+//==========================================================
+$module [update_aPosteriori12] $in (ncol_ind_12: $uint<16>) $out() $is
+{
+
+	$volatile ncol_ind_12_minus_3  := (ncol_ind_12 - 3)
+	$branchblock [update_aPosteriori12_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 2)
+
+			val0 := ( mem12[(3+I)]-1 )
+			val1 := ( mem12[(4+I)]-1 )
+			
+			temp0 := ( aPosteriori2[val0] + ext_info12[I] ) 
+			temp1 := ( aPosteriori2[val1] + ext_info12[(I+1)] )
+			
+			aPosteriori2[val0] := temp0 
+			aPosteriori2[val1] := temp1 
+
+			
+			$while ((I+1) < ncol_ind_12_minus_3 ) 	
+		}( I => count )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (count+2)
+	
+	ncol_ind_12_minus_1 := (ncol_ind_12 - 1)
+	$branchblock [update_aPosteriori12_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge  $loopback  $entry
+	$phi J := ($bitcast ($uint<16>) index_count) $on $entry NJ $on $loopback
+	$endmerge
+	NJ := (J + 1)
+	//
+	val := ( mem12[(3+J)]-1 )
+	temp := ( aPosteriori2[val] + ext_info12[J] ) 
+	aPosteriori2[val] := temp 
+	//
+	$while (J < ncol_ind_12_minus_1 ) 	
+	}
+}
+//============================================================
+$module [checkIsdecoded1] $in (ncols: $uint<16>) $out( is_decoded_1: $uint<1>) $is
+{	
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [checkIsdecoded1_loop] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge $loopback  $entry 
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+	$phi is_decoded_tmp := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp $on $loopback
+	$endmerge
+	NI := (I + 1)
+	c_aPosteriori := (aPosteriori1[I] > 0)
+	c_code_block  := (code_block1[I] < 0 )
+	c_is_decoded0_1 :=  ((~c_code_block) & c_aPosteriori) 
+	c_is_decoded0_2 :=  ((~c_aPosteriori) & c_code_block)
+	c_is_decoded0 := ( c_is_decoded0_1 | c_is_decoded0_2 )
+	next_is_decoded_tmp :=($mux c_is_decoded0  0  is_decoded_tmp)
+	$guard (c_aPosteriori) code_block1[I] := _f-1.00e+0
+	$guard (~c_aPosteriori) code_block1[I] := _f1.00e+0
+	
+	$while (I < ncols_minus_1)	
+	}(is_decoded_tmp => is_decoded_tmp)
+	is_decoded_1 := is_decoded_tmp 
+	
+
+}
+
+//==============================================================
+$module [checkIsdecoded2] $in (ncols: $uint<16>) $out( is_decoded_2: $uint<1>) $is
+{	
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [checkIsdecoded2_loop] {
+	$dopipeline $depth 7 $buffering 1 
+	$merge $loopback  $entry 
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+	$phi is_decoded_tmp := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp $on $loopback
+	$endmerge
+	NI := (I + 1)
+	c_aPosteriori := (aPosteriori2[I] > ($bitcast ($float<8,23>) _f0.00e+0))
+	c_code_block  := (code_block2[I] < ($bitcast ($float<8,23>) _f0.00e+0))
+	c_is_decoded0_1 :=  ((~c_code_block) & c_aPosteriori) 
+	c_is_decoded0_2 :=  ((~c_aPosteriori) & c_code_block)
+	c_is_decoded0 := ( c_is_decoded0_1 | c_is_decoded0_2 )
+	next_is_decoded_tmp :=($mux c_is_decoded0  0  is_decoded_tmp)
+	$guard (c_aPosteriori) code_block2[I] := _f-1.00e+0
+	$guard (~c_aPosteriori) code_block2[I] := _f1.00e+0
+	
+	$while (I < ncols_minus_1)	
+	}(is_decoded_tmp => is_decoded_tmp)
+	is_decoded_2 := is_decoded_tmp 
+	
+
+}
+
+//==============================================================
+$module [updateMessage11] $in (nrows ncol_ind_11: $uint<16>) $out() $is
+{
+	
+	nrows_minus_1 := (nrows - 1)
+	$branchblock [updatemessage11_loop1] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	Nrow := (row + 1)
+	temp00 := (3 + ncol_ind_11 )
+	temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_11 - ( mem11[temp01] -1 ) )	
+	temp10 := (3 + ncol_ind_11 )
+	temp11 := ( temp10 + row )
+	temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem11[temp12] - mem11[temp11])
+	range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		
+		range_minus_1 := (range - 1)
+		$branchblock [updatemessage11_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+		Ncol := (col + 1)
+		//
+		index_2D := ( (mem11[((3 + ncol_ind_11) + row)] -1 )+ col )
+		index_1D := ( mem11 [(3 + index_2D)] - 1 )
+		message11 [ index_2D ] := ( aPosteriori1[index_1D] - ext_info11 [index_2D] )
+		//
+		$while(col < range_minus_1) 	
+		}
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	}
+}
+//==================================================================
+$module [updateMessage12] $in (nrows ncol_ind_12: $uint<16>) $out() $is
+{
+	
+	nrows_minus_1 := (nrows - 1)
+	$branchblock [updatemessage12_loop1] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	Nrow := (row + 1)
+	temp00 := (3 + ncol_ind_12 )
+	temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_12 - ( mem12[temp01] -1 ) )	
+	temp10 := (3 + ncol_ind_12 )
+	temp11 := ( temp10 + row )
+	temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem12[temp12] - mem12[temp11])
+	range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		$if (range!=0) $then
+		range_minus_1 := (range - 1)
+		$branchblock [updatemessage12_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+		Ncol := (col + 1)
+		//
+		index_2D := ( (mem12[((3 + ncol_ind_12) + row)] -1 )+ col )
+		index_1D := ( mem12 [(3 + index_2D)] - 1 )
+		message12 [ index_2D ] := ( aPosteriori2[index_1D] - ext_info12 [index_2D] )
+		//
+		$while(col < range_minus_1) 	
+		}
+		$endif
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	}
+}
+//===============================================================
+$module [updateMessage22] $in (nrows ncol_ind_22: $uint<16>) $out() $is
+{
+	
+	nrows_minus_1 := (nrows - 1)
+	$branchblock [updatemessage22_loop1] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	Nrow := (row + 1)
+	temp00 := (3 + ncol_ind_22 )
+	temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_22 - ( mem22[temp01] -1 ) )	
+	temp10 := (3 + ncol_ind_22 )
+	temp11 := ( temp10 + row )
+	temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem22[temp12] - mem22[temp11])
+	range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		$if (range!=0) $then
+		range_minus_1 := (range - 1)
+		$branchblock [updatemessage22_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+		Ncol := (col + 1)
+		//
+		index_2D := ( (mem22[((3 + ncol_ind_22) + row)] -1 )+ col )
+		index_1D := ( mem22[(3 + index_2D)] - 1 )
+		message22 [ index_2D ] := ( aPosteriori2[index_1D] - ext_info22 [index_2D] )
+		//
+		$while(col < range_minus_1) 	
+		}
+		$endif
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	}
+}
+//==================================================================
+$module [updateMessage21] $in (nrows ncol_ind_21: $uint<16>) $out() $is
+{
+	
+	nrows_minus_1 := (nrows - 1)
+	$branchblock [updatemessage21_loop1] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<16>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	Nrow := (row + 1)
+	temp00 := (3 + ncol_ind_21 )
+	temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind_21 - ( mem21[temp01] -1 ) )	
+	temp10 := (3 + ncol_ind_21 )
+	temp11 := ( temp10 + row )
+	temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem21[temp12] - mem21[temp11])
+	range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		$if (range!=0) $then
+		range_minus_1 := (range - 1)
+		$branchblock [updatemessage21_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<16>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+		Ncol := (col + 1)
+		//
+		index_2D := ( (mem21[((3 + ncol_ind_21) + row)] -1 )+ col )
+		index_1D := ( mem21 [(3 + index_2D)] - 1 )
+		message21 [ index_2D ] := ( aPosteriori1[index_1D] - ext_info21 [index_2D] )
+		//
+		$while(col < range_minus_1) 	
+		}
+		$endif
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	}
+}
+
+//=================================================================
+$module [send_output] $in(ncols: $uint<16> nitr : $uint<16>) $out() $is
+{
+
+	ncols_minus_1 := (ncols - 1)
+// code block 1
+	$branchblock [send_outputs_loop1] {
+	$dopipeline $depth 7 $buffering 1 
+	$merge $entry $loopback 
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+	$endmerge
+	NI := (I + 1)
+	//
+	val := code_block1[I]
+	code_block_decoded := val 
+	//
+	$while (I < ncols_minus_1) 	
+	}
+// code block 2
+	$branchblock [send_outputs_loop2] {
+	$dopipeline $depth 7 $buffering 1 
+	$merge $entry $loopback 
+	$phi I := ($bitcast ($uint<16>) 0) $on $entry NI $on $loopback
+	$endmerge
+	NI := (I + 1)
+	//
+	val := code_block2[I]
+	code_block_decoded := val 
+	//
+	$while (I < ncols_minus_1) 	
+	}
+// number of iterations
+	Nitr_required := nitr 
+}
+
+//================================================================
+$module[top_daemon_1]  $in ()   $out ()   $is
+{
+
+//----------------initialize inputs---------------------------	
+
+	$call initInputs () (nrows ncols ncol_ind_11 ncol_ind_12 ncol_ind_21 ncol_ind_22 maxNitr ebbyNo rate)
+	
+//---------------- send inputs to other daemon--------------------
+	nrows_to_deamon_2_pipe := nrows
+	ncols_to_deamon_2_pipe := ncols
+	ncols_11_to_deamon_2_pipe := ncol_ind_11
+	ncols_12_to_deamon_2_pipe := ncol_ind_12
+	ncols_21_to_deamon_2_pipe := ncol_ind_21
+	ncols_22_to_deamon_2_pipe := ncol_ind_22
+	rate_to_deamon_2_pipe := rate
+	ebbyNo_to_deamon_2_pipe := ebbyNo
+	maxNitr_to_deamon_2_pipe := maxNitr
+
+	
+	nrows_to_deamon_3_pipe  := nrows
+	ncols_to_deamon_3_pipe  := ncols
+	ncols_11_to_deamon_3_pipe := ncol_ind_11
+	ncols_12_to_deamon_3_pipe := ncol_ind_12
+	ncols_21_to_deamon_3_pipe := ncol_ind_21
+	ncols_22_to_deamon_3_pipe := ncol_ind_22
+	rate_to_deamon_3_pipe  := rate
+	ebbyNo_to_deamon_3_pipe  := ebbyNo
+	maxNitr_to_deamon_3_pipe := maxNitr
+	
+	nrows_to_deamon_4_pipe  := nrows
+	ncols_to_deamon_4_pipe  := ncols
+	ncols_11_to_deamon_4_pipe := ncol_ind_11
+	ncols_12_to_deamon_4_pipe := ncol_ind_12
+	ncols_21_to_deamon_4_pipe := ncol_ind_21
+	ncols_22_to_deamon_4_pipe := ncol_ind_22
+	rate_to_deamon_4_pipe  := rate
+	ebbyNo_to_deamon_4_pipe  := ebbyNo
+	maxNitr_to_deamon_4_pipe := maxNitr
+	
+
+//-------------read code block---------------------------------
+
+	$call readCodeBlock (ncols) ()
+	
+//----------instruct daemon2 to compute apriori---------------
+
+	reading_code_block_done := _b1 
+
+//----------------compute apriori------------------------------
+
+	$call initialize_aPriori1 (ncols ebbyNo rate) ()
+	
+//---------------compute message----------------------------------	
+
+	$call initializeMessage11 (ncol_ind_11) ()
+
+//---- tell engine3 to start computing message -------------------
+
+	 message11_initialized := _b1		
+
+//-------------- start iterations --------------------------
+
+		$branchblock[minSumDecode1_loop] 
+		{	
+		$merge $entry loopback
+		$phi nitr := ($bitcast ($uint<16>) 1) $on $entry next_nitr $on loopback
+		$endmerge
+		next_nitr := (nitr + 1)	 
+		
+		$call initialize_aPosteriori1 ( ncols) () 
+		$call initializeExtrinsicInfo11 (ncol_ind_11) ()
+		$call initializeTransInfo11_12 (nrows) ()
+		$call checkNodeComputeEngine11 (ncol_ind_11 nrows) ()
+
+//----tell engine 2 that trans info is comuted
+		
+		trans_info11_12_calulation_done := 1
+		
+//------read if engine2 have computed trans info-------------
+
+		init_trans_info := trans_info12_11_calulation_done
+
+		$call transverseCorrection11(ncol_ind_11 nrows) ()
+//----------------------------------------------------
+		now_compute_aposteriori1 := aPosteriori1_phase_1_done
+
+		$call update_aPosteriori11(ncol_ind_11) ()
+
+//------------------ check is decoded --------------
+
+		$call checkIsdecoded1(ncols) (is_decoded_1)
+		
+	//	pipe_do_decode_2 := 1 
+		
+		is_decoded_from_2_recieved := is_decoded_from_2
+		
+		is_decoded := ( is_decoded_1 & is_decoded_from_2_recieved ) 
+		
+		is_decoded_d2 := is_decoded
+		
+		exit_condition := ((nitr > maxNitr) | is_decoded ) 
+		
+		$if (~exit_condition) $then
+			$call updateMessage11(nrows ncol_ind_11) ()
+			message11_modified := 1
+			read_message21_modified := message21_modified
+			$place [loopback]
+		$endif
+		}(nitr => nitr)	
+	
+	$call send_output (ncols nitr) () 
+}
+
+//==================================================================
+$module[top_daemon_2]  $in ()   $out ()   $is
+{
+//---------- read input info -------------------------
+
+	nrows := nrows_to_deamon_2_pipe
+	ncols := ncols_to_deamon_2_pipe
+	ncol_ind_11 := ncols_11_to_deamon_2_pipe
+	ncol_ind_12 := ncols_12_to_deamon_2_pipe
+	ncol_ind_21 := ncols_21_to_deamon_2_pipe
+	ncol_ind_22 := ncols_22_to_deamon_2_pipe
+	rate := rate_to_deamon_2_pipe
+	ebbyNo := ebbyNo_to_deamon_2_pipe
+	maxNitr := maxNitr_to_deamon_2_pipe
+		
+//----------------------------------------------------------
+	init_mat := reading_code_block_done
+
+	$call initialize_aPriori2 (ncols ebbyNo rate) ()
+		 
+	$call initializeMessage12 (ncol_ind_12) ()
+//----------------------------------------------------------------	 
+	 message12_initialized := _b1
+	 
+//-------------- start iterations --------------------------
+
+		$branchblock[minSumDecode2_loop] 
+		{	
+		$merge $entry loopback
+		$phi nitr := ($bitcast ($uint<16>) 1) $on $entry next_nitr $on loopback
+		$endmerge
+		next_nitr := (nitr + 1)	
+
+		$call initialize_aPosteriori2 ( ncols) () 
+		$call initializeExtrinsicInfo12 (ncol_ind_12) ()
+		$call initializeTransInfo12_11 (nrows) ()
+		$call checkNodeComputeEngine12 (ncol_ind_12 nrows) ()
+
+		trans_info12_11_calulation_done := 1
+		
+		init_trans_info := trans_info11_12_calulation_done
+
+		$call transverseCorrection12(ncol_ind_12 nrows) ()
+		
+		now_compute_aposteriori2 := aPosteriori2_phase_1_done
+
+		$call update_aPosteriori12(ncol_ind_12) ()
+
+		//------------------ check is decoded --------------
+	//	start_decode_2 := pipe_do_decode_2
+
+		$call checkIsdecoded2(ncols) (is_decoded_2)
+		//----------------------------------------------
+		
+		is_decoded_from_2 := is_decoded_2
+
+		is_decoded := is_decoded_d2
+		
+		is_decoded_d3 := is_decoded
+
+		exit_condition := ((nitr > maxNitr) | is_decoded ) 
+		
+		$if (~exit_condition) $then
+			$call updateMessage12(nrows ncol_ind_12) ()
+			message12_modified := 1
+			read_message22_modified := message22_modified
+			$place [loopback]
+		$endif
+		}(nitr => nitr)	
+}
+
+
+//====================================================================
+$module[daemon_3]  $in ()   $out ()   $is
+{
+//---------- reading input info -------------------------
+
+	nrows := nrows_to_deamon_3_pipe
+	ncols := ncols_to_deamon_3_pipe
+	ncol_ind_11 := ncols_11_to_deamon_3_pipe
+	ncol_ind_12 := ncols_12_to_deamon_3_pipe
+	ncol_ind_21 := ncols_21_to_deamon_3_pipe
+	ncol_ind_22 := ncols_22_to_deamon_3_pipe
+	rate := rate_to_deamon_3_pipe
+	ebbyNo := ebbyNo_to_deamon_3_pipe
+	maxNitr := maxNitr_to_deamon_3_pipe
+	
+//------------------------------------------------------
+	init_mess21 := message11_initialized 
+	
+	$call initializeMessage21 (ncol_ind_21) ()
+
+//-------------- start iterations --------------------------
+
+		$branchblock[minSumDecode3_loop] 
+		{	
+		$merge $entry loopback
+		$phi nitr := ($bitcast ($uint<16>) 1) $on $entry next_nitr $on loopback
+		$endmerge
+		next_nitr := (nitr + 1)	
+		
+		$call initializeExtrinsicInfo21 (ncol_ind_21) ()
+		$call initializeTransInfo21_22 (nrows) ()
+		$call checkNodeComputeEngine21 (ncol_ind_21 nrows) ()
+
+		trans_info21_22_calulation_done := 1
+		trans_info_computed := trans_info22_21_calulation_done
+
+		$call transverseCorrection21(ncol_ind_21 nrows) ()	
+		$call update_aPosteriori21(ncol_ind_21) ()	
+		
+		aPosteriori1_phase_1_done := 1
+
+		is_decoded := is_decoded_d3
+		
+		is_decoded_d4 := is_decoded 
+
+//------	
+		exit_condition := ((nitr > maxNitr) | is_decoded ) 
+		
+		$if (~exit_condition) $then
+			$call updateMessage21(nrows ncol_ind_21) ()
+			message21_modified := 1
+			read_message11_modified := message11_modified
+			$place [loopback]
+		$endif
+		
+		
+		}(nitr => nitr)	
+}
+
+//====================================================================
+
+$module[daemon_4]  $in ()   $out ()   $is
+{
+//---------- reading input info -------------------------
+
+	nrows := nrows_to_deamon_4_pipe
+	ncols := ncols_to_deamon_4_pipe
+	ncol_ind_11 := ncols_11_to_deamon_4_pipe
+	ncol_ind_12 := ncols_12_to_deamon_4_pipe
+	ncol_ind_21 := ncols_21_to_deamon_4_pipe
+	ncol_ind_22 := ncols_22_to_deamon_4_pipe
+	rate := rate_to_deamon_4_pipe
+	ebbyNo := ebbyNo_to_deamon_4_pipe
+	maxNitr := maxNitr_to_deamon_4_pipe
+//------------------------------------------------------
+	init_mess22 := message12_initialized 
+	$call initializeMessage22 (ncol_ind_22) ()
+	
+//-------------- start iterations --------------------------
+
+		$branchblock[minSumDecode4_loop] 
+		{	
+		$merge $entry loopback
+		$phi nitr := ($bitcast ($uint<16>) 1) $on $entry next_nitr $on loopback
+		$endmerge
+		next_nitr := (nitr + 1)	
+	
+		$call initializeExtrinsicInfo22 (ncol_ind_22) ()
+		$call initializeTransInfo22_21 (nrows) ()
+		$call checkNodeComputeEngine22 (ncol_ind_22 nrows) ()
+
+		trans_info22_21_calulation_done := 1
+		trans_info_computed := trans_info21_22_calulation_done
+
+		$call transverseCorrection22(ncol_ind_22 nrows) ()
+
+		$call update_aPosteriori22(ncol_ind_22) ()
+		aPosteriori2_phase_1_done := 1
+		
+		is_decoded := is_decoded_d4
+	
+//------	
+		exit_condition := ((nitr > maxNitr) | is_decoded ) 
+		
+		$if (~exit_condition) $then
+			$call updateMessage22(nrows ncol_ind_22) ()
+			message22_modified := 1
+			read_message12_modified := message12_modified
+			$place [loopback]
+		$endif
+		}(nitr => nitr)	
+}
