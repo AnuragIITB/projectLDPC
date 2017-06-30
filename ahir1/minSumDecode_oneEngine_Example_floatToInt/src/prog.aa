@@ -1,0 +1,627 @@
+$parameter MATRIX_NNZ         60000
+$parameter MATRIX_ORDER       13000
+
+
+$storage mem : $array [ MATRIX_NNZ ] $of $uint<32>
+$storage code_block : $array [ MATRIX_ORDER ] $of $int<32>
+$storage aPriori    : $array [ MATRIX_ORDER ] $of $int<32>
+$storage aPosteriori    : $array [ MATRIX_ORDER ] $of $int<32>
+$storage message : $array [ MATRIX_NNZ ] $of $int<32>
+$storage ext_info : $array [ MATRIX_NNZ ] $of $int<32>
+
+
+$pipe maxNitr_in : $uint<32>
+$pipe ebbyNo_in  : $uint<32>
+$pipe matrix_in : $uint<32>  $depth 2
+$pipe rate_in  : $uint<32>
+
+$pipe code_block_in: $uint<32> $depth 2
+$pipe code_block_decoded: $uint<32> 
+$pipe Nitr_required : $uint<32>
+
+
+$pipe ebbyNo_out  : $uint<32>
+$pipe matrix_out : $uint<32>  $depth 2
+$pipe rate_out  : $uint<32>
+
+$module [initInputs] $in () $out (nrows ncols ncol_ind maxNitr ebbyNo rate: $uint<32>  ) $is
+{
+	//
+	nrows := matrix_in
+	ncols := matrix_in
+	ncol_ind := matrix_in
+	//
+	$volatile range := (ncol_ind + nrows)
+	$volatile range_min_5 := ((ncol_ind + nrows) - 5)
+	$branchblock [matrixRead] {
+		$dopipeline $depth 7 $buffering 1
+			$merge $entry $loopback
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge 
+			$volatile NI := (I+4)
+			
+			mem[(I+3)] := matrix_in
+			mem[(I+4)] := matrix_in
+			mem[(I+5)] := matrix_in
+			mem[(I+6)] := matrix_in
+
+		$while ((I+3) < range_min_5)
+	}( I => I )
+	
+	$volatile index_count:= (I+4)
+	$volatile range_minus_1 := (range-1)
+	$branchblock [matrixRead_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+			mem[(J+3)] := matrix_in
+			$while (J < range_minus_1) 	
+		}	
+	//	
+	rate := rate_in	
+	maxNitr := maxNitr_in
+	ebbyNo := ebbyNo_in
+}
+
+
+//
+// reading code block to decode
+$module [readCodeBlock] $in (ncols: $uint<32>) $out () $is
+{
+
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [readCodeBlockLoop_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) 0) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			val := code_block_in
+			code_block[J] := ($bitcast ($int<32>) val)
+
+			$while (J < ncols_minus_1 ) 	
+		}		
+	
+}
+
+//
+//
+//
+//
+$module [initialize_aPriori] $in (ncols ebbyNo rate: $uint<32> ) $out() $is
+{
+		$volatile temp1 := (-4*($bitcast ($int<32>) (rate * ebbyNo )) )
+	$volatile ncols_minus_5 := (ncols - 5)
+	$branchblock [init_aPriori_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 4)
+
+			aPriori[I] 	 := (temp1 * code_block[I]  )     
+			aPriori[(I+1)] := (temp1 * code_block[(I+1)]) 
+			aPriori[(I+2)] := (temp1 * code_block[(I+2)]) 
+			aPriori[(I+3)] := (temp1 * code_block[(I+3)]) 
+		
+			$while ((I+3) < ncols_minus_5) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (I+4)
+	$volatile ncols_minus_1 := (ncols-1)
+	$branchblock [init_aPriori_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 1)
+
+			aPriori[J] := (temp1 * code_block[J])
+			$while (J < ncols_minus_1 ) 	
+		}		
+		
+}
+
+//
+//
+//
+$module [initializeMessage] $in ( ncol_ind: $uint<32>  ) $out() $is
+{	
+	$volatile ncol_ind_minus_5 := (ncol_ind - 5)
+	$branchblock [initializeMessage_loop1] 
+	{
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 4)
+			$volatile  temp00 := (3 + I) 
+			$volatile  temp01 := (4 + I) 
+			$volatile  temp02 := (5 + I) 
+			$volatile  temp03 := (6 + I) 
+			 
+			$volatile temp10 := ( mem[ temp00 ] - 1 )
+			$volatile temp11 := ( mem[ temp01 ] - 1 )
+			$volatile temp12 := ( mem[ temp02 ] - 1 )
+			$volatile temp13 := ( mem[ temp03 ] - 1 )
+			
+			message[I] := aPriori[ temp10 ]
+			message[(I+1)] := aPriori[ temp11 ]
+			message[(I+2)] := aPriori[ temp12 ]
+			message[(I+3)] := aPriori[ temp13 ]
+			
+		$while ((I+3) < ncol_ind_minus_5) 	
+		}( I => I )
+		
+	$volatile index_count:= (I+4)
+	$volatile ncol_ind_minus_1 := (ncol_ind - 1)
+	$branchblock [initializeMessage_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			
+			$volatile  NJ := (J + 1)
+			$volatile  temp0 := (3 + J) 
+			$volatile temp1 := ( mem[ temp0 ] - 1 )
+			message[J] := aPriori[ temp1 ]
+			
+			$while (J < ncol_ind_minus_1 ) 	
+		}			
+		
+}
+//
+//
+$module [initialize_aPosteriori] $in (ncols: $uint<32>) $out() $is
+{
+
+	$volatile ncols_minus_5 := (ncols - 5)
+	$branchblock [initialize_aPosteriori_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) 0) $on $entry NJ $on $loopback
+			$endmerge
+			$volatile  NJ := (J + 4)
+			
+			aPosteriori[J] := aPriori[J] 
+			aPosteriori[(J+1)] := aPriori[(J+1)] 
+			aPosteriori[(J+2)] := aPriori[(J+2)] 
+			aPosteriori[(J+3)] := aPriori[(J+3)] 
+
+		
+			$while ((J+3) < ncols_minus_5) 	
+		}( J => J )
+		
+		// for the last entries less than or equal to 8
+	$volatile index_count:= (J+4)
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [initialize_aPosteriori_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<32>) index_count) $on $entry NI $on $loopback
+			$endmerge
+			NI := (I + 1)
+			aPosteriori[I] := aPriori[I] 	
+		$while (I < ncols_minus_1)	
+		}
+}
+
+//
+//
+$module [initializeExtrinsicInfo] $in ( ncol_ind: $uint<32>  ) $out() $is
+{
+
+	$volatile ncol_ind_minus_5 := (ncol_ind - 5)
+	$branchblock [initializeExtrinsicInfo_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 4)
+
+			ext_info[I] := _f0.00e+0
+			ext_info[(I+1)] := _f0.00e+0
+			ext_info[(I+2)] := _f0.00e+0
+			ext_info[(I+3)] := _f0.00e+0
+		
+			$while ((I+3) < ncol_ind_minus_5) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (I+4)
+	
+	$volatile ncol_ind_minus_1 := (ncol_ind - 1)
+	$branchblock [initializeExtrinsicInfo_loop2] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+			$endmerge
+			NJ := (J + 1)
+			ext_info[J] := _f0.00e+0
+		$while (J < ncol_ind_minus_1)			
+		}
+}
+//
+//
+//
+//
+
+	$module [checkNodeComputeEngine] $in (ncol_ind nrows: $uint<32> ) $out() $is
+{
+	$storage exor : $uint<1>
+	$storage val  : $int<32>
+	
+	$volatile nrows_minus_1 := (nrows - 1)
+	$branchblock [checkNodeComputeEngine_loop1] 
+	{ 
+	$merge loopback1 $entry 
+	$phi row := ($bitcast ($uint<32>) 0) $on $entry Nrow $on loopback1
+	$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind - ( mem[temp01] -1 ) )	
+	$volatile  temp10 := (3 + ncol_ind )
+	$volatile  temp11 := ( temp10 + row )
+	$volatile  temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem[temp12] - mem[temp11])
+	
+ 
+	$volatile  range := ($mux (row == nrows_minus_1)  CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+
+		$volatile  range_minus_1 := (range- 1)
+		$branchblock [checkNodeComputeEngine_loop2] 
+		{
+		$merge loopback2 $entry 
+		$phi col := ($bitcast ($uint<32>) 0) $on $entry Ncol $on loopback2
+		$endmerge
+		$volatile  Ncol := (col + 1)
+		$volatile  temp20 := (3 + ncol_ind )
+		$volatile temp21 := (temp20 + row )
+		index_2D := ((mem[temp21] -1) + col )
+ 			
+ 			exor := 0
+ 			val  := 0
+			$branchblock [checkNodeComputeEngine_loop3] 
+			{
+			$dopipeline $depth 7 $buffering 1 
+			$merge $loopback $entry  
+			$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$phi flag := ($bitcast ($uint<1>) 0) $on $entry next_flag $on $loopback	
+			$endmerge
+			$volatile NI := (I + 1)
+			
+			index := ( (mem[((3 + ncol_ind) + row)] -1) + I )
+			mod_temp30 := ( -1*message[index] )
+			condition_mesg := (message[index] < 0 ) 
+			temp1 := ($mux condition_mesg  mod_temp30 message[index])			
+				$volatile condition_I := (I==col)
+				$volatile condition_flag := (flag == 0)
+				$volatile condition_swap := ( temp1 < val )
+				$volatile condtion_exor_1 := ((~condition_I) &condition_mesg)
+				$volatile condtion_val_init := ((~condition_I) & condition_flag ) 
+				$volatile condtion_val_swap_par :=  ( ( ~condition_I) & condition_swap ) 
+				$volatile condtion_val_swap := ((~condition_flag) & condtion_val_swap_par )
+				$volatile  condition_val_change := (condtion_val_init|condtion_val_swap) 
+				$volatile  next_flag := ($mux condition_I flag  1)
+				//$volatile  next_exor := ($mux condtion_exor_1  (exor^1) exor)
+				$guard (condtion_exor_1) exor := (exor^1)
+				//$volatile  next_val:= ($mux condition_val_change  temp1 val)
+				$guard (condition_val_change) val := temp1
+				
+			$while (I < range_minus_1) 	
+			}
+			
+			$volatile sign := ($mux  (exor == 0)  1 -1 )
+
+			$volatile  temp_info := ( val * sign )
+			ext_info[ index_2D ] := temp_info 
+		$if (col < range_minus_1) $then 
+			$place [loopback2]
+		$endif	
+		}
+	
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]	
+	$endif
+	}
+}
+//
+//
+//
+$module [update_aPosteriori] $in (ncol_ind: $uint<32>) $out() $is
+{
+
+	$volatile ncol_ind_minus_5  := (ncol_ind - 5)
+	$branchblock [update_aPosteriori_loop1] {
+		$dopipeline $depth 8 $buffering 1 
+			$merge $loopback $entry  
+				$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+			$endmerge
+			$volatile  NI := (I + 4)
+
+			val0 := ( mem[(3+I)]-1 )
+			val1 := ( mem[(4+I)]-1 )
+			val2 := ( mem[(5+I)]-1 )
+			val3 := ( mem[(6+I)]-1 )
+			
+			temp0 := ( aPosteriori[val0] + ext_info[I] ) 
+			temp1 := ( aPosteriori[val1] + ext_info[(I+1)] )
+			temp2 := ( aPosteriori[val2] + ext_info[(I+2)] )
+			temp3 := ( aPosteriori[val3] + ext_info[(I+3)] )
+			
+			aPosteriori[val0] := temp0 
+			aPosteriori[val1] := temp1 
+			aPosteriori[val2] := temp2 
+			aPosteriori[val3] := temp3 
+			
+			$while ((I+3) < ncol_ind_minus_5 ) 	
+		}( I => I )
+		
+		// for the last entries less than or equal to 8
+
+	$volatile index_count:= (I+4)
+	
+	ncol_ind_minus_1 := (ncol_ind - 1)
+	$branchblock [update_aPosteriori_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge  $loopback  $entry
+	$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+	$endmerge
+	NJ := (J + 1)
+	//
+	val := ( mem[(3+J)]-1 )
+	temp := ( aPosteriori[val] + ext_info[J] ) 
+	aPosteriori[val] := temp 
+	//
+	$while (J < ncol_ind_minus_1 ) 	
+	}
+}
+
+//
+//
+//
+//
+//
+
+$module [checkIsdecoded] $in (ncols: $uint<32>) $out( is_decoded: $uint<1>) $is
+{	
+
+	$volatile ncols_minus_4 := (ncols - 4)
+	$branchblock [checkIsdecoded_loop1] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge $loopback  $entry 
+	$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+	$phi is_decoded_tmp_x0 := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp_x0 $on $loopback
+	$phi is_decoded_tmp_x1 := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp_x1 $on $loopback
+	$phi is_decoded_tmp_x2 := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp_x2 $on $loopback
+
+	$endmerge
+	$volatile NI := (I + 3)
+		//
+	//
+	c_aPosteriori_x0 := (aPosteriori[I] > 0)
+	c_code_block_x0  := (code_block[I] < 0)
+	$volatile c_is_decoded0_1_x0 :=  ((~c_code_block_x0) & c_aPosteriori_x0) 
+	$volatile c_is_decoded0_2_x0 :=  ((~c_aPosteriori_x0) & c_code_block_x0)
+	$volatile c_is_decoded0_x0 := ( c_is_decoded0_1_x0 | c_is_decoded0_2_x0 )
+	$volatile next_is_decoded_tmp_x0 :=($mux c_is_decoded0_x0  0  is_decoded_tmp_x0)
+	$guard (c_aPosteriori_x0) code_block[I] := -100
+	$guard (~c_aPosteriori_x0) code_block[I] := 100
+	//
+	//
+	//
+	//
+	c_aPosteriori_x1 := (aPosteriori[(I+1)] > 0)
+	c_code_block_x1  := (code_block[(I+1)] < 0)
+	$volatile c_is_decoded0_1_x1 :=  ((~c_code_block_x1) & c_aPosteriori_x1) 
+	$volatile c_is_decoded0_2_x1 :=  ((~c_aPosteriori_x1) & c_code_block_x1)
+	$volatile c_is_decoded0_x1 := ( c_is_decoded0_1_x1 | c_is_decoded0_2_x1 )
+	$volatile next_is_decoded_tmp_x1 :=($mux c_is_decoded0_x1  0  is_decoded_tmp_x1)
+	$guard (c_aPosteriori_x1) code_block[(I+1)] := -100
+	$guard (~c_aPosteriori_x1) code_block[(I+1)] := 100
+	//
+	//
+		//
+	//
+	c_aPosteriori_x2 := (aPosteriori[(I+2)] > 0)
+	c_code_block_x2  := (code_block[(I+2)] < 0)
+	$volatile c_is_decoded0_1_x2 :=  ((~c_code_block_x2) & c_aPosteriori_x2) 
+	$volatile c_is_decoded0_2_x2 :=  ((~c_aPosteriori_x2) & c_code_block_x2)
+	$volatile c_is_decoded0_x2 := ( c_is_decoded0_1_x2 | c_is_decoded0_2_x2 )
+	$volatile next_is_decoded_tmp_x2 :=($mux c_is_decoded0_x2  0  is_decoded_tmp_x2)
+	$guard (c_aPosteriori_x2) code_block[(I+2)] := -100
+	$guard (~c_aPosteriori_x2) code_block[(I+2)] := 100
+	//
+	//
+
+	$while ((I+2) < ncols_minus_4)	
+	}(is_decoded_tmp_x0 => is_decoded_tmp_x0 is_decoded_tmp_x1 => is_decoded_tmp_x1 is_decoded_tmp_x2 => is_decoded_tmp_x2  I=>I)
+	is_decoded_x11 := ( is_decoded_tmp_x0 & is_decoded_tmp_x1 ) 	
+	is_decoded_partial := ( is_decoded_x11 & is_decoded_tmp_x2 )
+	//
+	//
+	$volatile index_count:= (I+3)
+	$volatile ncols_minus_1 := (ncols - 1)
+	$branchblock [checkIsdecoded_loop2] {
+	$dopipeline $depth 8 $buffering 1 
+	$merge $loopback  $entry 
+	$phi J := ($bitcast ($uint<32>) index_count) $on $entry NJ $on $loopback
+	$phi is_decoded_tmp := ($bitcast ($uint<1>) 1) $on $entry next_is_decoded_tmp $on $loopback
+	$endmerge
+	$volatile NJ := (J + 1)
+	c_aPosteriori := (aPosteriori[J] > 0)
+	c_code_block  := (code_block[J] < 0)
+	$volatile c_is_decoded0_1 :=  ((~c_code_block) & c_aPosteriori) 
+	$volatile c_is_decoded0_2 :=  ((~c_aPosteriori) & c_code_block)
+	$volatile c_is_decoded0 := ( c_is_decoded0_1 | c_is_decoded0_2 )
+	$volatile next_is_decoded_tmp :=($mux c_is_decoded0  0  is_decoded_tmp)
+	$guard (c_aPosteriori) code_block[J] := -100
+	$guard (~c_aPosteriori) code_block[J] := 100
+	
+	$while (J < ncols_minus_1)	
+	}(is_decoded_tmp => is_decoded_tmp)
+	
+	is_decoded := ( is_decoded_tmp & is_decoded_partial ) 
+	
+
+}
+//
+//
+//
+//
+$module [updateMessage] $in (nrows ncol_ind: $uint<32>) $out() $is
+{
+$storage column_index : $array [ MATRIX_ORDER] $of $uint<32>
+	
+	$volatile  nrows_minus_1 := (nrows - 1)
+	$branchblock [updateMessage_loop1] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<32>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind - ( mem[temp01] -1 ) )	
+	$volatile temp10 := (3 + ncol_ind )
+	$volatile temp11 := ( temp10 + row )
+	$volatile temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem[temp12] - mem[temp11])
+	$volatile range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		
+		$volatile range_minus_3 := (range - 3)
+		$branchblock [updateMessage_loop2] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<32>) 0) $on $entry Ncol $on $loopback
+		$endmerge
+		$volatile Ncol := (col + 2)
+		//
+		index_2D_x0 := ( (mem[((3 + ncol_ind) + row)] -1 )+ col )
+		index_1D_x0 := ( mem [(3 + index_2D_x0)] - 1 )
+		message [ index_2D_x0 ] := ( aPosteriori[index_1D_x0] - ext_info [index_2D_x0] )
+		//
+		index_2D_x1 := ( (mem[((3 + ncol_ind) + row)] -1 )+ (col+1) )
+		index_1D_x1 := ( mem [(3 + index_2D_x1)] - 1 )
+		message [ index_2D_x1 ] := ( aPosteriori[index_1D_x1] - ext_info [index_2D_x1] )
+		
+		$while(col < range_minus_3) 	
+		} ( col => col )
+	column_index[row] := col 
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	} 
+	
+	//
+	//
+	
+	$branchblock [updateMessage_loop11] {
+			$merge loopback1 $entry
+				$phi row := ($bitcast ($uint<32>) 0) $on $entry Nrow $on loopback1
+			$endmerge
+	$volatile  Nrow := (row + 1)
+	$volatile  temp00 := (3 + ncol_ind )
+	$volatile  temp01 := ( temp00 + row )
+	CHECK_BIT_COUNT1 := (ncol_ind - ( mem[temp01] -1 ) )	
+	$volatile temp10 := (3 + ncol_ind )
+	$volatile temp11 := ( temp10 + row )
+	$volatile temp12 := ( 1 + temp11 )
+	CHECK_BIT_COUNT2 := (mem[temp12] - mem[temp11])
+	$volatile range := ($mux (row==nrows_minus_1) CHECK_BIT_COUNT1 CHECK_BIT_COUNT2)
+		
+		$volatile range_minus_1 := (range - 1)
+		index_count := column_index[row]
+		$branchblock [updateMessage_loop12] {
+		$dopipeline $depth 7 $buffering 1 
+		$merge $loopback $entry  
+		$phi col := ($bitcast ($uint<32>)index_count) $on $entry Ncol $on $loopback
+		$endmerge
+		$volatile Ncol := (col + 1)
+		//
+		index_2D := ( (mem[((3 + ncol_ind) + row)] -1 )+ col )
+		index_1D := ( mem [(3 + index_2D)] - 1 )
+		message [ index_2D ] := ( aPosteriori[index_1D] - ext_info [index_2D] )
+		//
+		$while(col < range_minus_1) 	
+		}
+	$if (row < nrows_minus_1) $then
+		$place [loopback1]
+	$endif	
+	}
+}
+//
+//
+//
+//
+//
+//
+$module [send_output] $in(ncols: $uint<32> nitr : $uint<32>) $out() $is
+{
+
+	ncols_minus_1 := (ncols - 1)
+	$branchblock [send_outputs_loop] {
+	$dopipeline $depth 7 $buffering 1 
+	$merge $entry $loopback 
+	$phi I := ($bitcast ($uint<32>) 0) $on $entry NI $on $loopback
+	$endmerge
+	NI := (I + 1)
+	//
+	val := code_block[I]
+	code_block_decoded := ($bitcast ($uint<32>) val) 
+	//
+	$while (I < ncols_minus_1) 	
+	}
+	Nitr_required := nitr 
+}
+
+//
+//
+//
+$module [minSumDecode] $in () $out () $is
+{
+
+		$call initInputs () (nrows ncols ncol_ind maxNitr ebbyNo rate)
+		$call readCodeBlock (ncols) ()
+		
+//--------------------------------------------------
+		
+	$call initialize_aPriori (ncols ebbyNo rate) ()
+
+	$call initializeMessage (ncol_ind) ()
+	
+		$branchblock[minSumDecode_loop] 
+		{	
+		$merge $entry loopback
+		$phi nitr := ($bitcast ($uint<32>) 1) $on $entry next_nitr $on loopback
+		$endmerge
+		next_nitr := (nitr + 1)
+		
+		$call initialize_aPosteriori ( ncols) () 
+
+		$call initializeExtrinsicInfo (ncol_ind) ()
+
+		$call checkNodeComputeEngine (ncol_ind nrows) ()
+
+		$call update_aPosteriori(ncol_ind) ()
+
+		$call checkIsdecoded(ncols) (is_decoded)
+
+		exit_condition := ((nitr > maxNitr) | is_decoded ) 
+		
+		$if (~exit_condition) $then
+			$call updateMessage(nrows ncol_ind) ()
+			$place [loopback]
+		$endif
+		}(nitr => nitr)	
+		
+		$call send_output (ncols nitr) () 
+} //end min sum
+
+
