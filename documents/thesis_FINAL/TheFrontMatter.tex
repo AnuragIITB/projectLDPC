@@ -1,0 +1,162 @@
+% This file contains the templates for the first few pages of the thesis including 
+% 1. Title page
+% 2. Dedication
+% 3. Dissertation approval
+% 4. Declaration of authorship
+% 5. Abstract
+
+
+%   1. TITLE
+\newcommand{\titlePage}{
+
+% No page number
+\thispagestyle{empty}
+\begin{center}
+
+% thesis title
+\vspace*{15px}
+{\Huge\bfseries \thesisTitle}\\[1.0cm] 
+
+% submitted in partial fulfillment etc.
+\textit{Submitted in partial fulfillment of the requirements\\[0.2cm] of the degree of\\[0.2cm] \degree}\\[2.0cm]
+ 
+% author
+\textit{by}\\[0.2cm]
+\authorName \\[0.2cm] (\textit{Roll no.} \rollNo) \\[2.0cm]
+
+% supervisor
+\textit{Supervisor:}\\[0.2cm]
+% or
+% \textit{under the supervision of}\\[0.2cm]
+\supervisorOne \\[2.0cm]
+
+% iit-b logo
+\includegraphics[width=0.25\textwidth]{Figures/iitb_logo.jpg}
+
+\vspace*{10px}
+
+% department and college
+\dept\\[0.2cm]
+\college\\[0.2cm]
+
+% year
+\currentyear\\[4cm] 
+
+\end{center}
+
+\clearpage
+}
+
+%   2. DEDICATION
+\newcommand{\dedication}{
+\thispagestyle{empty}
+\vspace*{150px}
+\begin{center}\large{\textit{Dedicated to my parents.}} \\
+
+
+\end{center}
+
+\clearpage
+}
+
+%   3. DISSERTATION APPROVAL
+
+\newcommand{\approval}{
+% if you use a dedication, then use a page number with the plain page style
+\thispagestyle{plain}
+% else, use no page number with the empty page style
+%\thispagestyle{empty}
+
+
+% page title
+\begin{center}{\huge\bf Dissertation Approval\par}\end{center}
+
+\vspace*{15px}
+
+\noindent This dissertation entitled 
+% title
+\textbf{``\thesisTitle"}, submitted by 
+% author
+\authorName  
+(Roll No.  \rollNo),
+is approved for the award of degree of 
+% degree
+\degree \hspace{1mm}in Electrical Engineering.\\[1.0cm]
+
+% examiners and supervisors
+\begin{flushright}
+\textbf{{Examiner 1}}\\[0.8cm]
+\quad\rule{0.3\textwidth}{.3pt}\\[0.8cm]
+\textbf{{Examiner 2}}\\[0.8cm]
+\quad\rule{0.3\textwidth}{.3pt}\\[1.6cm]
+
+\textbf{{Supervisor}}\\[0.8cm]
+\quad\rule{0.3\textwidth}{.3pt}\\[1.6cm]
+
+\textbf{{Chairman}}\\[0.8cm]
+\quad\rule{0.3\textwidth}{.3pt}\\[2.4cm]
+
+\end{flushright}
+\textbf{Date:} ...... \currentmonth { } \currentyear\\[0.3cm]
+\textbf{Place:}\quad\rule{0.5\textwidth}{.3pt} 
+
+% start a new page
+\clearpage
+}
+
+%   4. DECLARATION OF AUTHORSHIP
+\newcommand{\authorship}{
+\thispagestyle{plain}
+
+\begin{center}{\huge\bf Declaration of Authorship\par}\end{center}
+
+\vspace*{15px}
+
+% institute declaration text
+\noindent I declare that this written submission represents my ideas in my own words and where others' ideas or words have been included, I have adequately cited and referenced the original sources.  I also declare that I have adhered to all principles of academic honesty and integrity and   have   not   misrepresented   or   fabricated   or   falsified   any   idea/data/fact/source   in   my submission.  I understand that any violation of the above will be cause for disciplinary action by the Institute and can also evoke  penal action from the sources which have thus not been properly cited or from whom proper permission has not been taken when needed.
+
+\vspace*{10px}
+
+% signature
+\begin{flushright}
+{Signature: ......................................\\[0.4cm]}
+
+% author name
+{\textbf{\authorName}\\[0.0cm]\rollNo\\[2.0cm]}
+
+\end{flushright}
+% date
+\begin{flushleft}
+{Date: ...... \currentmonth { } \currentyear\\}
+\end{flushleft}
+
+
+% start a new page
+\clearpage 
+}
+
+%   5. ABSTRACT
+\newcommand{\abstractpage}{
+\thispagestyle{plain}
+
+% header-type text for the abstract - optional
+%\small {\noindent\authorName/ \supervisorOne{ }(Supervisor): \textbf{``\thesisTitle"}, \textit{Master of Technology Dissertation}, \dept, \college, \currentmonth { } \currentyear.}\\[0.0cm]
+%\HRule\\[0.2cm]
+
+
+\vspace*{10px}
+
+\begin{center}{\huge{\textit {Abstract}}\par}\end{center}
+
+\vspace*{10px}
+
+% Abstract text - Type abstract here
+\noindent The thesis investigates the performance of the Low-density parity-check (LDPC) codes for their use in storage systems using AHIR tool chain. AHIR is a open source tool- used for high level synthesis (HLS),  developed at IIT Bombay. \\
+Some decoding algorithms can achieve error-correction performance very close to the Shannon limit by using properties of low density parity check matrices. We have implemented Bit Flipping algorithm, Sum Product algorithm and Min Sum algorithm in C to decode the code block. The algorithms are written in C so that the description can be converted into hardware via high level synthesis (HLS) tool. The performance of Sum Product algorithm is very close to Shannon limit but implemented hardware is very complex and costly. Generally, the performance of Min Sum decode algorithm is relatively lesser than Sum Product algorithm and implemented hardware cost is also relatively lesser. Thus, we chose to implement Min Sum decode algorithm on a field-programmable gate array (FPGA) plateform. The implemented hardware is a serial min sum decoder. To parallelize the hardware  we have performed partitioning of the parity check matrix. The results of partitioning different low density parity check matrix have promised a good level of parallelism in hardware. Thus, Min Sum decoding algorithm was modified to make decoding more efficient. This will result in a partial parallel decoder. The modified Min Sum algorithm incorporates parallel decoding with less complex hardware. \\[0.2cm]
+
+% Index terms
+%\noindent \textbf{Index terms:} 
+
+% Start a new page
+\clearpage 
+}

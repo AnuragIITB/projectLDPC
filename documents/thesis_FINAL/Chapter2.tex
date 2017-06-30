@@ -1,0 +1,76 @@
+% Introduction
+
+% Main chapter title
+%\chapter{Theory of LDPC} 
+
+% Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+%\label{Chapter2} 
+
+% This is for the header on each page
+%\lhead{Chapter 2. \emph{Theory of LDPC}}  
+
+The goal of communication is to transmit a message and receive it correctly even after noisy transmission through the channel. This is achieved by introducing redundancy in the message at the transmitter side, called as encoding of message. The encoded message is called codeword. Then codeword is then transmitted through the noisy channel, which alters the codeword. By some error correcting algorithm the message is extracted back at receiver side, called decoding of the codeword. Thus, the error free transmission takes place by applying error correcting codes in communication system.\\
+We have a k bit long message to encode it we introduce a m bit redundancy (or called parity bits) to form a $n(=m+k)$ bit long codeword. These category of codes are called (n,k) block codes. 
+
+\subsection{Parity Check Matrix}
+
+The codeword must satisfy a group conditions to ensure error free transmission or to indicate the error have been taken place. If error occurs, the error can be corrected by applying some algorithm on those group of conditions . The group of conditions are called parity check equations.The matrix form of the condition is called parity check matrix. \\
+Example: If a code block $y=[c_1 c_2 c_3 c_4 c_5 c_6]$ has to satisfy following parity check equations. 
+\begin{align}
+c_1 \oplus c_2 \oplus c_4 =0 \\
+ c_2 \oplus c_3 \oplus c_5 =0 \\
+c_1 \oplus c_2 \oplus c_3 \oplus c_6 =0 
+\end{align}  
+Then it's parity check matrix is as follows:
+\begin{align}
+ H= \left[ \begin{array}{cccccc}
+1 & 1 & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 0 & 0 & 1 & 1\\
+0 & 0 & 1 & 1 & 0 & 1  
+\end{array} \right]  
+\end{align} 
+s.t. $Hy^T=0$.
+
+\subsection{Encoding of Message}
+We can rewrite the above equations (1),(2),(3) as:
+\begin{align}
+c_4 = c_1 \oplus c_2 \\
+c_5 = c_2 \oplus c_3 \\
+c_6 = c_1 \oplus c_2 \oplus c_3  
+\end{align}  
+We can find parity check bits $c_4,c_5,c_6$ by message bits $c_1,c_2,c_3$.
+Thus we can encode message bits to find codeword. \\
+Encoding is preferably done in matrix form, by manipulating parity check matrix to find a generator matrix.
+If parity check matrix can be written in the form
+$H = [A, I_{n- k} ]$,
+where A is an $(n-k)$xk binary matrix and $I_{n-k}$ is the identity matrix of order
+$(n-k)$. The generator matrix is then
+$G = [I_k , A^T ]$.
+s.t $GH^T = 0$. \\
+\begin{align}
+[c_1 c_2 ... c_6]=[c_1 c_2 c_3] \left[ \begin{array}{cccccc}
+1 & 0 & 0 & 1 & 0 & 1\\
+0 & 1 & 0 & 1 & 1 & 1\\
+0 & 0 & 1 & 0 & 1 & 1  
+\end{array} \right]
+\end{align}
+ 
+
+Thus, m is message block containing message bits $[c_1 c_2 c_3]$, then codeword can be generated as $y=mG$.
+
+\subsection{Error Detection \& Correction}
+
+If the codeword got corrupted in the transmission then all the parity check equation will not get satisfied. This we will get $Hy^T\neq0$. The non-zero vector is called syndrome. That shows that received message is corrupted. But there is a certain limit in number of bits upto that error can be detected and corrected.
+The limit is represented in term of hamming distance. Hamming distance between two codes is number of flipped bits between them. If $d_{min}$ is minimum distance between codes then maximum number bit flipped to which error can be correctly detected is $d_{min}-1$ and maximum number of bits upto which error can be corrected is
+(t) = $[\frac{d_{min}-1}{2}]$
+where [] denotes greatest integer function.\\
+The more the number of redundant bits the more the hamming distance thus more error bits can be detected and corrected but the code rate is reduces. The correction is directly taking the received vector and comparing it to all the codewords and correcting it to the codeword having minimum distance to it. This is called maximum likelihood decoding. But if n is lager then this task become complex. LDPC maximum likelihood decoding, bit flipping decoding are other decoding schemes which reduce complexity of this task.
+
+
+
+
+
+
+
+
