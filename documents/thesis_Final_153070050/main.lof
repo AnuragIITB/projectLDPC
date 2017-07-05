@@ -1,0 +1,28 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Transition probability diagram of Binary Symmetric Channel}}{4}{figure.caption.22}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Tanner graph}}{11}{figure.caption.39}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Partitioning a bipartite graph\relax }}{23}{figure.caption.74}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Block Diagram of process flow\relax }}{24}{figure.caption.76}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Performance of Gallager matrix\relax }}{25}{figure.caption.78}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Performance of MacKay Neal matrix\relax }}{26}{figure.caption.79}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Performance of quasi-cyclic matrix\relax }}{26}{figure.caption.80}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Tanner Graph}}{28}{figure.caption.83}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Initialization of a priori probabilities }}{28}{figure.caption.84}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Initialization of messages}}{29}{figure.caption.85}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Computation of extrinsic information}}{29}{figure.caption.86}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Calculation of a posteriori probabilities}}{30}{figure.caption.87}
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Updating the messages}}{30}{figure.caption.88}
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Initialization of a priori probabilities on partitioned Tanner graphs}}{31}{figure.caption.90}
+\contentsline {figure}{\numberline {6.8}{\ignorespaces Initialization of messages on partitioned Tanner graphs}}{32}{figure.caption.91}
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Computation of partial extrinsic information \& Transverse information }}{32}{figure.caption.92}
+\contentsline {figure}{\numberline {6.10}{\ignorespaces Computation of extrinsic information using Transverse information}}{33}{figure.caption.93}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Comparison of time taken to decode\relax }}{36}{figure.caption.103}
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Timing trends as the function of order of matrix\relax }}{37}{figure.caption.104}
+\contentsline {figure}{\numberline {7.3}{\ignorespaces Timing trends as the function of order of partition\relax }}{37}{figure.caption.106}
+\addvspace {10\p@ }

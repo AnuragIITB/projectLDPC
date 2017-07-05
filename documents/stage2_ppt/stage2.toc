@@ -17,3 +17,11 @@
 \beamer@subsubsectionintoc {3}{2}{2}{Aa to VHDL}{49}{0}{3}
 \beamer@subsubsectionintoc {3}{2}{3}{Results}{51}{0}{3}
 \beamer@sectionintoc {4}{Conclusions \& Future Work}{54}{0}{4}
+\beamer@sectionintoc {5}{Parity Check Matrix}{57}{1}{5}
+\beamer@subsectionintoc {5}{1}{Gallager parity check matrix}{57}{1}{5}
+\beamer@subsectionintoc {5}{2}{MacKay Neal Construction}{59}{1}{5}
+\beamer@subsectionintoc {5}{3}{Repeat Accumulate Code}{61}{1}{5}
+\beamer@subsectionintoc {5}{4}{Soft Decoding}{65}{1}{5}
+\beamer@subsectionintoc {5}{5}{ Generation of parity check matrix }{70}{1}{5}
+\beamer@subsectionintoc {5}{6}{ Constructing Weighted check node incident matrix }{73}{1}{5}
+\beamer@subsectionintoc {5}{7}{ Partitioning check node matrix }{76}{1}{5}

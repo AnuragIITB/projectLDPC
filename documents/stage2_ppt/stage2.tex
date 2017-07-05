@@ -980,7 +980,363 @@ BUFG  & 1 & 1 & 1 & 1 \\ \hline
 			\end{figure}   
 \end{frame}	
 
+%======================================================
 
+\appendix	
+\begin{frame}[t] 
+\frametitle{Basic definitions}
+
+\begin{itemize}
+\item \emph {\textbf{random codes vs systematic codes:}} parity check matrix is generated randomly in random codes whereas parity check matrix has a specific method of filling $1's$ in matrix in a systematic code.
+\item \emph{\textbf{regular codes vs irregular codes:}} In regular codes parity check matrix has constant number of $1's$ in row and columns. if $w_c$ is number of $1's$ in a column and $w_r $is number of $1's$ in a row then in a mxn parity check matrix. \\
+\alert{$ m.w_r =n.w_c $} \\
+%\item columns are divided in $w_r$ sets n/$w_r$ columns in each set. 
+ irregular codes 
+we designate the fraction of columns
+of weight i by $v_i$ and the fraction of rows of weight i by $h_i$. Collectively the set
+v and h is called the degree distribution of the code. \\
+\alert{$ m. \sum_{i} h_i.i = n \sum_{i} v_i.i $}
+
+\end{itemize}         
+\end{frame}
+
+\section{Parity Check Matrix}
+\subsection{Gallager parity check matrix}
+%---------------------------frame 1
+\begin{frame}[t] 
+\frametitle{Gallager parity check matrix}
+\begin{itemize}
+\item regular codes,random codes
+\item (n,$w_c$,$w_r$) codes. \ $w_c$= no of 1\textsuperscript{'}s in a column \ $w_r$= number of 1\textsuperscript{'}s in a row \ n=block length
+\\ \alert{Method of construction:}
+\item divide rows in $w_c$ sets with m/$w_c$ rows in each set.
+%\item columns are divided in $w_r$ sets n/$w_r$ columns in each set. 
+\item All rows of first set of rows contain $w_r$ consecutive once ordered from left to right.
+\item Every other set of row is random \textbf{column permutation} of first set of rows. 
+\end{itemize}         
+\end{frame}
+%----------------------------frame 2
+\begin{frame}[t] 
+\frametitle{Gallager parity check matrix:example}
+ (n,$w_c$,$w_r$)=(12,3,4) take m=9
+ \begin{itemize}
+ \item thus we have 3 set of rows having 9/3=3 rows in a set. 
+  \[
+ \left[ \begin{array}{cccccccccccc}
+1 &  1 &  1  & 1 &  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 &  1 &  1  & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 &  1 &  1  & 1 \\
+-& - & - & - & - & - & - & - & - &  - &  -  & -\\ 
+1 &  0 &  1  & 0 &  0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 &  0 &  1  & 1 & 0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 &  0 &  1  &  0\\
+-& - & - & - & - & - & - & - & - &  - &  -  & -\\ 
+1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\ \end{array} \right]  
+\] 
+%\item \textbf{other set of rows} are random \textbf{column permutation} of first set of rows.
+ \end{itemize}
+\end{frame}
+%----------------------------------------------------
+
+\subsection{MacKay Neal Construction}
+\begin{frame}[t] 
+\frametitle{MacKay Neal parity-check matrix}
+\begin{itemize}
+\item regular (n,$w_c$,$w_r$) codes,random codes
+\\ \alert{Method of construction:}
+\item start from the first column.Place $w_c$ 1\textsuperscript{'}s in the column randomly.
+\item Keep a track a  1\textsuperscript{'}s in a row.
+\item Keep Repeating the process for other columns. Break only if at any point number of 1\textsuperscript{'}s in the row becomes greater than $w_r$.
+\item If break occurs then go back to some columns and repeat again till all columns get filled.
+\end{itemize}         
+\end{frame}
+%----------------------------frame 2
+\begin{frame}[t] 
+\frametitle{MacKay Neal parity-check matrix}
+ n=12 m=9
+ \begin{itemize}
+ \item  
+  \[
+ \left[ \begin{array}{cccccccccccc}
+1 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 \\
+1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 \\
+0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
+1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\ \end{array} \right]  
+\] 
+
+ \end{itemize}
+\end{frame} 
+
+\subsection{Repeat Accumulate Code}
+\begin{frame}[t] 
+\frametitle{Repeat Accumulate Code}
+\begin{itemize}
+\item systematic codes,irregular codes
+ \item  each parity-bit can be computed  one  at  a  time  using  only  the  message  bits  and  the  one  previously calculated parity-bit. 
+\\ \alert{Method of construction:}
+\item The first (n-m) columns of H correspond to the message bits.
+\item then rest columns have  1\textsuperscript{'}s of weight two, that are placed in a step pattern for the last m columns of H.
+%\item columns are divided in $w_r$ sets n/$w_r$ columns in each set. 
+ 
+\end{itemize}         
+\end{frame}
+
+%----------------------------frame 2
+\begin{frame}[t] 
+\frametitle{Repeat Accumulate Code:example}
+ n=12 m=9
+ \begin{itemize}
+ \item  
+  \[
+ \left[ \begin{array}{cccccccccccc}
+1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\ \end{array} \right]  
+\] 
+ \item $c_4 = c_1$ ;\ $c_5 = c_1 \oplus c_4$ ;\ $c_6 = c_5 \oplus c_2$ ; ...\
+%\item \textbf{other set of rows} are random \textbf{column permutation} of first set of rows.
+ \end{itemize}
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{ Quasi-Cyclic (QC) parity Check Matrix:}
+QC matrix can be construction by 
+Sridhara Fuja Tanner (SFT) Method is discussed. 
+Method of Construction of (j,k)-regular QC-LDPC code:
+\begin{itemize}
+\item Construct two sequences $\{s_1,s_2,...,s_{j-1}\}$ and $\{t_1,t_2,...,t_{k-1}\}$, whose elements are randomly selected from GF(p), where p is prime and p$>$2 , $s_i \neq s_x \ \& \ t_i \neq t_x$ if i $\neq$x.
+\item Now, form a preliminary matrix E with the elements of GF(p) as follows:
+\begin{align}
+ E= \left[ \begin{array}{cccc}
+e_{0,0} & e_{0,1} & \cdots & e_{0,k-1} \\
+e_{1,0} & e_{0,1} & \cdots & e_{0,k-1} \\
+\vdots & \vdots & \ddots & \vdots \\
+e_{j-1,0} & e_{j-1,1} & \cdots & e_{j-1,k-1} 
+\end{array} \right] 
+\end{align}
+\end{itemize}
+\end{frame}
+
+ 
+ \begin{frame}
+ \begin{itemize}
+\item where (i,j)th element of E is calculated by following quadratic congruential equation for a fix parameter
+$\kappa\epsilon\{1,2,...,p-1\} $ and $\nu_i,\nu_j\epsilon\{1,2,...,p-1\} $: 
+\begin{align}
+ e_{i,j}=[\kappa(s_i+t_j)^2 + \nu_i +\nu_j] 
+\end{align}
+\item So the parity check matrix H is represented by jxk array of circulant permutation of identity matrix. 
+\begin{align}
+ H= \left[ \begin{array}{cccc}
+I(e_{0,0}) & I(e_{0,1}) & \cdots & I(e_{0,k-1}) \\
+I(e_{1,0}) & I(e_{0,1}) & \cdots & I(e_{0,k-1}) \\
+\vdots & \vdots & \ddots & \vdots \\
+I(e_{j-1,0}) & I(e_{j-1,1}) & \cdots & I(e_{j-1,k-1}) 
+\end{array} \right]
+\end{align} 
+Where I(x) is pxp identity matrix with row cyclically shifted right by x position.
+\end{itemize}
+ \end{frame}
+ 
+ 
+ %--------------------------------------------------
+ \subsection{Soft Decoding}
+\begin{frame}[t] 
+\frametitle{Sum product decoding}
+\begin{itemize}
+\item it is a \textbf{soft decision} algorithm.
+\item bit-flipping decoding accepts an initial hard decision on
+the received bits as input, whereas the sum-product algorithm accepts the probability of each received bit as input.
+\item The input bit probabilities are called the a \textbf{priori} probabilities
+\item The bit probabilities returned by the decoder are called the a \textbf{posteriori}
+probabilities
+\item sum-product decoding these probabilities are expressed
+as \textbf{log-likelihood ratios.}
+\end{itemize}         
+\end{frame}
+
+
+\begin{frame}[t] 
+\frametitle{LLR}
+\begin{itemize}
+\item $ L(x)=log\dfrac{p(x=0)}{p(x=1)}=log\dfrac{1-p(x=1)}{p(x=1)} $
+\item If p(x = 0) $>$ p(x = 1) then L(x) is positive.\\
+and the greater the difference between p(x = 0) and p(x = 1), i.e. the more
+sure we are that p(x) = 0, the larger the positive value for L(x), and vic. versa.
+\item Thus,Log likelihood ratios are used to represent the \textbf{metrics} for a binary variable x
+by a single value rather than individual probability of being zero and one.
+\item Thus
+the sign of L(x) provides the \textbf{hard decision} on x and the magnitude $|L(x)|$ is
+the \textbf{reliability} of this decision
+\end{itemize}         
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Probabilities in term of LLR}
+\begin{itemize}
+\item probability that transmitted bit was one is : \\
+$ P(x=1)=\dfrac{p(x=1)/p(x=0)}{1+p(x=1)/p(x=0)} = \dfrac{e^{-L(x)}}{1+e^{-L(x)}} $
+\item probability that transmitted bit was zero is : \\
+$ P(x=1)=\dfrac{p(x=0)/p(x=1)}{1+p(x=0)/p(x=1)} = \dfrac{e^{L(x)}}{1+e^{L(x)}} $
+\item benefit of the logarithmic representation of probabilities is that when probabilities
+need to be multiplied log-likelihood ratios\textbf{(LLR)} need only be \textbf{added}, reducing
+implementation complexity
+\end{itemize}         
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Sum product decoding:contd...}
+\begin{itemize}
+\item aim: compute the maximum a posteriori
+probability \textbf{(MAP)} for each codeword bit on the event N that all
+parity-check constraints are satisfied
+\item The extra information about bit i received
+from the parity-check j is called \textbf{extrinsic information} for bit i denoted by $E_j,i$.
+\item $E_{(j,i)} = log\dfrac{\dfrac{1}{2}+\dfrac{1}{2} \prod_{i'\in B_j \ i'\neq i }tanh(M_{j,i'}/2) }{\dfrac{1}{2}-\dfrac{1}{2} \prod_{i'\in B_j \ i'\neq i }tanh(M_{j,i'}/2) }  $
+\item $Mj,i $ is message passed from ith bit node to jth check node.
+\item for first iteration $Mj,i $ is priori of bit i .\\
+%\item %Each bit has access to the input a priori LLR, ri, and the LLRs from every
+%connected check node. The total LLR of the i-th bit is the sum of these LLRs
+\end{itemize}         
+\end{frame}
+
+\begin{frame}[t] 
+\frametitle{Sum product decoding:contd...}
+After first iteration:
+\begin{itemize}
+\item Each bit has access to the input a priori LLR, ri, and the LLRs from every
+connected check node. The total LLR of the i-th bit is the sum of these LLRs: \\
+$ LLR = \sum_{j\in A_i} E_{j,i} + r_i  $
+\item Now, take hard decision on the LLR post priori and check whether code satisfies $Hc^T=0$.
+\item if yes, then decoding stop. else find $M_{j,i}$ and repeat the process of calculating$\rightarrow M_{j,i}$ $\rightarrow$extrinsic LLR $\rightarrow $ LLR $\rightarrow$ hard decision $\rightarrow$ satisfy $Hc^T$ ...
+\item But, note that $M_{j,i}$ is not exactly the LLR, it exclude the message generated by the same check node.\\
+$  M_{j,i} = \sum_{j'\in A_i j'\neq j} E_{j,i} + r_i $
+\end{itemize}         
+\end{frame}
+
+%----------------------------------
+\subsection{ Generation of parity check matrix }
+\begin{frame}[t]
+\begin{columns}[t]
+\column{.33\textwidth}
+\alert{ Gallager\footnote[frame]{R. G. Gallager, Low-Density Parity-Check Codes. Cambridge, MA: MIT
+Press, 1963.} parity check matrix-}
+\vspace{3mm}
+		\begin{itemize}
+		\setbeamertemplate{itemize item}[triangle]
+		\item Regular matrix
+		\item Randomly generated	
+		\item Short cycles	
+		\item Simple construction
+		\end{itemize}
+
+\pause			
+\column{.33\textwidth}
+\alert{	 Mackay Neal\footnote[frame]{D. J. C. MacKay, “Good error-correcting codes based on very sparse matrices,” IEEE Trans. Inform. Theory, vol. 45, no. 2, pp. 399–431, March
+1999.}  parity check matrix-}
+		\begin{itemize}
+		\setbeamertemplate{itemize item}[triangle]
+		\item Irregular matrix
+		\item Randomly generated
+		\item Avoid cycle of four
+		\item Performance is better for large block length	
+		\end{itemize}
+			
+\pause			
+\column{.33\textwidth}
+\alert{ Quasi-cyclic\footnote[frame]{C. M. Huang, J. F. Huang and C. C. Yang, "Construction of quasi-cyclic
+LDPC codes from quadratic congruences," in IEEE Communications
+Letters, vol. 12, no. 4, pp. 313-315, April 2008.} parity check matrix-}
+		\begin{itemize}
+		\setbeamertemplate{itemize item}[triangle]
+		\item Regular matrix
+		\item Systematic matrix
+		\item Performance is better for moderate block length
+		\end{itemize}						
+\end{columns}
+\end{frame}
+		
+%-----------------------------------------------------------------	
+		
+\subsection{ Constructing Weighted check node incident matrix }
+\begin{frame}[t]
+\alert{Constructing weighted check node incidence matrix:}
+
+\begin{columns}
+\column{.33\textwidth}
+\begin{figure}
+\includegraphics[height=2.5cm,width=3cm]{paritymatwtb1}
+			\end{figure}
+
+\begin{figure}
+\includegraphics[height=2.5cm,width=3.5cm]{tanneri1}
+			\end{figure}
+			
+			M(1,3)=M(3,1)=1
+\pause			
+\column{.33\textwidth}
+\begin{figure}
+\includegraphics[height=2.5cm,width=3cm]{paritymatwtb2}
+			\end{figure}
+
+\begin{figure}
+\includegraphics[height=2.5cm,width=3.5cm]{tanneri2}
+			\end{figure}
+M(1,2)=M(2,1)=1
+			
+\pause			
+\column{.33\textwidth}
+\begin{figure}
+		
+\includegraphics[height=2.5cm,width=3cm]{paritymatwtb3}
+			\end{figure}	
+\begin{figure}
+			
+\includegraphics[height=2.5cm,width=3.5cm]{tanneri3}
+			\end{figure}		
+M(2,4)=M(4,2)=1						
+\end{columns}
+\end{frame}
+
+\subsection{ Partitioning check node matrix }
+\begin{frame}[t]
+\frametitle{ Partitioning check node matrix }
+\begin{columns}		
+\column{0.6\textwidth}
+\vspace{-5mm}
+\begin{figure}
+\includegraphics[height=7cm,width=5cm]{weightedcheck}
+\end{figure}
+	
+	\pause
+	
+				
+\column{0.4\textwidth}
+\alert{Partitioning Incident Matrix using METIS}\footnote{glaros.dtc.umn.edu/gkhome/metis/metis/}		\\
+\begin{figure}			
+\includegraphics[height=2cm,width=5cm]{METIS}
+			\end{figure}	
+\begin{itemize}
+\setbeamertemplate{itemize item}[triangle]
+\item Minimum weight cut
+\item Equal partitions
+\end{itemize}			
+\end{columns}
+\end{frame}
+%---------------------------------
 
 %----------------------------------------------------------------------
 

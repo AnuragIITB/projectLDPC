@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.11.24)  30 JUN 2017 00:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.11.24)  30 JUN 2017 12:43
 entering extended mode
 **stage2.tex
 (stage2.tex
@@ -2028,7 +2028,7 @@ Overfull \vbox (2.93294pt too high) detected at line 921
 [51
 
  <./parallel_result1.jpg>]
-<parallel_result2.jpg, id=1685, 531.48563pt x 375.65344pt>
+<parallel_result2.jpg, id=1686, 531.48563pt x 375.65344pt>
 File: parallel_result2.jpg Graphic file (type jpg)
 
 <use parallel_result2.jpg>
@@ -2118,7 +2118,7 @@ Package pdftex.def Info: iitb_logo.jpg used on input line 969.
  [54
 
 ]
-<end.jpg, id=1774, 746.01291pt x 559.50967pt>
+<end.jpg, id=1775, 746.01291pt x 559.50967pt>
 File: end.jpg Graphic file (type jpg)
  <use end.jpg>
 Package pdftex.def Info: end.jpg used on input line 981.
@@ -2131,31 +2131,322 @@ Overfull \hbox (5.69191pt too wide) in paragraph at lines 981--981
 [55
 
  <./end.jpg>]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\translate ' on input line 985.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/bx/it' undefined
+(Font)              using `OT1/cmss/bx/n' instead on input line 1001.
+
+File: iitb_logo.jpg Graphic file (type jpg)
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1001.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [56
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1017.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [57
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1040.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [58
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1054.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [59
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1075.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [60
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1089.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [61
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1112.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [62
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1131.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [63
+
+] [64
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1169.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+
+[65
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1185.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [66
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1198.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [67
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1214.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+
+[68
+
+]
+File: iitb_logo.jpg Graphic file (type jpg)
+ <use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1228.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+ [69
+
+] [70
+
+] [71
+
+] [72
+
+]
+<paritymatwtb1.jpg, id=2333, 559.08875pt x 281.05pt>
+File: paritymatwtb1.jpg Graphic file (type jpg)
+ <use paritymatwtb1.jpg>
+Package pdftex.def Info: paritymatwtb1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+
+<tanneri1.jpg, id=2334, 538.01pt x 233.87375pt>
+File: tanneri1.jpg Graphic file (type jpg)
+ <use tanneri1.jpg>
+Package pdftex.def Info: tanneri1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.57954pt x 71.13332pt.
+
+<paritymatwtb2.jpg, id=2335, 559.08875pt x 281.05pt>
+File: paritymatwtb2.jpg Graphic file (type jpg)
+ <use paritymatwtb2.jpg>
+Package pdftex.def Info: paritymatwtb2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+
+<tanneri2.jpg, id=2336, 536.0025pt x 233.87375pt>
+File: tanneri2.jpg Graphic file (type jpg)
+ <use tanneri2.jpg>
+Package pdftex.def Info: tanneri2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.5842pt x 71.13332pt.
+
+<paritymatwtb3.jpg, id=2337, 559.08875pt x 281.05pt>
+File: paritymatwtb3.jpg Graphic file (type jpg)
+ <use paritymatwtb3.jpg>
+Package pdftex.def Info: paritymatwtb3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+
+<tanneri3.jpg, id=2338, 534.99875pt x 232.87pt>
+File: tanneri3.jpg Graphic file (type jpg)
+ <use tanneri3.jpg>
+Package pdftex.def Info: tanneri3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.58546pt x 71.13005pt.
+
+Overfull \vbox (0.53891pt too high) detected at line 1312
+ []
+
+[73
+
+ <./paritymatwtb1.jpg> <./tanneri1.jpg> <./paritymatwtb2.jpg> <./tanneri2.jpg> 
+<./paritymatwtb3.jpg> <./tanneri3.jpg>]
+File: paritymatwtb1.jpg Graphic file (type jpg)
+ <use paritymatwtb1.jpg>
+Package pdftex.def Info: paritymatwtb1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri1.jpg Graphic file (type jpg)
+
+<use tanneri1.jpg>
+Package pdftex.def Info: tanneri1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.57954pt x 71.13332pt.
+File: paritymatwtb2.jpg Graphic file (type jpg)
+ <use paritymatwtb2.jpg>
+Package pdftex.def Info: paritymatwtb2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri2.jpg Graphic file (type jpg)
+ <use tanneri2.jpg>
+Package pdftex.def Info: tanneri2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.5842pt x 71.13332pt.
+File: paritymatwtb3.jpg Graphic file (type jpg)
+
+<use paritymatwtb3.jpg>
+Package pdftex.def Info: paritymatwtb3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri3.jpg Graphic file (type jpg)
+ <use tanneri3.jpg>
+Package pdftex.def Info: tanneri3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.58546pt x 71.13005pt.
+
+Overfull \vbox (0.53891pt too high) detected at line 1312
+ []
+
+[74
+
+]
+File: paritymatwtb1.jpg Graphic file (type jpg)
+ <use paritymatwtb1.jpg>
+Package pdftex.def Info: paritymatwtb1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri1.jpg Graphic file (type jpg)
+ <use tanneri1.jpg>
+Package pdftex.def Info: tanneri1.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.57954pt x 71.13332pt.
+File: paritymatwtb2.jpg Graphic file (type jpg)
+ <use paritymatwtb2.jpg>
+Package pdftex.def Info: paritymatwtb2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri2.jpg Graphic file (type jpg)
+
+<use tanneri2.jpg>
+Package pdftex.def Info: tanneri2.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.5842pt x 71.13332pt.
+File: paritymatwtb3.jpg Graphic file (type jpg)
+ <use paritymatwtb3.jpg>
+Package pdftex.def Info: paritymatwtb3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 85.35262pt x 71.12859pt.
+File: tanneri3.jpg Graphic file (type jpg)
+ <use tanneri3.jpg>
+Package pdftex.def Info: tanneri3.jpg used on input line 1312.
+(pdftex.def)             Requested size: 99.58546pt x 71.13005pt.
+
+Overfull \vbox (0.53891pt too high) detected at line 1312
+ []
+
+[75
+
+] <weightedcheck.pdf, id=2434, 348.30125pt x 533.995pt>
+File: weightedcheck.pdf Graphic file (type pdf)
+
+<use weightedcheck.pdf>
+Package pdftex.def Info: weightedcheck.pdf used on input line 1338.
+(pdftex.def)             Requested size: 142.26234pt x 199.17207pt.
+ <METIS.pdf, id=2435, 334.24875pt x 112.42pt>
+File: METIS.pdf Graphic file (type pdf)
+
+<use METIS.pdf>
+Package pdftex.def Info: METIS.pdf used on input line 1338.
+(pdftex.def)             Requested size: 142.26549pt x 56.9063pt.
+
+Overfull \hbox (19.35143pt too wide) in paragraph at lines 1338--1338
+ [] 
+ []
+
+
+Overfull \hbox (129.7487pt too wide) detected at line 1338
+[][][] $[]$[][][][][][][][] $[]$[][][][][][] 
+ []
+
+File: iitb_logo.jpg Graphic file (type jpg)
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1338.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+
+Overfull \vbox (4.56546pt too high) detected at line 1338
+ []
+
+[76
+
+ <./weightedcheck.pdf> <./METIS.pdf>]
+File: weightedcheck.pdf Graphic file (type pdf)
+ <use weightedcheck.pdf>
+Package pdftex.def Info: weightedcheck.pdf used on input line 1338.
+(pdftex.def)             Requested size: 142.26234pt x 199.17207pt.
+File: METIS.pdf Graphic file (type pdf)
+
+<use METIS.pdf>
+Package pdftex.def Info: METIS.pdf used on input line 1338.
+(pdftex.def)             Requested size: 142.26549pt x 56.9063pt.
+
+Overfull \hbox (19.35143pt too wide) in paragraph at lines 1338--1338
+ [] 
+ []
+
+
+Overfull \hbox (129.7487pt too wide) detected at line 1338
+[][][] $[]$[][][][][][][][] $[]$[][][][][][] 
+ []
+
+File: iitb_logo.jpg Graphic file (type jpg)
+<use iitb_logo.jpg>
+Package pdftex.def Info: iitb_logo.jpg used on input line 1338.
+(pdftex.def)             Requested size: 28.448pt x 28.45255pt.
+
+Overfull \vbox (4.56546pt too high) detected at line 1338
+ []
+
+[77
+
+]
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 987.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 987.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1343.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1343.
  (stage2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 987.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 987.
-Package rerunfilecheck Info: File `stage2.out' has not changed.
-(rerunfilecheck)             Checksum: 456BD7EF0BA74027EDC225490A6660A6;388.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1343.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1343.
 
+
+
+Package rerunfilecheck Warning: File `stage2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `stage2.out':
+(rerunfilecheck)             Before: 456BD7EF0BA74027EDC225490A6660A6;388
+(rerunfilecheck)             After:  0398A7A3CFC2C35844924ADE698E645B;1060.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 987.
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1343.
  ) 
 Here is how much of TeX's memory you used:
- 23419 strings out of 493698
- 481270 string characters out of 3144408
- 581712 words of memory out of 3000000
- 26034 multiletter control sequences out of 15000+200000
- 16841 words of font info for 61 fonts, out of 3000000 for 9000
+ 23516 strings out of 493698
+ 482595 string characters out of 3144408
+ 588238 words of memory out of 3000000
+ 26070 multiletter control sequences out of 15000+200000
+ 17192 words of font info for 62 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 56i,15n,67p,404b,678s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 56i,17n,67p,404b,729s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTe
@@ -2169,9 +2460,9 @@ si10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssi8.pfb
 gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 
 2.9/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on stage2.pdf (55 pages, 1862283 bytes).
+Output written on stage2.pdf (77 pages, 2452743 bytes).
 PDF statistics:
- 1878 PDF objects out of 2073 (max. 8388607)
- 129 named destinations out of 1000 (max. 500000)
- 322 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2594 PDF objects out of 2984 (max. 8388607)
+ 182 named destinations out of 1000 (max. 500000)
+ 362 words of extra memory for PDF output out of 10000 (max. 10000000)
 

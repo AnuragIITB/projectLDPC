@@ -1,0 +1,221 @@
+% Introduction
+
+% Main chapter title
+\chapter{C Level Implementation \& Verification} 
+
+% Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+\label{Chapter4} 
+
+% This is for the header on each page
+\lhead{Chapter 4. \emph{Theory of LDPC}}  
+
+We have implemented \textit{bit flipping algorithm}, \textit{sum product algorithm} and \textit{min sum algorithm} in C. \\
+The decoding algorithms are so implemented that it can be used for any arbitrary rate and parity check matrix. The software takes parity check matrix file, code block file as input arguments and after decoding it writes decoded block in a file. The software can also compute time to decode and accuracy of decoding according to additional input argument given. \\
+
+After developing the software for basic LDPC decoding algorithms in C we decided to convert min sum decode algorithm from C level description to hardware. This is done by Ahir tool chain, developed at IIT-Bomabay under the supervision of Prof. Madhav P. Desai. Firstly, we concentrated on testing algorithmic accuracy of min sum decode algorithm. The reason to verify the algorithm so regressively in C level is that it gives us confidence to proceed for the hardware design.  
+
+\section{ Min Sum Decode Algorithm}
+The key specification of the algorithm and notations on the tables are as follows :
+\begin{itemize}
+\item Min sum algorithm is implemented for Gaussian channel. 
+\item Quasi-cyclic matrix of block size(n=) 4K, 8K and 12K  are formed using Sridhara-Fuja-Tanner algorithm.
+\item Five different code rates(R=) 0.75, 0.80, 0.85, 0.90 and 0.95 are taken.
+\item Raw input bit error rate(BER(IN)) is between $10^{-2}$ to $10^{-3}$, converted in form of Eb/No(db) to express input SNR in db. 
+\item BER(OUT) : Output block error rate.
+\item CDB : Number of correctly decoded blocks.  
+\item Itr : Average number of iterations per block.
+\end{itemize}
+
+
+
+\subsection{Results on Quasi Cyclic Matrix}
+\subsubsection{Block Error Rate }
+
+We have sent code blocks continuously and noted when the first code block gets incorrectly decoded. Maximum number of sent blocks is 1 million. If all 1 million blocks gets correctly decoded then $'-'$ is shown in table.
+
+\begin{table}[H]
+\centering
+\caption[Table for block error estimates of Min Sum decode using quasi cyclic matrix]{ Table for block error estimates  }
+\begin{tabular}{|l|l|r|r|r|r|r|}
+\hline
+n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.80  & R=0.85  & R=0.9 & R=0.95 \\ \hline
+4K  & $1.0\times10^{-2}$  & -    & - &2.677$\times10^{3}$           &1.7819$\times10^{4}$       &1       \\ 
+    & $0.5\times10^{-3}$  &-     & - &2.4944$\times10^{4}$          &1.65511$x10^{5}$		&1.79$\times10^{2}$   \\ 
+    & $1.0\times10^{-3}$  & -   & -  &5.47550$\times10^{5}$         &4.89654$\times10^{5}$     &3.328$\times10^{3}$ \\ \hline
+8K  & $1.0\times10^{-2}$   & -   & - &2.3817$\times10^{4}$          &1.16847$\times10^{5}$        &1   \\ 
+    & $0.5\times10^{-3}$   & -     & -&6.9491$\times10^{4}$          &1.72263$\times10^{5}$       &1.001$\times10^{3}$  \\ 
+    & $1.0\times10^{-3}$   & -   & -  &9.16505 $\times10^{5}$        &6.28939$\times10^{5}$       &9.338$\times10^{3}$  \\ \hline
+12K & $1.0\times10^{-2}$   & -   & -  &9.705$\times10^{3}$          &5.37754$\times10^{5}$       	&1       \\
+    & $0.5\times10^{-3}$   & -     & -&5.6400$\times10^{4}$          &-     			 		&1.318$\times10^{3}$  \\ 
+    & $1.0\times10^{-3}$   & - & - &- 			             &-    					 &1.6920$\times10^{4}$   \\ \hline 
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+\subsubsection{ Error threshold  and number of iterations required  }
+We have tabulated results for the test case when we send 100 code blocks and noted BER and number of iterations to decode.
+The testing focus to get error threshold of the algorithm. Error threshold is the maximum input bit error rate that can be corrected by the decoder. We performed testing by varying input BER between $10^{-2}$ to $10^{-3}$. To get error threshold we check for the input BER at which no block gets correctly decoded when sending 100 code blocks are sent.  
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.75, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at  code rate = 0.75 }
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+n     & BER(In) 			& Eb/No(db) & BER(OUT) & CDB  & Itr \\ \hline
+4112  & $3.3\times10^{-2}$       & 3.5   & 0   & 100 & 5         \\  \hline
+	  & $1.0\times10^{-2}$       & 5.5   & 0   & 100 & 2         \\ 
+      &	$4.8\times10^{-3}$		& 6.5   & 0   & 100 & 1         \\
+      &	$1.8\times10^{-3}$		& 7.5   & 0   & 100 & 1         \\ \hline
+8180  &	$2.9\times10^{-2}$    	& 3.8   & 0   & 100 & 5         \\  \hline
+      &	$1.0\times10^{-2}$    	& 5.5   & 0   & 100 & 2         \\ 
+      &	$4.8\times10^{-3}$		& 6.5   & 0   & 100 & 1         \\
+      &	$1.8\times10^{-3}$		& 7.5   & 0   & 100 & 1         \\ \hline
+12304 &	$3.4\times10^{-2}$		& 3.4   & 0   & 100 & 6         \\ \hline
+	  &	$1.0\times10^{-2}$		& 5.5   & 0   & 100 & 2         \\  
+      &	$4.8\times10^{-3}$		& 6.5   & 0   & 100 & 1         \\ 
+      &	$1.8\times10^{-3}$		& 7.5   & 0   & 100 & 1         \\ \hline
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.95, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at code rate = 0.95}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & BER(IN)& Eb/No(db) & BER    & CDB & Itr(/25) \\ \hline
+4260  & $1.1\times10^{-2}$ & 4.5   & $6.8\times10^{-3}$      & 23 &  -       \\ 
+      & $4.7\times10^{-3}$ & 5.5   & 0           & 100 & 3         \\  
+      & $1.6\times10^{-3}$ & 6.5   & 0           & 100 & 2         \\ \hline
+8220  & $1.1\times10^{-2}$ & 4.5   & $7.5\times10^{-3}$      & 8 & -         \\ 
+      & $4.7\times10^{-3}$ & 5.5   & $2.8\times10^{-7}$      & 99 & -         \\ 
+      & $1.6\times10^{-3}$ & 6.5   & 0      & 100 & 2         \\ \hline
+12660 & $1.1\times10^{-2}$ & 4.5   & $7.2\times10^{-3}$      & 4 & -        \\ 
+      & $4.7\times10^{-3}$ & 5.5   & 0      & 100 & 4         \\ 
+      & $1.6\times10^{-3}$ & 6.5   & 0      & 100 & 2         \\ \hline      
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.80, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at code rate = 0.80}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & BER(In)  	& Eb/No(db) & BER & CDB & Itr(/25) \\ \hline
+4075  &	$2.2\times10^{-2}$ & 4.1   & 0   & 100 & 4         \\  \hline
+	  &	$0.8\times10^{-2}$ & 5.5   & 0   & 100 & 2         \\
+      &	$3.8\times10^{-3}$ & 6.5   & 0   & 100 & 1         \\ 
+      &	$1.5\times10^{-3}$ & 7.5   & 0   & 100 & 1         \\ \hline
+8275  &	$2.4\times10^{-2}$ & 3.9   & 0   & 100 & 5         \\  \hline
+	  &	$0.8\times10^{-2}$ & 5.5   & 0   & 100 & 2         \\ 
+      &	$3.8\times10^{-3}$ & 6.5   & 0   & 100 & 1         \\ 
+      &	$1.5\times10^{-3}$ & 7.5   & 0   & 100 & 1         \\ \hline
+12275 &	$2.5\times10^{-2}$ & 3.8   & 0   & 100 & 6         \\ \hline
+      &	$0.8\times10^{-2}$ & 5.5   & 0   & 100 & 2         \\  
+      &	$3.8\times10^{-3}$ & 6.5   & 0   & 100 & 1         \\
+      &	$1.5\times10^{-3}$ & 7.5   & 0   & 100 & 1         \\ \hline
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.85, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at code rate = 0.85}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & BER(IN) & Eb/No(db) & BER & CDB & Itr(/25) \\ \hline
+4220  & $1.9\times10^{-2}$ & 4     & 0   & 100 & 6         \\ \hline
+	  & $1.0\times10^{-2}$ & 5     & 0   & 100 & 3         \\
+      & $4.5\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.7\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+8180  & $1.9\times10^{-2}$ & 4     & 0   & 100 & 6         \\  \hline
+      & $1.0\times10^{-2}$ & 5     & 0   & 100 & 3         \\ 
+      & $4.5\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.7\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+12260 & $1.9\times10^{-2}$ & 4     & 0   & 100 & 6         \\  \hline
+      & $1.0\times10^{-2}$ & 5     & 0   & 100 & 3         \\ 
+      & $4.5\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.7\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.90, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at code rate = 0.90}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & BER(IN) & Eb/No(db) & BER & CDB & Itr(/25) \\ \hline
+4120  & $1.1\times10^{-2}$ & 4.7     & 0   & 100 & 4         \\  \hline
+      & $0.9\times10^{-2}$ & 5     & 0   & 100 & 3         \\ 
+      & $3.6\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.3\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+8440  & $1.2\times10^{-2}$ & 4.5     & 0   & 100 & 5         \\  \hline
+      & $0.9\times10^{-2}$ & 5     & 0   & 100 & 3         \\ 
+      & $3.6\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.3\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+12280 & $1.2\times10^{-2}$ & 4.5     & 0   & 100 & 5         \\  \hline
+      & $0.9\times10^{-2}$ & 5     & 0   & 100 & 3         \\ 
+      & $3.6\times10^{-3}$ & 6     & 0   & 100 & 2         \\ 
+      & $1.3\times10^{-3}$ & 7     & 0   & 100 & 1         \\ \hline
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption[Table for error threshold estimate at code rate = 0.95, Min Sum decode using quasi cyclic matrix]{Table for error threshold estimate at code rate = 0.95}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+n     & BER(IN)& Eb/No(db) & BER    & CDB & Itr(/25) \\ \hline
+4260  & $1.1\times10^{-2}$ & 4.5   & $6.8\times10^{-3}$      & 23 &  -       \\ 
+      & $4.7\times10^{-3}$ & 5.5   & 0           & 100 & 3         \\  
+      & $1.6\times10^{-3}$ & 6.5   & 0           & 100 & 2         \\ \hline
+8220  & $1.1\times10^{-2}$ & 4.5   & $7.5\times10^{-3}$      & 8 & -         \\ 
+      & $4.7\times10^{-3}$ & 5.5   & $2.8\times10^{-7}$      & 99 & -         \\ 
+      & $1.6\times10^{-3}$ & 6.5   & 0      & 100 & 2         \\ \hline
+12660 & $1.1\times10^{-2}$ & 4.5   & $7.2\times10^{-3}$      & 4 & -        \\ 
+      & $4.7\times10^{-3}$ & 5.5   & 0      & 100 & 4         \\ 
+      & $1.6\times10^{-3}$ & 6.5   & 0      & 100 & 2         \\ \hline      
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+
+\subsection{Results on Random Matrices }
+\subsubsection{Block Error Rate }
+
+We have sent code blocks continuously and noted when the first code block gets incorrectly decoded. Maximum number of sent blocks is 1 million. If all 1 million blocks get correctly decoded then $'-'$ is shown in table.
+\begin{table}[H]
+\centering
+\caption[Table for block error estimates of Min Sum decode using random matrix]{ Table for block error estimates  }
+\begin{tabular}{|l|l|r|r|r|r|r|}
+\hline
+n$\simeq$   & BER(In)$\simeq$    & R=0.75  & R=0.8   & R=0.85  & R=0.9 & R=0.95 \\ \hline
+4K  & $1.0\times10^{-2}$  &  1.2799$\times10^{4}$   & 2.0754$\times10^{4}$  & 3.39$\times10^{2}$ & 1.259$\times10^{3}$ & NA      
+\\ 
+    & $0.5\times10^{-3}$  &  5.53727$\times10^{5}$  &  1.72781$\times10^{5}$& 6.6700$\times10^{4}$ & 1.65511$\times10^{5}$ & NA   
+\\ 
+    & $1.0\times10^{-3}$  & -			      & 6.24436$\times10^{5}$& 3.45503$\times10^{5}$& 1.19008$\times10^{5}$  & NA  
+\\ \hline
+8K  & $1.0\times10^{-2}$  & 1.92476$\times10^{5}$   & 8.3898$\times10^{4}$  & 5.193$\times10^{3}$ & 5.947$\times10^{3}$         & NA      \\ 
+    & $0.5\times10^{-3}$ & 3.21027$\times10^{5}$    & 4.6092$\times10^{4}$& 3.7952$\times10^{4}$ & 1.1389$\times10^{4}$ & NA  
+\\ 
+    & $1.0\times10^{-3}$ & -				     & -  				 & -         	  & -    & NA             
+\\ \hline
+12K & $1.0\times10^{-2}$ & 2.20022$\times10^{5}$   & 1.57371$\times10^{5}$  & 1.2894$\times10^{4}$ & 1.2626$\times10^{4}$     & 1.1      \\ 
+    & $0.5\times10^{-3}$ & 2.17452$\times10^{5}$   & 9.0158$\times10^{4}$& 1.56487$\times10^{5}$& 5.4866$\times10^{4}$ & 1.034$\times10^{4}$    \\ 
+    & $1.0\times10^{-3}$ & -				     & -   & -			  			 & -     & 1.4759$\times10^{4}$   \\ \hline
+\end{tabular}
+\label{tab:nameForThisTable}
+\end{table}
+For rate = 0.95 \& n = 4K,8k - we were not able to generate cycle-4 free parity check matrix.
+
+
+
+
+ 
+

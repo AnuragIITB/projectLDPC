@@ -1,0 +1,75 @@
+% Introduction
+
+% Main chapter title
+\chapter{Introduction} 
+
+% Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+\label{Chapter1} 
+
+% This is for the header on each page
+\lhead{Chapter 1. \emph{Introduction}}  
+
+This is a super quick tutorial on how to use this \LaTeX
+template. The template has been made keeping the guidelines given by IIT in mind almost to the letter. The guidelines page is also included in the folder.
+
+% SECTION 1
+\section{Document Structure}
+
+The folder contains the following files - 
+\begin{enumerate}
+\item \textit{main.tex} - This is the file to be compiled, as any self respecting main should be. It contains a bunch of settings which are (hopefully) adequately explained.
+\item \textit{TheFrontMatter.tex} - This contains details about the first few pages including the title page, approval page, declaration of authorship, abstract etc.
+\item \textit{TheBackMatter.tex} - This contains details about the list of publications page and the acknowledgements page.
+\item \textit{Details.tex} - Enter all details such as thesis title, your name, supervisor's name, department etc. in this file. It will be substituted throughout the document.
+\item \textit{ChapterTemplate.tex} - Use this as a template to generate more chapter files as and when required. Number them in order and then include them in main where mentioned
+\item \textit{Chapter1.tex} - This is a README on how to use this template.
+\item \textit{AppendixTemplate.tex} - If you need Appendices, works the same as the Chapter template.
+\end{enumerate}
+
+\section{Inserting Stuff}
+
+The syntax for inserting figures, tables and equations can be picked up from the file Chapter1.tex.
+
+\subsection{Figures}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/xkcd.png}
+\caption[Text that you want on the list of figures page]{Text that you want below the figure}
+\label{fig:nameForThisFigure}
+\end{figure}
+
+Refer to figures using - \begin{verbatim}\ref{label} \end{verbatim} For example, this is how you can refer to Figure \ref{fig:nameForThisFigure}, no need to keep track of the numbers. Save all images in the Figures folder in .png or .jpg format. This image has been taken from \citep{xkcd}.
+
+\subsection{Tables}
+
+\begin{table}
+\centering
+\caption[Text that you want on the list of tables page]{Caption which will appear above the table}
+
+\begin{tabular}{c|c|c|c}
+Header1 & Header 2 & Header 3 & Header 4 \\ \hline
+data & data & data & data \\
+data & data & data & data \\ \hline
+\end{tabular}
+
+\label{tab:nameForThisTable}
+\end{table}
+ 
+This is how you can refer to Table \ref{tab:nameForThisTable}.
+
+\subsection{Equations}
+
+\begin{equation}
+X = \sum_{i=1}^{N}{\frac{i+1}{i^2 + 3\alpha\beta_0}}
+\label{eqn: equationLabel}
+\end{equation}
+
+Equations also number themselves and can be referred in the same way as tables and figures.
+
+\section{Dealing with References}
+
+Find the paper you need on Google Scholar. Click on Cite. Click on Import into BiBTeX. Copy the text into Bibliography.bib. The first entry is the reference label. Use that label to refer to the paper anywhere in the document using - 
+\begin{verbatim}
+\citep{label}
+\end{verbatim}

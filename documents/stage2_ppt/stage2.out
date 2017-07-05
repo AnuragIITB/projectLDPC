@@ -4,3 +4,12 @@
 \BOOKMARK [3][]{Outline0.3.1.15}{Implementation of Serial Decoder }{Outline0.3}% 4
 \BOOKMARK [3][]{Outline0.3.2.35}{Modified min sum algorithm}{Outline0.3}% 5
 \BOOKMARK [2][]{Outline0.4}{Conclusions \046 Future Work}{}% 6
+\BOOKMARK [1][]{Outline1}{Appendix}{}% 7
+\BOOKMARK [2][]{Outline1.5}{Parity Check Matrix}{Outline1}% 8
+\BOOKMARK [3][]{Outline1.5.1.57}{Gallager parity check matrix}{Outline1.5}% 9
+\BOOKMARK [3][]{Outline1.5.2.59}{MacKay Neal Construction}{Outline1.5}% 10
+\BOOKMARK [3][]{Outline1.5.3.61}{Repeat Accumulate Code}{Outline1.5}% 11
+\BOOKMARK [3][]{Outline1.5.4.65}{Soft Decoding}{Outline1.5}% 12
+\BOOKMARK [3][]{Outline1.5.5.70}{ Generation of parity check matrix }{Outline1.5}% 13
+\BOOKMARK [3][]{Outline1.5.6.73}{ Constructing Weighted check node incident matrix }{Outline1.5}% 14
+\BOOKMARK [3][]{Outline1.5.7.76}{ Partitioning check node matrix }{Outline1.5}% 15
